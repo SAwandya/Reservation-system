@@ -4,6 +4,7 @@ import ImageSlider from '../components/ImageSlider'
 const HomePage = () => {
   return (
     <div>
+        
     </div>
   )
 }
