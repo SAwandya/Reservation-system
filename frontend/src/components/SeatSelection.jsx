@@ -4,13 +4,13 @@ import { Box, Grid, Button, Typography, Snackbar } from "@mui/material";
 // Simulated seat layout with sections and price
 const seatLayout = {
   VIP: [
-    [true, true, true, true, true, false, true, true, true, true, true, false],
+    [true, true, true, true, true, false],
     [true, true, true, true, true, true],
   ],
   Standard: [
     [true, true, true, false, true, true, true, true, true, false, true, true],
-    [true, true, false, false, true, true, true, true, true, false, true, true],
-    [true, true, true, true, true, true, true, true, true, false, true, true],
+    [true, true, false, false, true, true],
+    [true, true, true, true, true, true],
   ],
 };
 
@@ -73,6 +73,12 @@ const SeatSelection = () => {
               justifyContent="center"
               sx={{ mb: 1 }}
             >
+              <Grid item sx={{ mr: 1, alignSelf: "center" }}>
+                <Typography variant="h6">
+                  {String.fromCharCode(65 + rowIndex)}
+                </Typography>{" "}
+                {/* Row labels A, B, C, ... */}
+              </Grid>
               {row.map((isAvailable, colIndex) => {
                 const seatId = `${section}-${rowIndex}-${colIndex}`;
                 const isSelected = selectedSeats.includes(seatId);
@@ -83,8 +89,8 @@ const SeatSelection = () => {
                     onClick={() => handleSeatClick(section, rowIndex, colIndex)}
                     disabled={!isAvailable} // Disable if the seat is booked
                     sx={{
-                      width: 40,
-                      height: 40,
+                      width: { xs: 30, sm: 40 }, // Adjust width based on screen size
+                      height: { xs: 30, sm: 40 }, // Adjust height based on screen size
                       margin: 0.5,
                       backgroundColor: !isAvailable
                         ? "gray" // Booked seats
