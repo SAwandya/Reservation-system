@@ -8,8 +8,7 @@ const Layout = () => {
   return (
     <>
         <NavBar/>
-        <ImageSlider/>
-        <CardSlider/>
+        <HomePage/>
     </>
   )
 }

@@ -3,21 +3,19 @@ import Slider from "react-slick";
 import { Card, CardContent, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import CardActions from "@mui/material/CardActions";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 
 const cardData = [
-  { title: "Card 1", content: "This is card 1 content" },
-  { title: "Card 2", content: "This is card 2 content" },
-  { title: "Card 3", content: "This is card 3 content" },
-  { title: "Card 4", content: "This is card 4 content" },
-  { title: "Card 1", content: "This is card 1 content" },
-  { title: "Card 2", content: "This is card 2 content" },
-  { title: "Card 3", content: "This is card 3 content" },
-  { title: "Card 4", content: "This is card 4 content" },
-  { title: "Card 1", content: "This is card 1 content" },
-  { title: "Card 2", content: "This is card 2 content" },
-  { title: "Card 3", content: "This is card 3 content" },
-  { title: "Card 4", content: "This is card 4 content" },
-  // Add more cards as needed
+  { title: "Fire force", content: "This is card 1 content" },
+  { title: "Fire force", content: "This is card 2 content" },
+  { title: "Fire force", content: "This is card 3 content" },
+  { title: "Fire force", content: "This is card 4 content" },
+  { title: "Fire force", content: "This is card 5 content" },
+  { title: "Fire force", content: "This is card 1 content" },
+  { title: "Fire force", content: "This is card 2 content" },
 ];
 
 const NextArrow = (props) => {
@@ -56,28 +54,66 @@ const PrevArrow = (props) => {
   );
 };
 
-const HorizontalCardSlider = () => {
+const CardSlider = () => {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5, // Number of cards to show at once
+    slidesToShow: 7, // Default number of cards to show
     slidesToScroll: 1,
     nextArrow: <NextArrow />, // Custom Next Arrow
     prevArrow: <PrevArrow />, // Custom Prev Arrow
+    responsive: [
+      {
+        breakpoint: 1024, // For large screens (desktops)
+        settings: {
+          slidesToShow: 3, // Show 3 cards
+        },
+      },
+      {
+        breakpoint: 768, // For medium screens (tablets)
+        settings: {
+          slidesToShow: 2, // Show 2 cards
+        },
+      },
+      {
+        breakpoint: 480, // For small screens (mobile devices)
+        settings: {
+          slidesToShow: 1, // Show 1 card
+        },
+      },
+    ],
   };
 
   return (
     <Slider {...settings}>
       {cardData.map((card, index) => (
-        <Card key={index} sx={{ maxWidth: 300, margin: "0 10px" }}>
+        <Card key={index} sx={{ maxWidth: 180 }}>
+          <CardMedia
+            sx={{ height: 255 }}
+            image="../src/assets/fire.jpg"
+            title="green iguana"
+          />
           <CardContent>
-            <Typography variant="h5" component="div">
+            <Typography gutterBottom component="div">
               {card.title}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
               {card.content}
             </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "20px",
+                marginTop: '10px',
+                fontSize: '12px'
+              }}
+              endIcon={<ConfirmationNumberIcon/>}
+            >
+              Time & Ticket
+            </Button>
           </CardContent>
         </Card>
       ))}
@@ -85,4 +121,4 @@ const HorizontalCardSlider = () => {
   );
 };
 
-export default HorizontalCardSlider;
+export default CardSlider;
