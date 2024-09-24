@@ -1,0 +1,148 @@
+import React, { useState } from "react";
+import { Box, Grid, Button, Typography, Snackbar } from "@mui/material";
+
+// Simulated seat layout with sections and price
+const seatLayout = {
+  VIP: [
+    [true, true, true, true, true, false, true, true, true, true, true, false],
+    [true, true, true, true, true, true],
+  ],
+  Standard: [
+    [true, true, true, false, true, true, true, true, true, false, true, true],
+    [true, true, false, false, true, true, true, true, true, false, true, true],
+    [true, true, true, true, true, true, true, true, true, false, true, true],
+  ],
+};
+
+const sectionPrices = {
+  VIP: 15,
+  Standard: 10,
+};
+
+const SeatSelection = () => {
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // Handle seat selection
+  const handleSeatClick = (section, row, col) => {
+    const seatId = `${section}-${row}-${col}`;
+    if (selectedSeats.includes(seatId)) {
+      // Remove from selection
+      setSelectedSeats(selectedSeats.filter((seat) => seat !== seatId));
+      updateTotalPrice(seatId, "remove");
+    } else {
+      // Add to selection
+      setSelectedSeats([...selectedSeats, seatId]);
+      updateTotalPrice(seatId, "add");
+    }
+  };
+
+  // Update total price based on selected seats
+  const updateTotalPrice = (seatId, action) => {
+    const [section] = seatId.split("-");
+    const price = sectionPrices[section];
+    setTotalPrice(action === "add" ? totalPrice + price : totalPrice - price);
+  };
+
+  // Handle snackbar close
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  // Confirm selection
+  const handleConfirm = () => {
+    if (selectedSeats.length > 0) {
+      setSnackbarOpen(true);
+      // Add further booking logic here (API calls, etc.)
+    }
+  };
+
+  // Render seats
+  const renderSeats = () => {
+    return Object.keys(seatLayout).map((section) => (
+      <Box key={section} sx={{ mb: 4 }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          {section} Seats - ${sectionPrices[section]}
+        </Typography>
+        <Grid container justifyContent="center" sx={{ mb: 2 }}>
+          {seatLayout[section].map((row, rowIndex) => (
+            <Grid
+              container
+              key={rowIndex}
+              justifyContent="center"
+              sx={{ mb: 1 }}
+            >
+              {row.map((isAvailable, colIndex) => {
+                const seatId = `${section}-${rowIndex}-${colIndex}`;
+                const isSelected = selectedSeats.includes(seatId);
+
+                return (
+                  <Button
+                    key={colIndex}
+                    onClick={() => handleSeatClick(section, rowIndex, colIndex)}
+                    disabled={!isAvailable} // Disable if the seat is booked
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      margin: 0.5,
+                      backgroundColor: !isAvailable
+                        ? "gray" // Booked seats
+                        : isSelected
+                        ? "green" // Selected seats
+                        : "lightblue", // Available seats
+                      "&:hover": {
+                        backgroundColor:
+                          isAvailable && !isSelected ? "blue" : "",
+                      },
+                    }}
+                  />
+                );
+              })}
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    ));
+  };
+
+  return (
+    <Box sx={{ textAlign: "center", padding: 2 }}>
+      {/* Title */}
+      <Typography variant="h4" sx={{ mb: 4 }}>
+        Select Your Seats
+      </Typography>
+
+      {/* Seat Grid */}
+      {renderSeats()}
+
+      {/* Total Price */}
+      <Typography variant="h6" sx={{ mt: 4 }}>
+        Total Price: ${totalPrice}
+      </Typography>
+
+      {/* Confirm Button */}
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ mt: 4 }}
+        onClick={handleConfirm}
+        disabled={selectedSeats.length === 0} // Disable if no seats are selected
+      >
+        Confirm Selection
+      </Button>
+
+      {/* Snackbar for confirmation */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message={`Seats selected: ${selectedSeats.join(
+          ", "
+        )}, Total Price: $${totalPrice}`}
+      />
+    </Box>
+  );
+};
+
+export default SeatSelection;
