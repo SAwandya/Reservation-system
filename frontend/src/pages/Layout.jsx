@@ -6,6 +6,7 @@ import CardSlider from '../components/CardSlider'
 import MovieDetailsPage from './MovieDetailsPage'
 import DateScroller from '../components/DateScroller'
 import SeatSelection from '../components/SeatSelection'
+import MoviePostForm from '../components/MoviePostForm'
 
 const Layout = () => {
   return (

@@ -1,5 +1,7 @@
 // models/Movie.js
 const mongoose = require("mongoose");
+const Joi = require("joi");
+
 
 const movieSchema = new mongoose.Schema(
   {
@@ -20,4 +22,25 @@ const movieSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Movie", movieSchema);
+const Movie = mongoose.model("Movie", movieSchema);
+
+function validateMovie(movie) {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    releaseDate: Joi.date().required(),
+    duration: Joi.number().required().min(1),
+    director: Joi.string().required(),
+    cast: Joi.array().items(Joi.string()),
+    genre: Joi.array().items(Joi.string()),
+    rating: Joi.string().valid("G", "PG", "PG-13", "R", "NC-17"),
+    image: Joi.string(),
+  });
+
+  var result = schema.validate(movie);
+
+  return result;
+}
+
+exports.Movie = Movie;
+exports.validate = validateMovie;

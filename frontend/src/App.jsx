@@ -4,14 +4,15 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import HomePage from './pages/HomePage'
 import Layout from './pages/Layout'
+import MoviePostForm from './components/MoviePostForm'
 
 function App() {
 
   return (
     <>
-      <Layout />
+      <MoviePostForm />
     </>
-  )
+  );
 }
 
 export default App

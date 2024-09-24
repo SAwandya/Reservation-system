@@ -12,8 +12,8 @@ class APIClient {
   }
 
   post = (config) => {
-    axiosInstance.defaults.headers.common["x-auth-token"] =
-      localStorage.getItem("token");
+    // axiosInstance.defaults.headers.common["x-auth-token"] =
+    //   localStorage.getItem("token");
     return axiosInstance.post(this.endpoint, config).then((res) => res.data);
   };
 
