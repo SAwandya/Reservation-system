@@ -36,8 +36,8 @@ class APIClient {
   };
 
   getOne = (params) => {
-    axiosInstance.defaults.headers.common["x-auth-token"] =
-      localStorage.getItem("token");
+    // axiosInstance.defaults.headers.common["x-auth-token"] =
+    //   localStorage.getItem("token");
     return axiosInstance.get(`${this.endpoint}/${params}`).then((res) => res.data);
   };
 }
