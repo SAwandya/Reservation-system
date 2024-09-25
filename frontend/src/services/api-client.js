@@ -12,8 +12,8 @@ class APIClient {
   }
 
   post = (config) => {
-    axiosInstance.defaults.headers.common["x-auth-token"] =
-      localStorage.getItem("token");
+    // axiosInstance.defaults.headers.common["x-auth-token"] =
+    //   localStorage.getItem("token");
     return axiosInstance.post(this.endpoint, config).then((res) => res.data);
   };
 
@@ -26,20 +26,35 @@ class APIClient {
   delete = (params) => {
     axiosInstance.defaults.headers.common["x-auth-token"] =
       localStorage.getItem("token");
-    return axiosInstance.delete(`${this.endpoint}/${params}`).then((res) => res.data);  
+    return axiosInstance
+      .delete(`${this.endpoint}/${params}`)
+      .then((res) => res.data);
   };
 
   put = (config, params) => {
     axiosInstance.defaults.headers.common["x-auth-token"] =
       localStorage.getItem("token");
-    return axiosInstance.put(`${this.endpoint}/${params}`, config).then((res) => res.data);
+    return axiosInstance
+      .put(`${this.endpoint}/${params}`, config)
+      .then((res) => res.data);
   };
 
   getOne = (params) => {
-    axiosInstance.defaults.headers.common["x-auth-token"] =
-      localStorage.getItem("token");
-    return axiosInstance.get(`${this.endpoint}/${params}`).then((res) => res.data);
+    // axiosInstance.defaults.headers.common["x-auth-token"] =
+    //   localStorage.getItem("token");
+    return axiosInstance
+      .get(`${this.endpoint}/${params}`)
+      .then((res) => res.data);
   };
+
+  getMore = (movieId, theaterId) => {
+    return axiosInstance.get(`${this.endpoint}`, {
+      params: {
+        movieId: movieId,
+        theaterId: theaterId,
+      },
+    });
+  }
 }
 
 export { CanceledError, APIClient };

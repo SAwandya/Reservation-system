@@ -2,6 +2,11 @@ const { default: mongoose } = require("mongoose");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const movieRoutes = require("./routes/movieRoutes");
+const theaterRoutes = require("./routes/theaterRoutes");
+const seatRoutes = require("./routes/seatRoutes");
+const showtimeRoutes = require("./routes/showTimeRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 mongoose
   .connect(
@@ -12,7 +17,15 @@ mongoose
 
 app.use(cors()); // Enable CORS for all routes
 
-app.use(express.json());
+// Increase payload size for JSON and URL-encoded form data
+app.use(express.json({ limit: '10mb' })); // Set the limit (e.g., 10MB)
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+app.use("/api/movies", movieRoutes);
+app.use("/api/theaters", theaterRoutes);
+app.use("/api/seats", seatRoutes);
+app.use("/api/showtimes", showtimeRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

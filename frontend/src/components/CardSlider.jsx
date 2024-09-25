@@ -7,6 +7,8 @@ import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import useMovies from "../hooks/useMovies";
+import { useNavigate } from "react-router-dom";
 
 const cardData = [
   { title: "Fire force", content: "This is card 1 content" },
@@ -55,6 +57,10 @@ const PrevArrow = (props) => {
 };
 
 const CardSlider = () => {
+
+  const {data} = useMovies();
+  console.log(data);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -85,13 +91,19 @@ const CardSlider = () => {
     ],
   };
 
+  const navigate = useNavigate();
+
+  const handleSubmit = (id) => {
+    navigate(`/moviedetails/${id}`);
+  }
+
   return (
     <Slider {...settings}>
-      {cardData.map((card, index) => (
-        <Card key={index} sx={{ maxWidth: 180 }}>
+      {data?.map((card, index) => (
+        <Card key={index} sx={{ maxWidth: 180, marginLeft: '10px' }}>
           <CardMedia
             sx={{ height: 255 }}
-            image="../src/assets/fire.jpg"
+            image={card.imageUrl}
             title="green iguana"
           />
           <CardContent>
@@ -99,18 +111,19 @@ const CardSlider = () => {
               {card.title}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {card.content}
+              {card.genre}
             </Typography>
             <Button
               variant="contained"
+              onClick={() => handleSubmit(card._id)}
               sx={{
                 backgroundColor: "black",
                 color: "white",
                 borderRadius: "20px",
-                marginTop: '10px',
-                fontSize: '12px'
+                marginTop: "10px",
+                fontSize: "12px",
               }}
-              endIcon={<ConfirmationNumberIcon/>}
+              endIcon={<ConfirmationNumberIcon />}
             >
               Time & Ticket
             </Button>
