@@ -5,12 +5,15 @@ import './App.css'
 import HomePage from './pages/HomePage'
 import Layout from './pages/Layout'
 import MoviePostForm from './components/MoviePostForm'
+import { RouterProvider } from "react-router-dom";
+import router from "./routes";
+
 
 function App() {
 
   return (
     <>
-      <MoviePostForm />
+      <RouterProvider router={router} />
     </>
   );
 }

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Box, Grid, Button, Typography, Snackbar } from "@mui/material";
+import seatService from "../services/seatService";
 
+const theaterId = "66f431f9114c8d537ff71c4a";
 // Simulated seat layout with sections and price
 const seatLayout = {
   VIP: [
-    [true, true, true, true, true, false],
+    [true, true, true, true, true, true],
     [true, true, true, true, true, true],
   ],
   Standard: [
-    [true, true, true, false, true, true, true, true, true, false, true, true],
-    [true, true, false, false, true, true],
+    [true, true, true, true, true, true, true, true, true, true, true, true],
+    [true, true, true, true, true, true],
     [true, true, true, true, true, true],
   ],
 };
@@ -27,6 +29,7 @@ const SeatSelection = () => {
   // Handle seat selection
   const handleSeatClick = (section, row, col) => {
     const seatId = `${section}-${row}-${col}`;
+    console.log("Seat clicked:", selectedSeats);
     if (selectedSeats.includes(seatId)) {
       // Remove from selection
       setSelectedSeats(selectedSeats.filter((seat) => seat !== seatId));
@@ -50,11 +53,18 @@ const SeatSelection = () => {
     setSnackbarOpen(false);
   };
 
-  // Confirm selection
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (selectedSeats.length > 0) {
       setSnackbarOpen(true);
-      // Add further booking logic here (API calls, etc.)
+
+      seatService
+        .CreateSeat({ theaterId, selectedSeats })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error booking seats:", error);
+        });
     }
   };
 

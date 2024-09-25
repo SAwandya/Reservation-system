@@ -1,16 +1,47 @@
 const express = require("express");
-const Seat = require("../models/seat");
+const { Seat } = require("../models/seat");
 
 const router = express.Router();
 
 // Create a new seat
 router.post("/", async (req, res) => {
   try {
-    const seat = new Seat(req.body);
-    await seat.save();
-    res.status(201).json(seat);
+    const { theaterId, selectedSeats } = req.body;
+
+    // Loop through selectedSeats and update the availability
+    for (const seat of selectedSeats) {
+      const [section, row, col] = seat.split("-");
+      const seatNumber = parseInt(col) + 1;
+
+      console.log("Row:", row);
+      console.log("Seat Number:", seatNumber);
+      console.log("Section:", section);
+
+      // Find and update the seat availability
+      // await Seat.findOneAndUpdate(
+      //   {
+      //     theater: theaterId,
+      //     row: String.fromCharCode(65 + parseInt(row)),
+      //     number: seatNumber,
+      //     section: section,
+      //   },
+      //   { isAvailable: false }
+      // );
+       const newSeat = new Seat({
+         theater: theaterId, // Use theaterId from the request
+         row,
+         number: seatNumber,
+         section,
+         isAvailable: true, // You can change this based on your business logic
+       });
+
+       await newSeat.save();
+    }
+
+    return res.status(200).json({ message: "Seats booked successfully" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error booking seats:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
