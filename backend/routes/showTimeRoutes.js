@@ -1,5 +1,5 @@
 const express = require("express");
-const Showtime = require("../models/showtime");
+const { Showtime } = require("../models/showtime");
 
 const router = express.Router();
 
@@ -14,11 +14,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get all showtimes
 router.get("/", async (req, res) => {
+  const { movieId, theaterId } = req.query;
+
   try {
-    const showtimes = await Showtime.find().populate("movie theater");
-    res.json(showtimes);
+    const showtimes = await Showtime.find({
+      movie: movieId,
+      theater: theaterId,
+    });
+
+    res.send(showtimes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

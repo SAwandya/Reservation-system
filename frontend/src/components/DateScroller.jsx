@@ -1,28 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-
-// Sample list of dates
-const dates = [
-  "Mon 25 Sep",
-  "Tue 26 Sep",
-  "Wed 27 Sep",
-  "Thu 28 Sep",
-  "Fri 29 Sep",
-  "Sat 30 Sep",
-  "Sun 1 Oct",
-  "Mon 2 Oct",
-  "Tue 3 Oct",
-  "Wed 4 Oct",
-  "Thu 5 Oct",
-  "Fri 6 Oct",
-  "Sat 7 Oct",
-  "Sun 8 Oct",
-];
+import useShowtimes from "../hooks/useShowTimes";
+import axios from "axios";
 
 const DateScroller = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [scrollIndex, setScrollIndex] = useState(0);
+
+  const movieId = "66f40f14832f5e199d719894";
+  const theaterId = "66f431f9114c8d537ff71c4a";
+
+  const [showtimes, setShowtimes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchShowtimes = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/showtimes",
+          {
+            params: {
+              movieId,
+              theaterId,
+            },
+          }
+        );
+        setShowtimes(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (movieId && theaterId) {
+      fetchShowtimes();
+    }
+  }, [movieId, theaterId]);
+
+  const dates = showtimes
+    .map((showtime) =>
+      showtime.dateTime.map((dateTime) => dateTime.split("T")[0])
+    ) // Extract the date part
+    .flat();
 
   // Function to handle date selection
   const handleDateClick = (date) => {

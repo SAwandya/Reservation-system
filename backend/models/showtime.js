@@ -13,10 +13,16 @@ const showtimeSchema = new mongoose.Schema(
       ref: "Theater",
       required: true,
     },
-    dateTime: { type: Date, required: true }, // Show time
-    seats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Seat" }],
+    dateTime: { type: [Date], required: true },
+    times: {
+      // Array to store multiple time slots for the show
+      type: [String], // Use String or Date depending on your needs
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Showtime", showtimeSchema);
+const Showtime = mongoose.model("Showtime", showtimeSchema);
+
+exports.Showtime = Showtime;

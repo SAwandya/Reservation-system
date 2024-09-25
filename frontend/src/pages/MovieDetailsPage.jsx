@@ -10,6 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 import useMovie from "../hooks/useMovie";
 import SeatSelection from "../components/SeatSelection";
+import DateScroller from "../components/DateScroller";
 
 const MovieDetailsPage = () => {
   const {id} = useParams();
@@ -66,7 +67,9 @@ const MovieDetailsPage = () => {
           </Grid>
         </Grid>
       </Card>
+      <DateScroller/>
       <SeatSelection />
+      
     </>
   );
 };
