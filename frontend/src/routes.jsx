@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
 import SeatSelection from "./components/SeatSelection";
 import MoviePostForm from "./components/MoviePostForm";
+import RegisterForm from "./pages/RegisterForm";
+import SignInForm from "./pages/SignInForm";
 
 const router = createBrowserRouter([
   {
@@ -30,10 +32,15 @@ const router = createBrowserRouter([
     element: <MoviePostForm />,
   },
 
-  // {
-  //   path: "/signin",
-  //   element: <SignInPage />,
-  // },
+  {
+    path: "/signup",
+    element: <RegisterForm />,
+  },
+
+  {
+    path: "/signin",
+    element: <SignInForm />,
+  },
 ]);
 
 export default router;

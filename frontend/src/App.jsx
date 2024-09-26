@@ -7,13 +7,17 @@ import Layout from './pages/Layout'
 import MoviePostForm from './components/MoviePostForm'
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
+import { AuthProvider } from "./Context/AuthContext";
 
 
 function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        {" "}
+        <RouterProvider router={router} />
+      </AuthProvider>
     </>
   );
 }

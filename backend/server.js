@@ -7,6 +7,8 @@ const theaterRoutes = require("./routes/theaterRoutes");
 const seatRoutes = require("./routes/seatRoutes");
 const showtimeRoutes = require("./routes/showTimeRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+const admin = require("./routes/admin");
+const auth = require("./routes/auth");
 
 mongoose
   .connect(
@@ -26,6 +28,8 @@ app.use("/api/theaters", theaterRoutes);
 app.use("/api/seats", seatRoutes);
 app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/admin", admin);
+app.use("/api/auth", auth);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
