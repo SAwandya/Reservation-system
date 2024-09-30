@@ -3,17 +3,13 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import axios from "axios";
 import useGameQueryStore from "../store";
-import TheaterForm from "./TheaterForm";
 
 function formatToCustomISO(dateString) {
   const date = new Date(dateString);
-
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); 
+  const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-
   const formattedDate = `${year}-${month}-${day}T00:00:00.000+00:00`;
-
   return formattedDate;
 }
 
@@ -24,15 +20,9 @@ const DateScroller = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const theaterId = "66f431f9114c8d537ff71c4a";
-  
   const theaterId = useGameQueryStore((s) => s.selectedTheater);
-
   const date = useGameQueryStore((s) => s.selectedDate);
-
   const convertedDate = formatToCustomISO(date);
-
-  console.log(convertedDate);
 
   useEffect(() => {
     const fetchShowtimes = async () => {
@@ -47,7 +37,6 @@ const DateScroller = () => {
           }
         );
         setShowtimes(response.data);
-        console.log(response.data); 
       } catch (err) {
         setError(err);
       } finally {
@@ -60,18 +49,16 @@ const DateScroller = () => {
     }
   }, [theaterId, date]);
 
-  // Function to handle time selection
   const handleTimeClick = (time) => {
     setSelectedDate(time);
   };
 
-  // Function to handle left and right scroll buttons
   const scrollLeft = () => {
-    setScrollIndex((prev) => Math.max(prev - 1, 0)); // Decrease by 1 to scroll left
+    setScrollIndex((prev) => Math.max(prev - 1, 0));
   };
 
   const scrollRight = () => {
-    setScrollIndex((prev) => Math.min(prev + 1, showtimes.length - 1)); // Increase by 1 to scroll right
+    setScrollIndex((prev) => Math.min(prev + 1, showtimes.length - 1));
   };
 
   if (loading) return <CircularProgress />;
@@ -79,61 +66,68 @@ const DateScroller = () => {
     return <Typography color="error">Error fetching showtimes</Typography>;
 
   return (
-    <>
-      <Box display="flex" alignItems="center" sx={{ width: "100%" }}>
-        {/* Left Scroll Button */}
-        <Button onClick={scrollLeft} disabled={scrollIndex === 0}>
-          <ArrowBack />
-        </Button>
+    <Box
+      display="flex"
+      alignItems="center"
+      sx={{
+        width: { xs: "90%", sm: "80%", md: "80%" }, // Responsive width
+        margin: "20px auto", // Centering and margin
+        backgroundColor: "#E5D9F2",
+        borderRadius: "10px",
+        padding: { xs: 2, sm: 3 }, // Responsive padding
+      }}
+    >
+      {/* Left Scroll Button */}
+      <Button onClick={scrollLeft} disabled={scrollIndex === 0}>
+        <ArrowBack />
+      </Button>
 
-        {/* Time Scroller */}
-        <Box
-          display="flex"
-          sx={{
-            overflowX: "auto",
-            scrollBehavior: "smooth",
-            width: "80%",
-            padding: "10px",
-            "::-webkit-scrollbar": { display: "none" },
-            msOverflowStyle: "none",
-            scrollbarWidth: "none",
-          }}
-        >
-          {showtimes.length > 0 ? (
-            showtimes
-              .flatMap((showtime) =>
-                showtime.times.map((time, timeIndex) => (
-                  <Button
-                    key={`${showtime._id}-${timeIndex}`} // Use showtime._id to ensure unique keys
-                    onClick={() => handleTimeClick(time)}
-                    variant={selectedDate === time ? "contained" : "outlined"}
-                    sx={{
-                      minWidth: "100px",
-                      marginRight: "10px",
-                      whiteSpace: "nowrap",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {time}
-                  </Button>
-                ))
-              )
-              .slice(scrollIndex, scrollIndex + 5) // Display 5 time buttons based on scroll index
-          ) : (
-            <Typography>No showtimes available</Typography>
-          )}
-        </Box>
-
-        {/* Right Scroll Button */}
-        <Button
-          onClick={scrollRight}
-          disabled={scrollIndex >= showtimes.length - 5}
-        >
-          <ArrowForward />
-        </Button>
+      {/* Time Scroller */}
+      <Box
+        display="flex"
+        sx={{
+          overflowX: "auto",
+          scrollBehavior: "smooth",
+          width: "80%",
+          padding: "10px",
+          "::-webkit-scrollbar": { display: "none" },
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+        }}
+      >
+        {showtimes.length > 0 ? (
+          showtimes
+            .flatMap((showtime) =>
+              showtime.times.map((time, timeIndex) => (
+                <Button
+                  key={`${showtime._id}-${timeIndex}`} // Unique keys
+                  onClick={() => handleTimeClick(time)}
+                  variant={selectedDate === time ? "contained" : "outlined"}
+                  sx={{
+                    minWidth: { xs: "80px", sm: "100px" }, // Responsive button width
+                    marginRight: "10px",
+                    whiteSpace: "nowrap",
+                    fontSize: { xs: "12px", sm: "14px" }, // Responsive font size
+                  }}
+                >
+                  {time}
+                </Button>
+              ))
+            )
+            .slice(scrollIndex, scrollIndex + 5) // Show 5 buttons based on scroll index
+        ) : (
+          <Typography>Choose date for relevant times</Typography>
+        )}
       </Box>
-        <TheaterForm/>
-    </>
+
+      {/* Right Scroll Button */}
+      <Button
+        onClick={scrollRight}
+        disabled={scrollIndex >= showtimes.length - 5}
+      >
+        <ArrowForward />
+      </Button>
+    </Box>
   );
 };
 

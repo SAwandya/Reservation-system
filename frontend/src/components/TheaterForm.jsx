@@ -29,19 +29,27 @@ const TheaterForm = () => {
     fetchTheaters();
   }, []);
 
-   const setSelectedTheater = useGameQueryStore((s) => s.SetSelectedTheater);
+  const setSelectedTheater = useGameQueryStore((s) => s.SetSelectedTheater);
 
-   const selectedTheater = useGameQueryStore((s) => s.selectedTheater);
+  const selectedTheater = useGameQueryStore((s) => s.selectedTheater);
 
   const handleTheaterChange = (event) => {
     setSelectedTheater(event.target.value);
     console.log("Selected theater:", event.target.value);
-    // You can add additional logic here if needed, such as sending this value to an API
   };
 
   return (
     <Box
-      sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 400 }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        width: { xs: "80%", sm: "64%" },
+        margin: "20px",
+        padding: 2,
+        borderRadius: 4,
+        backgroundColor: "#E5D9F2",
+      }}
     >
       {loading ? (
         <CircularProgress />
@@ -56,7 +64,6 @@ const TheaterForm = () => {
           fullWidth
           variant="outlined"
           required
-          
         >
           {theaters.map((theater) => (
             <MenuItem key={theater._id} value={theater._id}>

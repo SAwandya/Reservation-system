@@ -12,9 +12,12 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -46,7 +49,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -56,107 +58,83 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+const NavBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isDropdownOpen = Boolean(dropdownOpen);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleDropdownOpen = (event) => {
+    setDropdownOpen(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+    setDropdownOpen(false);
   };
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
       keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          logout(); // Assuming you want to log out from the menu
+        }}
+      >
+        Logout
+      </MenuItem>
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
+  const dropdownId = "primary-search-dropdown-menu";
+  const renderDropdownMenu = (
     <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
+      anchorEl={dropdownOpen}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      id={dropdownId}
       keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isDropdownOpen}
+      onClose={handleMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/">HOME</Link>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/salesorders">MY ORDERS</Link>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/salescarts">CART</Link>
       </MenuItem>
     </Menu>
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: "rgb(228, 177, 240, 0.6)",
+          marginTop: "20px",
+          borderRadius: "10px",
+          color: "#1E5128",
+        }}
+      >
         <Toolbar>
           <IconButton
             size="large"
@@ -173,7 +151,7 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            Dairy Farm
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -184,25 +162,39 @@ export default function PrimarySearchAppBar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+
+          {/* Responsive Dropdown Button with Margins */}
+          <Box sx={{ display: { xs: "block", md: "none" }, mx: 2 }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
+              aria-label="show more"
+              aria-controls={dropdownId}
+              aria-haspopup="true"
+              onClick={handleDropdownOpen}
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
+              <MoreIcon />
             </IconButton>
+          </Box>
+
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Link to="/">
+              <Button sx={buttonStyles}>HOME</Button>
+            </Link>
+            <Link to="/salesorders">
+              <Button sx={buttonStyles}>MY ORDERS</Button>
+            </Link>
+            <Link to="/salescarts">
+              <Button sx={buttonStyles}>CART</Button>
+            </Link>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="show notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
+              <NotificationsIcon />
             </IconButton>
             <IconButton
               size="large"
@@ -216,22 +208,21 @@ export default function PrimarySearchAppBar() {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
+      {renderDropdownMenu}
     </Box>
   );
-}
+};
+
+// Button styles for links
+const buttonStyles = {
+  backgroundColor: "rgba(155, 207, 83, 0.8)",
+  fontSize: "17px",
+  fontWeight: "bold",
+  color: "#191919",
+  borderRadius: "10px",
+};
+
+export default NavBar;
