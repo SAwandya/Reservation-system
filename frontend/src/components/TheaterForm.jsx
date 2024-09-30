@@ -7,10 +7,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import useGameQueryStore from "../store";
 
 const TheaterForm = () => {
   const [theaters, setTheaters] = useState([]);
-  const [selectedTheater, setSelectedTheater] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,6 +28,10 @@ const TheaterForm = () => {
 
     fetchTheaters();
   }, []);
+
+   const setSelectedTheater = useGameQueryStore((s) => s.SetSelectedTheater);
+
+   const selectedTheater = useGameQueryStore((s) => s.selectedTheater);
 
   const handleTheaterChange = (event) => {
     setSelectedTheater(event.target.value);
@@ -52,6 +56,7 @@ const TheaterForm = () => {
           fullWidth
           variant="outlined"
           required
+          
         >
           {theaters.map((theater) => (
             <MenuItem key={theater._id} value={theater._id}>

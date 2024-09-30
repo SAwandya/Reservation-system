@@ -24,8 +24,10 @@ const DateScroller = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const theaterId = "66f431f9114c8d537ff71c4a";
+  // const theaterId = "66f431f9114c8d537ff71c4a";
   
+  const theaterId = useGameQueryStore((s) => s.selectedTheater);
+
   const date = useGameQueryStore((s) => s.selectedDate);
 
   const convertedDate = formatToCustomISO(date);
@@ -130,9 +132,7 @@ const DateScroller = () => {
           <ArrowForward />
         </Button>
       </Box>
-      <Box display="flex" alignItems="center" sx={{ width: "100%" }}>
         <TheaterForm/>
-      </Box>
     </>
   );
 };

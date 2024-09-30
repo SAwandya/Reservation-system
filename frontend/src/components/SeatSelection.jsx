@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Button, Typography, Snackbar } from "@mui/material";
 import useSeats from "../hooks/useSeats"; // Adjust the import path based on your structure
 import seatService from "../services/seatService";
-
-const theaterId = "66f431f9114c8d537ff71c4a";
+import useGameQueryStore from "../store";
+import LivingTwoToneIcon from "@mui/icons-material/LivingTwoTone";
+// const theaterId = "66f431f9114c8d537ff71c4a";
 
 const sectionPrices = {
   VIP: 15,
@@ -11,6 +12,8 @@ const sectionPrices = {
 };
 
 const SeatSelection = () => {
+  const theaterId = useGameQueryStore((s) => s.selectedTheater);
+
   const { data, isLoading, isError } = useSeats(theaterId);
   const [seatLayout, setSeatLayout] = useState({});
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -68,18 +71,18 @@ const SeatSelection = () => {
   };
 
   const handleConfirm = async () => {
-     if (selectedSeats.length > 0) {
-       setSnackbarOpen(true);
+    if (selectedSeats.length > 0) {
+      setSnackbarOpen(true);
 
-       seatService
-         .CreateSeat({ theaterId, selectedSeats })
-         .then((response) => {
-           console.log(response.data);
-         })
-         .catch((error) => {
-           console.error("Error booking seats:", error);
-         });
-     }
+      seatService
+        .CreateSeat({ theaterId, selectedSeats })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error booking seats:", error);
+        });
+    }
   };
 
   // Render loading or error states
@@ -119,9 +122,9 @@ const SeatSelection = () => {
                       onClick={() => handleSeatClick(section, rowKey, colIndex)}
                       disabled={!isAvailable} // Disable if the seat is booked
                       sx={{
-                        width: { xs: 30, sm: 40 },
-                        height: { xs: 30, sm: 40 },
-                        margin: 0.5,
+                        width: { xs: 3, sm: 13 },
+                        height: { xs: 20, sm: 20 },
+                        margin: 0.3,
                         backgroundColor: !isAvailable
                           ? "gray" // Booked seats
                           : isSelected

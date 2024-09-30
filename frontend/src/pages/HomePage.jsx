@@ -3,13 +3,12 @@ import { Grid, Box, Typography } from "@mui/material";
 import SeatSelection from "../components/SeatSelection";
 import Calender from "../components/Calender";
 import DateScroller from "../components/DateScroller";
+import ImageSlider from "../components/ImageSlider";
 
 const HomePage = () => {
   return (
     <Box>
-      <Typography variant="h4" align="center" sx={{ marginBottom: 2 }}>
-        Welcome to the Event Planner
-      </Typography>
+      <ImageSlider/>
       <Grid container spacing={2} justifyContent="center">
         <Grid
           item
@@ -20,8 +19,10 @@ const HomePage = () => {
           alignItems="center"
           justifyContent="center"
         >
-          {" "}
-          <Calender />
+          <Box sx={{ display: "flex", flexDirection: "column", justifyContent: 'center', alignItems: 'center' }}>
+            <DateScroller />
+            <Calender />
+          </Box>
         </Grid>
         <Grid
           item
@@ -32,7 +33,7 @@ const HomePage = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-        ><DateScroller/></Grid>
+        ><SeatSelection/></Grid>
       </Grid>
     </Box>
   );
