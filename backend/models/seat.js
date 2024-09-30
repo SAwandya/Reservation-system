@@ -8,10 +8,10 @@ const seatSchema = new mongoose.Schema(
       ref: "Theater",
       required: true,
     },
-    row: { type: String, required: true }, // A, B, C, etc.
-    number: { type: Number, required: true }, // Seat number
+    row: { type: String, required: true }, 
+    number: { type: Number, required: true }, 
     isAvailable: { type: Boolean, default: true },
-    section: { type: String, required: true }, // VIP, Regular, etc.
+    section: { type: String, required: true }, 
   },
   { timestamps: true }
 );

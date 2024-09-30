@@ -31,24 +31,24 @@ router.post("/", async (req, res) => {
     for (const seat of selectedSeats) {
       const [section, row, col] = seat.split("-");
 
-      const result = await Seat.findOneAndUpdate(
-        {
-          theater: theaterId,
-          row: row,
-          number: col,
-          section: section,
-        },
-        { isAvailable: false }
-      );
-      //  const newSeat = new Seat({
-      //    theater: theaterId, // Use theaterId from the request
-      //    row,
-      //    number: seatNumber,
-      //    section,
-      //    isAvailable: true, // You can change this based on your business logic
-      //  });
+      // const result = await Seat.findOneAndUpdate(
+      //   {
+      //     theater: theaterId,
+      //     row: row,
+      //     number: col,
+      //     section: section,
+      //   },
+      //   { isAvailable: false }
+      // );
+       const newSeat = new Seat({
+         theater: theaterId, // Use theaterId from the request
+         row,
+         number: seatNumber,
+         section,
+         isAvailable: true, // You can change this based on your business logic
+       });
 
-      //  await newSeat.save();
+       await newSeat.save();
     }
 
     return res.send("Seats booked successfully");
