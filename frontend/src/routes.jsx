@@ -6,6 +6,7 @@ import SeatSelection from "./components/SeatSelection";
 import MoviePostForm from "./components/MoviePostForm";
 import RegisterForm from "./pages/RegisterForm";
 import SignInForm from "./pages/SignInForm";
+import ShowtimeForm from "./components/showTimeForm";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/moviepostform",
     element: <MoviePostForm />,
+  },
+  {
+    path: "/showtimeform",
+    element: <ShowtimeForm />,
   },
 
   {

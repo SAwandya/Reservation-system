@@ -7,14 +7,12 @@ router.get("/:theaterId", async (req, res) => {
   const { theaterId } = req.params;
 
   try {
-    // Fetch all seats for the given theater
     const seats = await Seat.find({ theater: theaterId }).sort({
       section: 1,
       row: 1,
       number: 1,
     });
 
-    // Return seats data directly
     res.json(seats);
   } catch (error) {
     console.error("Error fetching seats:", error);

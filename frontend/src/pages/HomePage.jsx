@@ -1,46 +1,58 @@
 import React from "react";
+import { Grid, Box, Typography } from "@mui/material";
+import SeatSelection from "../components/SeatSelection";
+import Calender from "../components/Calender";
+import DateScroller from "../components/DateScroller";
 import ImageSlider from "../components/ImageSlider";
-import CardSlider from "../components/CardSlider";
-import { Box, Typography } from "@mui/material";
-import '@fontsource/roboto';
-
+import TheaterForm from "../components/TheaterForm";
 
 const HomePage = () => {
   return (
-    <div>
+    <Box>
       <ImageSlider />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          margin: '20px',
-          flexDirection: { xs: "column", sm: "row" }, // Stack vertically on small screens
-          alignItems: "center", // Center vertically when in column mode
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: { xs: "24px", sm: "48px" }, // Smaller font size on small screens
-            marginRight: { sm: "10px" }, // Margin only applied in row layout
-            marginBottom: { xs: "10px", sm: 0 },
-            fontFamily: "'Roboto', sans-serif", // Bottom margin for column layout
-          }}
+      <Grid container spacing={2} justifyContent="center">
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={5}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          Now Showing
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: { xs: "24px", sm: "48px" }, // Smaller font size on small screens
-            marginLeft: { sm: "10px" },
-            fontFamily: "'Roboto', sans-serif", // Margin only applied in row layout
-          }}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: { xs: "20px", sm: "40px", md: "60px" },
+              marginBottom: { xs: "20px", sm: "40px", md: "60px" },
+              backgroundColor: "#A594F9",
+              borderRadius: "20px",
+              padding: { xs: "10px", sm: "15px", md: "20px" },
+              width: { xs: "100%", sm: "80%", md: "60%" },
+            }}
+          >
+            <TheaterForm />
+            <Calender />
+            <DateScroller />
+          </Box>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={7}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
         >
-          Coming Soon
-        </Typography>
-      </Box>
-
-      <CardSlider />
-    </div>
+          <SeatSelection />
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import useShowtimes from "../hooks/useShowTimes";
 import axios from "axios";
+import useGameQueryStore from "../store";
+
+function formatToCustomISO(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}T00:00:00.000+00:00`;
+  return formattedDate;
+}
 
 const DateScroller = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [scrollIndex, setScrollIndex] = useState(0);
-
-  const movieId = "66f40f14832f5e199d719894";
-  const theaterId = "66f431f9114c8d537ff71c4a";
-
   const [showtimes, setShowtimes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const theaterId = useGameQueryStore((s) => s.selectedTheater);
+  const date = useGameQueryStore((s) => s.selectedDate);
+  const convertedDate = formatToCustomISO(date);
 
   useEffect(() => {
     const fetchShowtimes = async () => {
@@ -22,8 +31,8 @@ const DateScroller = () => {
           "http://localhost:3000/api/showtimes",
           {
             params: {
-              movieId,
-              theaterId,
+              theater: theaterId,
+              date: convertedDate,
             },
           }
         );
@@ -35,39 +44,45 @@ const DateScroller = () => {
       }
     };
 
-    if (movieId && theaterId) {
+    if (theaterId) {
       fetchShowtimes();
     }
-  }, [movieId, theaterId]);
+  }, [theaterId, date]);
 
-  const dates = showtimes
-    .map((showtime) =>
-      showtime.dateTime.map((dateTime) => dateTime.split("T")[0])
-    ) // Extract the date part
-    .flat();
-
-  // Function to handle date selection
-  const handleDateClick = (date) => {
-    setSelectedDate(date);
+  const handleTimeClick = (time) => {
+    setSelectedDate(time);
   };
 
-  // Function to handle left and right scroll buttons
   const scrollLeft = () => {
     setScrollIndex((prev) => Math.max(prev - 1, 0));
   };
 
   const scrollRight = () => {
-    setScrollIndex((prev) => Math.min(prev + 1, dates.length - 5));
+    setScrollIndex((prev) => Math.min(prev + 1, showtimes.length - 1));
   };
 
+  if (loading) return <CircularProgress />;
+  if (error)
+    return <Typography color="error">Error fetching showtimes</Typography>;
+
   return (
-    <Box display="flex" alignItems="center" sx={{ width: "100%" }}>
+    <Box
+      display="flex"
+      alignItems="center"
+      sx={{
+        width: { xs: "90%", sm: "80%", md: "80%" }, // Responsive width
+        margin: "20px auto", // Centering and margin
+        backgroundColor: "#E5D9F2",
+        borderRadius: "10px",
+        padding: { xs: 2, sm: 3 }, // Responsive padding
+      }}
+    >
       {/* Left Scroll Button */}
       <Button onClick={scrollLeft} disabled={scrollIndex === 0}>
         <ArrowBack />
       </Button>
 
-      {/* Date Scroller */}
+      {/* Time Scroller */}
       <Box
         display="flex"
         sx={{
@@ -75,30 +90,41 @@ const DateScroller = () => {
           scrollBehavior: "smooth",
           width: "80%",
           padding: "10px",
-          "::-webkit-scrollbar": { display: "none" }, // Hide scrollbar in webkit browsers
-          msOverflowStyle: "none", // Hide scrollbar in IE and Edge
-          scrollbarWidth: "none", // Hide scrollbar in Firefox
+          "::-webkit-scrollbar": { display: "none" },
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
         }}
       >
-        {dates.slice(scrollIndex, scrollIndex + 5).map((date, index) => (
-          <Button
-            key={index}
-            onClick={() => handleDateClick(date)}
-            variant={selectedDate === date ? "contained" : "outlined"}
-            sx={{
-              minWidth: "100px",
-              marginRight: "10px",
-              whiteSpace: "nowrap",
-              fontSize: "14px",
-            }}
-          >
-            {date}
-          </Button>
-        ))}
+        {showtimes.length > 0 ? (
+          showtimes
+            .flatMap((showtime) =>
+              showtime.times.map((time, timeIndex) => (
+                <Button
+                  key={`${showtime._id}-${timeIndex}`} // Unique keys
+                  onClick={() => handleTimeClick(time)}
+                  variant={selectedDate === time ? "contained" : "outlined"}
+                  sx={{
+                    minWidth: { xs: "80px", sm: "100px" }, // Responsive button width
+                    marginRight: "10px",
+                    whiteSpace: "nowrap",
+                    fontSize: { xs: "12px", sm: "14px" }, // Responsive font size
+                  }}
+                >
+                  {time}
+                </Button>
+              ))
+            )
+            .slice(scrollIndex, scrollIndex + 5) // Show 5 buttons based on scroll index
+        ) : (
+          <Typography>Choose date for relevant times</Typography>
+        )}
       </Box>
 
       {/* Right Scroll Button */}
-      <Button onClick={scrollRight} disabled={scrollIndex >= dates.length - 5}>
+      <Button
+        onClick={scrollRight}
+        disabled={scrollIndex >= showtimes.length - 5}
+      >
         <ArrowForward />
       </Button>
     </Box>

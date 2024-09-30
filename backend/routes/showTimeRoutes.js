@@ -1,31 +1,72 @@
 const express = require("express");
 const { Showtime } = require("../models/showtime");
+const { default: mongoose } = require("mongoose");
+
 
 const router = express.Router();
 
 // Create a new showtime
 router.post("/", async (req, res) => {
+  const { theater, date, times } = req.body;
+
+  // Validate the input
+  if (!theater || !date || !Array.isArray(times) || times.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Theater, date, and showtimes are required." });
+  }
+
   try {
-    const showtime = new Showtime(req.body);
-    await showtime.save();
-    res.status(201).json(showtime);
+    // Create a new Showtime document
+    const newShowtime = new Showtime({
+      theater,
+      date,
+      times,
+    });
+
+    // Save the document to the database
+    await newShowtime.save();
+
+    // Respond with the created showtime
+    res.status(201).json(newShowtime);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error, please try again later." });
   }
 });
 
+
 router.get("/", async (req, res) => {
-  const { movieId, theaterId } = req.query;
+  const { theater, date } = req.query;
+
+  // Validate the input
+  if (!theater || !date) {
+    return res.status(400).json({ message: "Theater and date are required." });
+  }
 
   try {
+    // Parse the date string to a Date object
+    const parsedDate = new Date(date);
+
+    // Ensure the date is valid
+    if (isNaN(parsedDate.getTime())) {
+      return res.status(400).json({ message: "Invalid date format." });
+    }
+
+    // Query to find showtimes for the specified theater and date
     const showtimes = await Showtime.find({
-      movie: movieId,
-      theater: theaterId,
+      theater: theater,
+      date: {
+        $gte: parsedDate.setHours(0, 0, 0, 0), // Start of the day
+        $lt: parsedDate.setHours(23, 59, 59, 999), // End of the day
+      },
     });
 
-    res.send(showtimes);
+    // Respond with the found showtimes
+    res.status(200).json(showtimes);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error, please try again later." });
   }
 });
 
