@@ -3,14 +3,37 @@ const Booking = require("../models/booking");
 
 const router = express.Router();
 
-// Create a new booking
 router.post("/", async (req, res) => {
   try {
-    const booking = new Booking(req.body);
-    await booking.save();
-    res.status(201).json(booking);
+    const {
+      theater,
+      seats, // Array of seat identifiers (can be seat IDs or names)
+      customerName,
+      customerEmail,
+      totalAmount,
+      bookingDate,
+      bookingTime,
+    } = req.body;
+
+    // Create a new booking
+    const newBooking = new Booking({
+      theater: theater, // Cast the theater ID to ObjectId
+      seats: seats.map((seat) => seat), 
+      customerName,
+      customerEmail,
+      totalAmount,
+      bookingDate,
+      bookingTime,
+    });
+
+    const savedBooking = await newBooking.save();
+
+    res
+      .status(201)
+      .json({ message: "Booking created successfully", savedBooking });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Error creating booking:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

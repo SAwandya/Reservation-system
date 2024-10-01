@@ -6,6 +6,8 @@ const useGameQueryStore = create((set) => ({
   selectedTheater: "66f431f9114c8d537ff71c4a",
   SetSelectedTheater: (selectedTheater) =>
     set({ selectedTheater: selectedTheater }),
+  selectedTime: null,
+  SetSelectedTime: (selectedTime) => set({ selectedTime: selectedTime }),
 }));
 
 export default useGameQueryStore;
