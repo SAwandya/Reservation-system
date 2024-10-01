@@ -5,9 +5,10 @@ const theaterSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     location: { type: String, required: true },
-    totalScreens: { type: Number, required: true },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Theater", theaterSchema);
+const Theater = mongoose.model("Theater", theaterSchema);
+
+exports.Theater = Theater;

@@ -19,6 +19,7 @@ const TheaterForm = () => {
       try {
         const response = await axios.get("http://localhost:3000/api/theaters"); // Replace with your API endpoint
         setTheaters(response.data);
+        console.log("Theaters:", response.data);
       } catch (err) {
         setError(err);
       } finally {
@@ -65,7 +66,7 @@ const TheaterForm = () => {
           variant="outlined"
           required
         >
-          {theaters.map((theater) => (
+          {theaters?.map((theater) => (
             <MenuItem key={theater._id} value={theater._id}>
               {theater.name}
             </MenuItem>

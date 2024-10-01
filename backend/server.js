@@ -31,11 +31,6 @@ app.use(cors()); // Enable CORS for all routes
 app.use(express.json({ limit: "10mb" })); // Set the limit (e.g., 10MB)
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  next();
-});
 app.use(
   session({
     secret: "Awandya2000#", // Use a strong secret key for production
