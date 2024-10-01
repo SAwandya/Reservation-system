@@ -1,5 +1,5 @@
 const express = require("express");
-const { Admin, validate } = require("../models/admin");
+const { User, validate } = require("../models/user");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -7,29 +7,32 @@ const config = require("config");
 const auth = require("../middleware/auth");
 
 router.get("/", auth, async (req, res) => {
-  const admins = await Admin.find().sort("name");
+  const users = await User.find().sort("name");
 
-  res.send(admins);
+  res.send(users);
 });
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let admin = await Admin.findOne({ email: req.body.email });
-  if (admin) return res.status(400).send("User already registered");
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send("User already registered");
 
-  admin = new Admin({
+  user = new User({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
   });
 
   const salt = await bcrypt.genSalt(10);
-  admin.password = await bcrypt.hash(admin.password, salt);
-  admin = await admin.save();
+  user.password = await bcrypt.hash(user.password, salt);
+  user = await user.save();
 
-  let token = jwt.sign({ _id: admin._id, name: admin.name }, config.get("jwtPrivateKey"));
+  let token = jwt.sign(
+    { _id: user._id, name: user.name },
+    config.get("jwtPrivateKey")
+  );
 
   // res
   //   .header("x-auth-token", token)

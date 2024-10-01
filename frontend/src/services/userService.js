@@ -1,8 +1,8 @@
 import { APIClient } from "./api-client";
 
-const apiClient = new APIClient("/admin");
+const apiClient = new APIClient("/user");
 
-class AdminService {
+class UserService {
   Create(user) {
     return apiClient.post(user);
   }
@@ -14,4 +14,4 @@ class AdminService {
   }
 }
 
-export default new AdminService();
+export default new UserService();

@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import Joi from "joi";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, IconButton } from "@mui/material";
-
+import { Alert } from "@mui/material";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import adminService from "../services/adminService";
 import { useAuth } from "../Context/AuthContext";
+import userService from "../services/userService";
 
 // Joi schema for validation
 const schema = Joi.object({
@@ -93,7 +91,7 @@ const RegisterForm = () => {
     } else {
       console.log("Form Data: ", formData);
 
-      adminService
+      userService
         .Create(formData)
         .then((res) => {
           console.log("Register successfully: ", res);

@@ -7,6 +7,8 @@ import MoviePostForm from "./components/MoviePostForm";
 import RegisterForm from "./pages/RegisterForm";
 import SignInForm from "./pages/SignInForm";
 import ShowtimeForm from "./components/showTimeForm";
+import DashboardLayout from "./pages/DashboardLayout";
+import Content from "./components/Content";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,19 @@ const router = createBrowserRouter([
       {
         path: "/seatselection",
         element: <SeatSelection />,
+      },
+    ],
+  },
+
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: (
+            <Content />
+        ),
       },
     ],
   },
