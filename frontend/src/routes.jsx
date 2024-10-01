@@ -9,6 +9,7 @@ import SignInForm from "./pages/SignInForm";
 import ShowtimeForm from "./components/showTimeForm";
 import DashboardLayout from "./pages/DashboardLayout";
 import Content from "./components/Content";
+import BookingDetails from "./pages/BookingDetails";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         path: "/seatselection",
         element: <SeatSelection />,
       },
+      {
+        path: "/bookingdetails",
+        element: <BookingDetails />,
+      },
     ],
   },
 
@@ -36,9 +41,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-            <Content />
-        ),
+        element: <Content />,
       },
     ],
   },

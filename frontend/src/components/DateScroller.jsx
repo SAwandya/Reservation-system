@@ -22,6 +22,7 @@ const DateScroller = () => {
 
   const theaterId = useGameQueryStore((s) => s.selectedTheater);
   const date = useGameQueryStore((s) => s.selectedDate);
+  const SetSelectedTime = useGameQueryStore((s) => s.SetSelectedTime);
   const convertedDate = formatToCustomISO(date);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const DateScroller = () => {
 
   const handleTimeClick = (time) => {
     setSelectedDate(time);
+    SetSelectedTime(time);
   };
 
   const scrollLeft = () => {

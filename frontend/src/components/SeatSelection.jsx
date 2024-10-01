@@ -11,15 +11,35 @@ import useSeats from "../hooks/useSeats"; // Adjust the import path based on you
 import seatService from "../services/seatService";
 import useGameQueryStore from "../store";
 import LivingIcon from "@mui/icons-material/Living";
+import dayjs from "dayjs";
+import { useAuth } from "../Context/AuthContext";
+import Joi from "joi"; // Import Joi
+import { useNavigate } from "react-router-dom";
 
 const sectionPrices = {
   VIP: 15,
   Standard: 10,
 };
 
+const getFormattedDate = (dayjsObject) => {
+  return dayjs(dayjsObject).format("YYYY-MM-DD"); // Customize format as needed
+};
+
+// Joi schema for booking validation
+const bookingSchema = Joi.object({
+  theater: Joi.string().required(),
+  seats: Joi.array().items(Joi.string()).required(),
+  customerName: Joi.string().min(1).required(),
+  customerEmail: Joi.string()
+    .pattern(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/) // Custom regex for email validation
+    .required(),
+  totalAmount: Joi.number().greater(0).required(),
+  bookingDate: Joi.string().isoDate().required(),
+  bookingTime: Joi.string().required(),
+});
+
 const SeatSelection = () => {
   const theaterId = useGameQueryStore((s) => s.selectedTheater);
-
   const { data, isLoading, isError } = useSeats(theaterId);
   const [seatLayout, setSeatLayout] = useState({});
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -29,6 +49,8 @@ const SeatSelection = () => {
   // Media query to detect screen size
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isMediumScreen = useMediaQuery("(max-width:960px)");
+  const selectedDate = useGameQueryStore((s) => s.selectedDate);
+  const selectedTime = useGameQueryStore((s) => s.selectedTime);
 
   // Effect to handle seat layout when data changes
   useEffect(() => {
@@ -76,17 +98,47 @@ const SeatSelection = () => {
     setSnackbarOpen(false);
   };
 
+  const { getCurrentUser } = useAuth();
+  const { _id, name, email } = getCurrentUser();
+
+  const navigate = useNavigate();
+
   const handleConfirm = async () => {
     if (selectedSeats.length > 0) {
+      const formattedDate = getFormattedDate(selectedDate);
+
+      // Prepare booking data
+      const bookingData = {
+        theater: theaterId,
+        seats: selectedSeats,
+        customerName: name,
+        customerEmail: email,
+        totalAmount: totalPrice,
+        bookingDate: formattedDate,
+        bookingTime: selectedTime,
+      };
+
+      // Validate booking data
+      const { error } = bookingSchema.validate(bookingData);
+      if (error) {
+        console.error("Validation Error:", error.details);
+        return; // Exit if validation fails
+      }
+
+      // Save valid booking data to local storage
+      localStorage.setItem("bookingData", JSON.stringify(bookingData));
+      
+      navigate("/bookingdetails");
       setSnackbarOpen(true);
-      seatService
-        .CreateSeat({ theaterId, selectedSeats })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error("Error booking seats:", error);
-        });
+
+      // seatService
+      //   .CreateSeat({ theaterId, selectedSeats })
+      //   .then((response) => {
+      //     console.log(response.data);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error booking seats:", error);
+      //   });
     }
   };
 
@@ -109,7 +161,7 @@ const SeatSelection = () => {
           backgroundColor: "#E5D9F2",
         }}
       >
-        <Typography sx={{ mb: 2, fontSize: '15px' }}>
+        <Typography sx={{ mb: 2, fontSize: "15px" }}>
           {section} Seats - ${sectionPrices[section]}
         </Typography>
         <Grid container justifyContent="center" sx={{ mb: 2 }}>
