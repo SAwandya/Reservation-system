@@ -1,5 +1,6 @@
 const express = require("express");
 const { Seat } = require("../models/seat");
+const { Theater } = require("../models/theater");
 
 const router = express.Router();
 
@@ -56,6 +57,47 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Route to create multiple seats
+router.post("/create", async (req, res) => {
+  try {
+    const { theater, sections, location } = req.body;
+
+    let newtheater = await Theater.findOne({ name: theater, location });
+    if (newtheater) res.status(404).json({ error: "Theater Already exist" });
+
+    // Create a new theater
+    newTheater = new Theater({ name: theater, location });
+    await newTheater.save();
+
+    if(newTheater) res.status(200).json({ message: "Theater created successfully" });
+
+
+    // Iterate through each section and row to create seats
+    const seatsToCreate = [];
+    sections.forEach((section) => {
+      section.layout.forEach((row, rowIndex) => {
+        row.forEach((isAvailable, colIndex) => {
+          const newSeat = {
+            theater: newTheater._id, // Theater ID from the body
+            row: rowIndex, // Row index
+            number: colIndex, // Column index
+            isAvailable, // Availability of the seat
+            section: section.name, // Section name
+          };
+          seatsToCreate.push(newSeat);
+        });
+      });
+    });
+
+    // Bulk insert seats into the database
+    await Seat.insertMany(seatsToCreate);
+
+    return res.status(201).json({ message: "Seats created successfully" });
+  } catch (error) {
+    console.error("Error creating seats:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Get a seat by ID
 router.get("/:id", async (req, res) => {
@@ -67,7 +109,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 router.delete("/:id", async (req, res) => {
   try {

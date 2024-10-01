@@ -1,17 +1,13 @@
 import { useState } from "react";
 import {
-  Box,
   CssBaseline,
-  Drawer,
-  Button,
   Typography,
   Grid,
 } from "@mui/material";
-import EmpTable from "../Components/EmpTable";
 import SideBar from "../Components/SideBar";
 import { Outlet } from "react-router-dom";
 import { RenderContentProvider } from "../Context/RenderContentContext";
-import DepTable from "../Components/DepTable";
+import AdminSeatConfigurator from "../components/AdminSeatConfigurator";
 
 const DashboardLayout = () => {
   // State to manage the active content
@@ -21,9 +17,9 @@ const DashboardLayout = () => {
   const renderContent = () => {
     switch (activeContent) {
       case "Employee":
-        return <EmpTable />;
+        return <AdminSeatConfigurator />;
       case "Department":
-        return <DepTable />;
+        return <AdminSeatConfigurator />;
       case "Profile":
         return <Typography variant="h4">Profile Page</Typography>;
       default:

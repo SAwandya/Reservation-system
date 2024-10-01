@@ -1,5 +1,5 @@
 const express = require("express");
-const Theater = require("../models/theater");
+const {Theater} = require("../models/theater");
 
 const router = express.Router();
 
