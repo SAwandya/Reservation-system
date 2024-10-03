@@ -60,7 +60,12 @@ const DateScroller = () => {
   };
 
   const scrollRight = () => {
-    setScrollIndex((prev) => Math.min(prev + 1, showtimes.length - 1));
+    setScrollIndex((prev) =>
+      Math.min(
+        prev + 1,
+        showtimes.flatMap((showtime) => showtime.times).length - 1
+      )
+    ); // Adjusted to the total number of times
   };
 
   if (loading) return <CircularProgress />;
@@ -90,7 +95,7 @@ const DateScroller = () => {
         sx={{
           overflowX: "auto",
           scrollBehavior: "smooth",
-          width: "80%",
+          width: "85%", // Increased width for better visibility
           padding: "10px",
           "::-webkit-scrollbar": { display: "none" },
           msOverflowStyle: "none",
@@ -99,24 +104,23 @@ const DateScroller = () => {
       >
         {showtimes.length > 0 ? (
           showtimes
-            .flatMap((showtime) =>
-              showtime.times.map((time, timeIndex) => (
-                <Button
-                  key={`${showtime._id}-${timeIndex}`} // Unique keys
-                  onClick={() => handleTimeClick(time)}
-                  variant={selectedDate === time ? "contained" : "outlined"}
-                  sx={{
-                    minWidth: { xs: "80px", sm: "100px" }, // Responsive button width
-                    marginRight: "10px",
-                    whiteSpace: "nowrap",
-                    fontSize: { xs: "12px", sm: "14px" }, // Responsive font size
-                  }}
-                >
-                  {time}
-                </Button>
-              ))
-            )
+            .flatMap((showtime) => showtime.times) // Flatten the showtimes
             .slice(scrollIndex, scrollIndex + 5) // Show 5 buttons based on scroll index
+            .map((time, timeIndex) => (
+              <Button
+                key={`${time}-${timeIndex}`} // Unique keys
+                onClick={() => handleTimeClick(time)}
+                variant={selectedDate === time ? "contained" : "outlined"}
+                sx={{
+                  minWidth: { xs: "80px", sm: "100px" }, // Responsive button width
+                  marginRight: "10px",
+                  whiteSpace: "nowrap",
+                  fontSize: { xs: "12px", sm: "14px" }, // Responsive font size
+                }}
+              >
+                {time}
+              </Button>
+            ))
         ) : (
           <Typography>Choose date for relevant times</Typography>
         )}
@@ -125,7 +129,10 @@ const DateScroller = () => {
       {/* Right Scroll Button */}
       <Button
         onClick={scrollRight}
-        disabled={scrollIndex >= showtimes.length - 5}
+        disabled={
+          scrollIndex >=
+          showtimes.flatMap((showtime) => showtime.times).length - 5
+        }
       >
         <ArrowForward />
       </Button>

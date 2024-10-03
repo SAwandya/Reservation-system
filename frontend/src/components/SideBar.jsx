@@ -50,7 +50,7 @@ const SideBar = ({ setActiveContent, activeContent }) => {
         <SideBarButton
           activeContent={activeContent}
           setActiveContent={setActiveContent}
-          title="Department"
+          title="Bookings"
         />
 
         <SideBarButton
@@ -65,8 +65,9 @@ const SideBar = ({ setActiveContent, activeContent }) => {
             backgroundColor: "#8A6BFF",
             width: "252px",
             height: "30px",
-            marginTop: "auto", // Push logout button to the bottom
+            marginTop: "300px", // Push logout button to the bottom
             borderRadius: "5px",
+            
           }}
           onClick={logout}
           fullWidth

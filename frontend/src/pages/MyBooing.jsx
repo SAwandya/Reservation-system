@@ -7,13 +7,13 @@ import {
   ListItemText,
   Divider,
   CircularProgress,
+  Box,
 } from "@mui/material";
 import axios from "axios";
 import { useAuth } from "../Context/AuthContext";
 
 const MyBooking = () => {
   const { getCurrentUser } = useAuth();
-
   const customerEmail = getCurrentUser().email;
 
   const [orders, setOrders] = useState([]);
@@ -40,32 +40,48 @@ const MyBooking = () => {
   }, [customerEmail]);
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        sx={{ display: "flex", justifyContent: "center", marginTop: "80px" }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
-    <div style={{ padding: "20px", marginTop: "80px" }}>
-      <Typography variant="h4" gutterBottom style={{ fontSize: "2rem" }}>
+    <Box sx={{ padding: 3, maxWidth: 800, margin: "100px auto auto auto" }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ fontSize: "2rem", color: "#5C2FC2" }}
+      >
         My Bookings
       </Typography>
 
       {orders?.length === 0 ? (
-        <Typography style={{ fontSize: "1.25rem" }}>No orders found</Typography>
+        <Typography sx={{ fontSize: "1.25rem", textAlign: "center" }}>
+          No orders found
+        </Typography>
       ) : (
         <List>
           {orders?.map((order) => (
             <Paper
               key={order._id}
-              style={{
-                marginBottom: "20px",
-                padding: "15px",
+              elevation={3}
+              sx={{
+                marginBottom: 2,
+                padding: 2,
                 backgroundColor: "#FFE1FF",
+                borderRadius: "10px",
               }}
             >
               <ListItem>
                 <ListItemText
-                  primaryTypographyProps={{ style: { fontSize: "1.2rem" } }}
-                  secondaryTypographyProps={{ style: { fontSize: "1.2rem" } }}
+                  primaryTypographyProps={{
+                    style: { fontSize: "1.2rem", fontWeight: "bold" },
+                  }}
+                  secondaryTypographyProps={{ style: { fontSize: "1rem" } }}
                   primary={`Theater: ${order.theaterName}`}
                   secondary={`Seats: ${order.seats.join(
                     ", "
@@ -74,16 +90,16 @@ const MyBooking = () => {
               </ListItem>
               <ListItemText
                 secondaryTypographyProps={{
-                  style: { fontSize: "1.25rem", marginLeft: "15px" },
+                  style: { fontSize: "1rem", marginLeft: "15px" },
                 }}
                 secondary={`Booking Date: ${order.bookingDate} | Booking Time: ${order.bookingTime}`}
               />
-              <Divider />
+              <Divider sx={{ marginY: 1 }} />
             </Paper>
           ))}
         </List>
       )}
-    </div>
+    </Box>
   );
 };
 

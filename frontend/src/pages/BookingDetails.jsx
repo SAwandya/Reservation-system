@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import { Box, Typography, Paper, Button, Grid } from "@mui/material";
 import Swal from "sweetalert2";
 import seatService from "../services/seatService";
 import bookingService from "../services/bookingService";
@@ -8,16 +8,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const bookSeat = async (bookingDataStr, userId, accessToken) => {
-  console.log(accessToken, userId);
-
   try {
-    // Call the backend to create a Google Calendar event
     const response = await axios.post(
       "http://localhost:3000/api/create-calendar-event",
       {
         userId: userId,
-        bookingDate: bookingDataStr.bookingDate, // Pass the booking date
-        bookingTime: bookingDataStr.bookingTime, // Pass the booking time
+        bookingDate: bookingDataStr.bookingDate,
+        bookingTime: bookingDataStr.bookingTime,
       },
       {
         headers: {
@@ -25,7 +22,6 @@ const bookSeat = async (bookingDataStr, userId, accessToken) => {
         },
       }
     );
-
     console.log("Calendar event created:", response.data);
   } catch (error) {
     console.error("Error booking seat and creating event:", error);
@@ -34,9 +30,7 @@ const bookSeat = async (bookingDataStr, userId, accessToken) => {
 
 const BookingDetails = () => {
   const bookingData = localStorage.getItem("bookingData");
-
   const bookingDataStr = JSON.parse(bookingData);
-
   const theaterId = bookingDataStr.theater;
   const selectedSeats = bookingDataStr.seats;
   const { getCurrentUser } = useAuth();
@@ -47,7 +41,7 @@ const BookingDetails = () => {
 
   const handleConfirm = () => {
     Swal.fire({
-      title: "Are you want to Confirm?",
+      title: "Confirm Booking?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
@@ -56,14 +50,14 @@ const BookingDetails = () => {
       confirmButtonText: "Confirm",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(bookingDataStr);
         bookSeat(bookingDataStr, userId, accessToken);
 
         Swal.fire({
-          title: "",
-          text: "Booking process complted",
+          title: "Success!",
+          text: "Booking process completed.",
           icon: "success",
         });
+
         seatService
           .CreateSeat({ theaterId, selectedSeats })
           .then((response) => {
@@ -71,7 +65,7 @@ const BookingDetails = () => {
             bookingService
               .Create(bookingDataStr)
               .then((response) => {
-                navigate('/');
+                navigate("/");
                 console.log(response.data);
               })
               .catch((error) => {
@@ -86,51 +80,64 @@ const BookingDetails = () => {
   };
 
   return (
-    <Box sx={{ padding: 3, maxWidth: 600, margin: "auto" }}>
-      <Paper elevation={3} sx={{ padding: 3 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+    <Box sx={{ padding: 3, maxWidth: 600, margin: "auto", marginTop: "100px" }}>
+      <Paper
+        elevation={4}
+        sx={{ padding: 4, borderRadius: "20px", backgroundColor: "#F5F5F5" }}
+      >
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{ color: "#5C2FC2" }}
+        >
           Booking Details
         </Typography>
 
-        <Typography variant="h6" component="h2">
-          Event Name:
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          {bookingDataStr.theaterName}
-        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Event Name:</Typography>
+            <Typography
+              variant="body1"
+              sx={{ marginBottom: 2, fontWeight: "bold" }}
+            >
+              {bookingDataStr.theaterName}
+            </Typography>
+          </Grid>
 
-        <Typography variant="h6" component="h2">
-          Date:
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          {bookingDataStr.bookingDate}
-        </Typography>
+          <Grid item xs={6}>
+            <Typography variant="h6">Date:</Typography>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              {bookingDataStr.bookingDate}
+            </Typography>
+          </Grid>
 
-        <Typography variant="h6" component="h2">
-          Time:
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          {bookingDataStr.bookingTime}
-        </Typography>
+          <Grid item xs={6}>
+            <Typography variant="h6">Time:</Typography>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              {bookingDataStr.bookingTime}
+            </Typography>
+          </Grid>
 
-        <Typography variant="h6" component="h2">
-          Total Price:
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          ${bookingDataStr.totalAmount}
-        </Typography>
+          <Grid item xs={6}>
+            <Typography variant="h6">Total Price:</Typography>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              ${bookingDataStr.totalAmount}
+            </Typography>
+          </Grid>
 
-        <Typography variant="h6" component="h2">
-          Seats:
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          {bookingDataStr.seats}
-        </Typography>
+          <Grid item xs={6}>
+            <Typography variant="h6">Seats:</Typography>
+            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+              {bookingDataStr.seats.join(", ")}
+            </Typography>
+          </Grid>
+        </Grid>
 
         <Button
           variant="contained"
           onClick={handleConfirm}
-          color="primary"
+          sx={{ backgroundColor: "#5C2FC2", color: "white", mt: 4 }}
           fullWidth
         >
           Confirm Booking

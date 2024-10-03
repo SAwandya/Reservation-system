@@ -22,33 +22,36 @@ const Login = () => {
   };
 
   return (
-    <Button
-      variant="outlined"
-      startIcon={
-        <Box
-          component="img"
-          src={googleIcon}
-          alt="Google logo"
-          sx={{ width: "20px", height: "20px" }} // Customize size as needed
-        />
-      }
-      onClick={handleLogin}
-      sx={{
-        textTransform: "none", // Ensure the button text is not all uppercase
-        backgroundColor: "#fff", // Google button white background
-        color: "#000", // Google button black text
-        borderColor: "#dcdcdc", // Light grey border
-        "&:hover": {
-          backgroundColor: "#f5f5f5",
-          borderColor: "#c2c2c2",
-        },
-        padding: "8px 16px",
-        fontWeight: 500,
-        fontSize: "14px",
-      }}
-    >
-      Sign in with Google
-    </Button>
+    <Box sx={{ display: "flex", marginTop: "20px" }}>
+      <Button
+        variant="outlined"
+        startIcon={
+          <Box
+            component="img"
+            sx={{ marginRight: "20px" }}
+            src={googleIcon}
+            alt="Google logo"
+            sx={{ width: "20px", height: "20px" }} // Customize size as needed
+          />
+        }
+        onClick={handleLogin}
+        sx={{
+          textTransform: "none", // Ensure the button text is not all uppercase
+          backgroundColor: "#fff", // Google button white background
+          color: "#000", // Google button black text
+          borderColor: "#dcdcdc", // Light grey border
+          "&:hover": {
+            backgroundColor: "#f5f5f5",
+            borderColor: "#c2c2c2",
+          },
+          padding: "8px 16px",
+          fontWeight: 500,
+          fontSize: "14px",
+        }}
+      >
+        Sign in with Google
+      </Button>
+    </Box>
   );
 };
 

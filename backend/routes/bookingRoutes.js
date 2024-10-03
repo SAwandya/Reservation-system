@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 // Get all bookings
 router.get("/", async (req, res) => {
   try {
-    const bookings = await Booking.find().populate("showtime seats");
+    const bookings = await Booking.find();
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
