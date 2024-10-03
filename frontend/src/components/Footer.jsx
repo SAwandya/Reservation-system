@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Box, Typography, IconButton, Link, Grid } from "@mui/material";
+import { Box, Typography, IconButton, Grid, Button } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import logo from 'E:/new 11/Reservation-system/frontend/src/assets/logo1.png'; // Import the image
 
 const Footer = () => {
   return (
@@ -29,6 +30,8 @@ const Footer = () => {
           <Typography variant="body1" sx={{ color: "#383838" }}>
             Freshness and quality in every product!
           </Typography>
+          {/* Image of the logo */}
+          <Box component="img" src={logo} alt="Dairy Farm Logo" sx={{ width: '200px', mt: 5 }} />
         </Grid>
 
         {/* Quick Links */}
@@ -36,21 +39,21 @@ const Footer = () => {
           <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "#191919" }}>
             Quick Links
           </Typography>
-          <Link href="/" color="inherit" sx={linkStyles}>
+          <Button href="/" variant="contained" color="primary" sx={buttonStyles}>
             Home
-          </Link>
-          <br />
-          <Link href="/salesorders" color="inherit" sx={linkStyles}>
+          </Button>
+          
+          <Button href="/salesorders" variant="contained" color="primary" sx={buttonStyles}>
             My Orders
-          </Link>
+          </Button>
           <br />
-          <Link href="/salescarts" color="inherit" sx={linkStyles}>
+          <Button href="/salescarts" variant="contained" color="primary" sx={buttonStyles}>
             Cart
-          </Link>
-          <br />
-          <Link href="/feedbackpage" color="inherit" sx={linkStyles}>
+          </Button>
+          
+          <Button href="/feedbackpage" variant="contained" color="primary" sx={buttonStyles}>
             Feedback
-          </Link>
+          </Button>
         </Grid>
 
         {/* Social Media Links */}
@@ -76,32 +79,33 @@ const Footer = () => {
       </Grid>
 
       {/* Footer Bottom */}
-      <Typography
-        variant="body2"
-        color="textSecondary"
-        sx={{ mt: 4, color: "#383838", fontWeight: "bold" }}
-      >
+      <Typography variant="body2" color="textSecondary" sx={{ mt: 4, color: "#383838", fontWeight: "bold" }}>
         &copy; {new Date().getFullYear()} Dairy Farm. All rights reserved.
       </Typography>
     </Box>
   );
 };
 
-// Link styles for quick links with hover effect
-const linkStyles = {
-  color: "#191919",
+// Button styles for quick links with elegant gradient
+const buttonStyles = {
+  background: "linear-gradient(90deg, rgba(228,177,240,1) 0%, rgba(167,223,119,1) 100%)",
+  color: "#000000",
   fontWeight: "bold",
   fontSize: "16px",
-  textDecoration: "none",
+  textTransform: "none",
+  width: "150px",
+  margin:"10px",
+  marginTop: "10px",
+  borderRadius: "8px", 
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
   "&:hover": {
-    color: "#388E3C",
-    textDecoration: "underline",
+    background: "linear-gradient(to right, rgba(173,216,230,0), #388E3C)",
   },
 };
 
 // Icon styles for social media with hover effect
 const iconStyles = {
-  color: "#1E5128",
+  color: "#1E3128",
   fontSize: "28px",
   transition: "color 0.3s",
   "&:hover": {
