@@ -5,9 +5,9 @@ import Calender from "../components/Calender";
 import DateScroller from "../components/DateScroller";
 import ImageSlider from "../components/ImageSlider";
 import TheaterForm from "../components/TheaterForm";
-import GoogleAuth from "../components/GoogleAuth";
 
 const HomePage = () => {
+
   return (
     <Box>
       <ImageSlider />
@@ -53,7 +53,6 @@ const HomePage = () => {
           <SeatSelection />
         </Grid>
       </Grid>
-      <GoogleAuth/>
     </Box>
   );
 };

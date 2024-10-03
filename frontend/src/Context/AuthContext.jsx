@@ -18,9 +18,9 @@ export const AuthProvider = ({ children }) => {
 
   const getCurrentUser = () => {
 
-    const {_id, name, email} = jwtDecode(authToken);
+    const {_id, name, email, accessToken} = jwtDecode(authToken);
 
-    return { _id, name, email };
+    return { _id, name, email, accessToken };
   }
 
   return (

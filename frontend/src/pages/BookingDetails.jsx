@@ -3,6 +3,34 @@ import { Box, Typography, Paper, Button } from "@mui/material";
 import Swal from "sweetalert2";
 import seatService from "../services/seatService";
 import bookingService from "../services/bookingService";
+import { useAuth } from "../Context/AuthContext";
+import axios from "axios";
+
+const bookSeat = async (bookingDataStr, userId, accessToken) => {
+
+  console.log(accessToken, userId);
+
+  try {
+    // Call the backend to create a Google Calendar event
+    const response = await axios.post(
+      "http://localhost:3000/api/create-calendar-event",
+      {
+        userId: userId,
+        bookingDate: bookingDataStr.bookingDate, // Pass the booking date
+        bookingTime: bookingDataStr.bookingTime, // Pass the booking time
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    console.log("Calendar event created:", response.data);
+  } catch (error) {
+    console.error("Error booking seat and creating event:", error);
+  }
+};
 
 const BookingDetails = () => {
   const bookingData = localStorage.getItem("bookingData");
@@ -11,43 +39,47 @@ const BookingDetails = () => {
 
   const theaterId = bookingDataStr.theaterId;
   const selectedSeats = bookingDataStr.seats;
+  const { getCurrentUser } = useAuth();
+  const userId = getCurrentUser()._id;
+  const accessToken = getCurrentUser().accessToken;
 
   const handleConfirm = () => {
-    Swal.fire({
-      title: "Are you want to Confirm?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Confirm",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log(bookingDataStr);
+    bookSeat(bookingDataStr, userId, accessToken);
+    // Swal.fire({
+    //   title: "Are you want to Confirm?",
+    //   text: "You won't be able to revert this!",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "Confirm",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     console.log(bookingDataStr);
 
-        Swal.fire({
-          title: "",
-          text: "Booking process complted",
-          icon: "success",
-        });
-        // seatService
-        //   .CreateSeat({ theaterId, selectedSeats })
-        //   .then((response) => {
-        //     console.log(response.data);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error booking seats:", error);
-        //   });
-        bookingService
-          .Create(bookingDataStr)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            console.error("Error booking seats:", error);
-          });
-      }
-    });
+    //     Swal.fire({
+    //       title: "",
+    //       text: "Booking process complted",
+    //       icon: "success",
+    //     });
+    //     // seatService
+    //     //   .CreateSeat({ theaterId, selectedSeats })
+    //     //   .then((response) => {
+    //     //     console.log(response.data);
+    //     //   })
+    //     //   .catch((error) => {
+    //     //     console.error("Error booking seats:", error);
+    //     //   });
+    //     bookingService
+    //       .Create(bookingDataStr)
+    //       .then((response) => {
+    //         console.log(response.data);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error booking seats:", error);
+    //       });
+    //   }
+    // });
   };
 
   return (

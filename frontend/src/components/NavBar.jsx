@@ -116,10 +116,10 @@ const NavBar = () => {
         <Link to="/">HOME</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Link to="/salesorders">MY ORDERS</Link>
+        <Link to="/salesorders">MY BOOKINGS</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Link to="/salescarts">CART</Link>
+        <Link to="/salescarts"></Link>
       </MenuItem>
     </Menu>
   );
@@ -151,7 +151,7 @@ const NavBar = () => {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            Dairy Farm
+            Reservation system
           </Typography>
           <Search>
             <SearchIconWrapper>

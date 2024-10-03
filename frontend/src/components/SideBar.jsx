@@ -44,7 +44,7 @@ const SideBar = ({ setActiveContent, activeContent }) => {
         <SideBarButton
           activeContent={activeContent}
           setActiveContent={setActiveContent}
-          title="Employee"
+          title="Layout"
         />
 
         <SideBarButton

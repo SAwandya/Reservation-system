@@ -1,14 +1,14 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const { User } = require("../models/user"); // Assuming you have a User model
+const config = require("config");
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID:
-        "130634797957-3nomoq3u697vsc0kpht36manaik0r5qm.apps.googleusercontent.com",
-      clientSecret: "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",
-      callbackURL: "/api/auth/google/callback",
+      clientID: config.get("GOOGLE_CLIENT_ID"),
+      clientSecret: config.get("GOOGLE_CLIENT_SECRET"),
+      callbackURL: "http://localhost:3000/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       // Find or create user in the database
@@ -19,12 +19,16 @@ passport.use(
             googleId: profile.id,
             name: profile.displayName,
             email: profile.emails[0].value,
-            // Add any other fields you need
+            accessToken: accessToken,
+            refreshToken: refreshToken,
           });
+        }else{
+          user.accessToken = accessToken;
+          user.save
         }
-        done(null, user);
+        return done(null, user);
       } catch (error) {
-        done(error, null);
+        return done(error, null);
       }
     }
   )
@@ -38,3 +42,5 @@ passport.deserializeUser(async (id, done) => {
   const user = await User.findById(id);
   done(null, user);
 });
+
+module.exports = passport;

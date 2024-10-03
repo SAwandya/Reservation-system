@@ -6,11 +6,14 @@ const config = require("config");
 const Joi = require("joi");
 const { User } = require("../models/user");
 const passport = require("passport");
+const { generateToken } = require("../services/authService");
 
 // Route to initiate Google authentication
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    scope: ["profile", "email", "https://www.googleapis.com/auth/calendar"],
+  })
 );
 
 // Callback route after successful authentication
@@ -18,9 +21,13 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("/"); // Redirect to dashboard or any other page
+  const token = generateToken(req.user);
+
+    res.redirect(`http://localhost:4000/login/?token=${token}`); // Redirect to dashboard or any other page
   }
 );
+
+
 
 router.post("/", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });

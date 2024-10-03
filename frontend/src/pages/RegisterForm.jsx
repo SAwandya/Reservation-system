@@ -7,6 +7,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import userService from "../services/userService";
+import Login from "../components/Login";
 
 // Joi schema for validation
 const schema = Joi.object({
@@ -255,6 +256,7 @@ const RegisterForm = () => {
             </Button>
           </Box>
         </form>
+        <Login/>
       </Box>
     </>
   );

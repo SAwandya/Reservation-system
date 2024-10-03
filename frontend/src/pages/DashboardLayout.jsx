@@ -8,16 +8,22 @@ import SideBar from "../Components/SideBar";
 import { Outlet } from "react-router-dom";
 import { RenderContentProvider } from "../Context/RenderContentContext";
 import AdminSeatConfigurator from "../components/AdminSeatConfigurator";
+import AdminShowTimeForm from "../components/AdminShowTimeForm";
 
 const DashboardLayout = () => {
   // State to manage the active content
-  const [activeContent, setActiveContent] = useState("Employee");
+  const [activeContent, setActiveContent] = useState("Layout");
 
   // Function to render dynamic content based on button click
   const renderContent = () => {
     switch (activeContent) {
-      case "Employee":
-        return <AdminSeatConfigurator />;
+      case "Layout":
+        return (
+          <>
+            <AdminSeatConfigurator />
+            <AdminShowTimeForm />
+          </>
+        );
       case "Department":
         return <AdminSeatConfigurator />;
       case "Profile":
