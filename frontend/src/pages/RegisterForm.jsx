@@ -36,8 +36,7 @@ const RegisterForm = () => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
 
-  const {login, authToken} = useAuth();
-
+  const { login, authToken } = useAuth();
   const navigate = useNavigate();
 
   // Validate a single field based on Joi schema
@@ -129,7 +128,7 @@ const RegisterForm = () => {
         draggable
         pauseOnHover
         theme="dark"
-        transition:Bounce
+        transition={Bounce}
       />
       {authToken && <Navigate to="/" replace={true} />}
       <Box
@@ -138,11 +137,11 @@ const RegisterForm = () => {
           p: 3,
           backgroundColor: "#F5F4FA",
           borderRadius: "20px",
-          padding: "60px",
-          alignItems: "center",
+          padding: { xs: "30px", sm: "40px", md: "60px" }, // Responsive padding
           marginTop: "30px",
-          maxWidth: "50%",
-          marginLeft: "25%",
+          maxWidth: { xs: "90%", sm: "80%", md: "50%" }, // Responsive width
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
         <Box
@@ -201,7 +200,7 @@ const RegisterForm = () => {
             type="email"
             onKeyPress={(e) => {
               const char = String.fromCharCode(e.keyCode || e.which);
-              if (!/^[a-zA-Z0-9.@s]*$/.test(char)) {
+              if (!/^[a-zA-Z0-9.@]*$/.test(char)) {
                 e.preventDefault(); // Prevents the user from entering numbers or special characters
               }
             }}
@@ -233,8 +232,8 @@ const RegisterForm = () => {
             </Typography>
           </Link>
 
-          {errors && errors.length > 0 && (
-            <Alert severity="error">{errors}</Alert>
+          {errors && Object.keys(errors).length > 0 && (
+            <Alert severity="error">{Object.values(errors).join(", ")}</Alert>
           )}
 
           {/* Add Button */}
@@ -245,18 +244,17 @@ const RegisterForm = () => {
               fullWidth
               type="submit"
               sx={{
-                marginRight: "40px",
                 borderRadius: "8px",
                 backgroundColor: "#7350F5",
                 height: "50px",
-                marginTop: "2px",
+                marginTop: "20px",
               }}
             >
               Register
             </Button>
           </Box>
         </form>
-        <Login/>
+        <Login />
       </Box>
     </>
   );

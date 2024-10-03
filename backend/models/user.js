@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
   accessToken: {
     type: String,
   },
+  role: {
+    type: String,
+    default: "user",
+  },
 });
 
 const User = mongoose.model("User", userSchema);

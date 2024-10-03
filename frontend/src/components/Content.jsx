@@ -23,7 +23,8 @@ const Content = () => {
               marginRight: "10px",
               color: "#8072b3",
               fontSize: "27px",
-              fontWeight: "500"
+              fontWeight: "500",
+              marginTop: "36px",
             }}
           >
             Welcome {getCurrentUser()?.name}!

@@ -17,7 +17,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
+import LogoutIcon from "@mui/icons-material/Logout"; // Importing Logout icon
+import { useAuth } from "../Context/AuthContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -78,6 +79,12 @@ const NavBar = () => {
     setDropdownOpen(false);
   };
 
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -93,9 +100,12 @@ const NavBar = () => {
       <MenuItem
         onClick={() => {
           handleMenuClose();
-          logout(); // Assuming you want to log out from the menu
+          // Implement your logout logic
         }}
       >
+        <IconButton onClick={() => handleLogout()} color="inherit" sx={{ mr: 1 }}>
+          <LogoutIcon />
+        </IconButton>
         Logout
       </MenuItem>
     </Menu>
@@ -116,7 +126,7 @@ const NavBar = () => {
         <Link to="/">HOME</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Link to="/salesorders">MY BOOKINGS</Link>
+        <Link to="/mybookings">MY BOOKINGS</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <Link to="/salescarts"></Link>
@@ -133,6 +143,8 @@ const NavBar = () => {
           marginTop: "20px",
           borderRadius: "10px",
           color: "#1E5128",
+          mx: "auto", // Center horizontally
+          px: 4, // Add padding to the left and right
         }}
       >
         <Toolbar>
@@ -151,7 +163,7 @@ const NavBar = () => {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            Reservation system
+            Reservation System
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -179,22 +191,25 @@ const NavBar = () => {
             </IconButton>
           </Box>
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+            {/* Adding some horizontal space between buttons */}
             <Link to="/">
               <Button sx={buttonStyles}>HOME</Button>
             </Link>
-            <Link to="/salesorders">
-              <Button sx={buttonStyles}>MY ORDERS</Button>
+            <Link to="/mybookings">
+              <Button sx={buttonStyles}>MY BOOKINGS</Button>
             </Link>
-            <Link to="/salescarts">
-              <Button sx={buttonStyles}>CART</Button>
-            </Link>
+            {/* <Link to="/salescarts">
+              <Button sx={buttonStyles}></Button>
+            </Link> */}
             <IconButton
               size="large"
               aria-label="show notifications"
               color="inherit"
             >
-              <NotificationsIcon />
+              <Badge badgeContent={4} color="error">
+                <NotificationsIcon />
+              </Badge>
             </IconButton>
             <IconButton
               size="large"
@@ -223,6 +238,7 @@ const buttonStyles = {
   fontWeight: "bold",
   color: "#191919",
   borderRadius: "10px",
+  mx: 2, // Add margin between buttons
 };
 
 export default NavBar;

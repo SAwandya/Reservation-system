@@ -39,15 +39,8 @@ router.post("/", async (req, res) => {
         },
         { isAvailable: false }
       );
-      //  const newSeat = new Seat({
-      //    theater: theaterId, // Use theaterId from the request
-      //    row,
-      //    number: seatNumber,
-      //    section,
-      //    isAvailable: true, // You can change this based on your business logic
-      //  });
-
-      //  await newSeat.save();
+      
+      
     }
 
     return res.send("Seats booked successfully");
@@ -69,7 +62,7 @@ router.post("/create", async (req, res) => {
     newTheater = new Theater({ name: theater, location });
     await newTheater.save();
 
-    if(newTheater) res.status(200).json({ message: "Theater created successfully" });
+    if(!newTheater) res.status(404).json({ error: "Theater not created" });
 
 
     // Iterate through each section and row to create seats

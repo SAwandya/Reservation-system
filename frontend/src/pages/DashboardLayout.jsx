@@ -5,14 +5,24 @@ import {
   Grid,
 } from "@mui/material";
 import SideBar from "../Components/SideBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { RenderContentProvider } from "../Context/RenderContentContext";
 import AdminSeatConfigurator from "../components/AdminSeatConfigurator";
 import AdminShowTimeForm from "../components/AdminShowTimeForm";
+import { useAuth } from "../Context/AuthContext";
+import AllBookings from "../components/AllBookings";
 
 const DashboardLayout = () => {
   // State to manage the active content
   const [activeContent, setActiveContent] = useState("Layout");
+
+  const navigate = useNavigate();
+
+  const { authToken } = useAuth();
+
+  if (!authToken) {
+    navigate("/signin");
+  }
 
   // Function to render dynamic content based on button click
   const renderContent = () => {
@@ -24,8 +34,8 @@ const DashboardLayout = () => {
             <AdminShowTimeForm />
           </>
         );
-      case "Department":
-        return <AdminSeatConfigurator />;
+      case "Bookings":
+        return <AllBookings />;
       case "Profile":
         return <Typography variant="h4">Profile Page</Typography>;
       default:

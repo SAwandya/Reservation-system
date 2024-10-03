@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -18,9 +19,9 @@ export const AuthProvider = ({ children }) => {
 
   const getCurrentUser = () => {
 
-    const {_id, name, email, accessToken} = jwtDecode(authToken);
+    const {_id, name, email, accessToken, role} = jwtDecode(authToken);
 
-    return { _id, name, email, accessToken };
+    return { _id, name, email, accessToken, role };
   }
 
   return (

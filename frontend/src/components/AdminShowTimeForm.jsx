@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { TextField, Button, MenuItem, IconButton, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  IconButton,
+  Typography,
+  Box,
+} from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
-import axios from "axios";
 import useTheaters from "../hooks/useTheaters";
+import showTimeService from "../services/showTimeService";
 
 const AdminShowTimeForm = () => {
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, watch } = useForm({
     defaultValues: {
       theater: "",
       date: "",
@@ -23,25 +30,52 @@ const AdminShowTimeForm = () => {
   });
 
   const onSubmit = async (formData) => {
-    try {
-      // Transform formData.times to just an array of time strings
-      const formattedData = {
-        ...formData,
-        times: formData.times.map((item) => item.time),
-      };
+    const formattedData = {
+      ...formData,
+      times: formData.times.map((item) => item.time),
+    };
 
-      await axios.post("/api/showtimes", formattedData);
-      alert("Showtime created successfully!");
+    try {
+      const response = await showTimeService.Create(formattedData);
+      console.log(response.data);
+      // Reset form after submission if needed
       reset();
     } catch (error) {
-      console.error("Error creating showtime", error);
+      console.error(error);
     }
   };
 
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
+  // Get current time in HH:MM format
+  const currentTime = new Date().toTimeString().split(" ")[0].substring(0, 5);
+
+  // Watch the selected date
+  const selectedDate = watch("date");
+
+  // Determine minimum time based on selected date
+  const minTime = selectedDate === today ? currentTime : "00:00"; // Set to midnight if not today
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <Box
+      sx={{
+        padding: 2,
+        backgroundColor: "#E5D9F2",
+        borderRadius: "10px",
+        marginTop: "20px",
+        marginRight: "70px",
+        marginBottom: "40px",
+      }}
+    >
+      <Typography
+        variant="h4"
+        sx={{ mb: 4, color: "#5C2FC2", fontWeight: "bold" }}
+      >
+        Create Showtimes
+      </Typography>
+
       {/* Theater Dropdown */}
-      <Typography variant="h4">Create Showtimes</Typography>
       <Controller
         name="theater"
         control={control}
@@ -53,6 +87,7 @@ const AdminShowTimeForm = () => {
             fullWidth
             margin="normal"
             required
+            sx={{ backgroundColor: "white", borderRadius: "5px" }}
           >
             {data?.map((theater) => (
               <MenuItem key={theater._id} value={theater._id}>
@@ -78,15 +113,22 @@ const AdminShowTimeForm = () => {
             InputLabelProps={{
               shrink: true,
             }}
+            inputProps={{
+              min: today, // Prevent selecting past dates
+            }}
+            sx={{ backgroundColor: "white", borderRadius: "5px" }}
           />
         )}
       />
 
       {/* Times Input (Dynamic Array) */}
-      <div>
-        <label>Times:</label>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6">Times:</Typography>
         {fields.map((item, index) => (
-          <div key={item.id} style={{ display: "flex", alignItems: "center" }}>
+          <Box
+            key={item.id}
+            sx={{ display: "flex", alignItems: "center", mb: 2 }}
+          >
             <Controller
               name={`times[${index}].time`}
               control={control}
@@ -96,7 +138,12 @@ const AdminShowTimeForm = () => {
                   label={`Time ${index + 1}`}
                   fullWidth
                   margin="normal"
+                  type="time"
                   required
+                  inputProps={{
+                    min: minTime, // Set the minimum time based on selected date
+                  }}
+                  sx={{ backgroundColor: "white", borderRadius: "5px" }}
                 />
               )}
             />
@@ -104,31 +151,32 @@ const AdminShowTimeForm = () => {
               onClick={() => remove(index)}
               aria-label="remove time"
               color="secondary"
+              sx={{ ml: 1 }}
             >
               <RemoveIcon />
             </IconButton>
-          </div>
+          </Box>
         ))}
         <Button
           type="button"
           variant="outlined"
           onClick={() => append({ time: "" })}
           startIcon={<AddIcon />}
-          style={{ marginTop: "10px" }}
+          sx={{ mb: 2 }}
         >
           Add Time
         </Button>
-      </div>
+      </Box>
 
       <Button
         type="submit"
         variant="contained"
         color="primary"
-        style={{ marginTop: "20px" }}
+        sx={{ backgroundColor: "#5C2FC2", color: "white" }}
       >
         Submit
       </Button>
-    </form>
+    </Box>
   );
 };
 

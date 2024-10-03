@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Grid } from "@mui/material";
 
 const SeatLayout = ({ section, handleSeatToggle, buttonSize }) => {
+
   return (
     <Box>
       {section.layout.map((row, rowIndex) => (

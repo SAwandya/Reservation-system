@@ -12,6 +12,8 @@ import Content from "./components/Content";
 import BookingDetails from "./pages/BookingDetails";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MyBooking from "./pages/MyBooing";
+import DashboardProtectedRoute from "./components/DashboardProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -50,12 +52,24 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: "/mybookings",
+        element: (
+          <ProtectedRoute>
+            <MyBooking />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <DashboardProtectedRoute>
+        <DashboardLayout />
+      </DashboardProtectedRoute>
+    ),
     children: [
       {
         index: true,

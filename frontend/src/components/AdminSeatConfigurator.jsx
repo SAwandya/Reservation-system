@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-  Grid
+  Grid,
 } from "@mui/material";
 import axios from "axios"; // For making API requests
 import { v4 as uuidv4 } from "uuid";
@@ -19,7 +19,7 @@ const AdminSeatConfigurator = () => {
   const [cols, setCols] = useState(0);
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
-  const buttonSize = isSmallScreen ? 18 : 30;
+  const buttonSize = isSmallScreen ? 30 : 50; // Button size adjustment
 
   // Add a new section
   const handleAddSection = () => {
@@ -61,7 +61,7 @@ const AdminSeatConfigurator = () => {
         theater, // Theater ID or name
         sections, // Sections with seat layouts
       };
-        console.log(requestBody);
+      console.log(requestBody);
       const response = await axios.post(
         "http://localhost:3000/api/seats/create",
         requestBody
@@ -73,8 +73,18 @@ const AdminSeatConfigurator = () => {
   };
 
   return (
-    <Box sx={{ padding: 2 }}>
-      <Typography variant="h4" sx={{ mb: 4 }}>
+    <Box
+      sx={{
+        padding: 4,
+        backgroundColor: "#E5D9F2",
+        borderRadius: 2,
+        marginRight: "70px",
+      }}
+    >
+      <Typography
+        variant="h4"
+        sx={{ mb: 4, color: "#5C2FC2", fontWeight: "bold" }}
+      >
         Theater Seat Configurator
       </Typography>
 
@@ -99,21 +109,31 @@ const AdminSeatConfigurator = () => {
           onChange={(e) => setSectionName(e.target.value)}
           sx={{ mb: 2 }}
         />
-        <TextField
-          label="Number of Rows"
-          type="number"
-          value={rows}
-          onChange={(e) => setRows(Number(e.target.value))}
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Number of Columns"
-          type="number"
-          value={cols}
-          onChange={(e) => setCols(Number(e.target.value))}
-          sx={{ mb: 2 }}
-        />
-        <Button variant="contained" onClick={handleAddSection} sx={{ mb: 4 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+              label="Number of Rows"
+              type="number"
+              value={rows}
+              onChange={(e) => setRows(Number(e.target.value))}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label="Number of Columns"
+              type="number"
+              value={cols}
+              onChange={(e) => setCols(Number(e.target.value))}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+        <Button
+          variant="contained"
+          onClick={handleAddSection}
+          sx={{ mb: 4, backgroundColor: "#5C2FC2", color: "white" }}
+        >
           Add Section
         </Button>
       </Box>
@@ -124,12 +144,15 @@ const AdminSeatConfigurator = () => {
           key={section.id}
           sx={{
             mb: 4,
-            padding: "10px",
+            padding: 2,
             backgroundColor: "#E5D9F2",
-            borderRadius: "10px",
+            borderRadius: 2,
+            boxShadow: 2,
           }}
         >
-          <Typography sx={{ mb: 2 }}>{section.name} Section</Typography>
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+            {section.name} Section
+          </Typography>
           <Grid container justifyContent="center">
             {section.layout.map((row, rowIndex) => (
               <Grid
@@ -147,12 +170,13 @@ const AdminSeatConfigurator = () => {
                     sx={{
                       width: buttonSize,
                       height: buttonSize,
-                      margin: 0.3,
+                      margin: 0.5,
                       backgroundColor: isAvailable ? "#80C4E9" : "gray",
                       "&:hover": {
                         backgroundColor: isAvailable ? "#5C2FC2" : "",
                       },
-                      borderRadius: "10px",
+                      borderRadius: "5px",
+                      cursor: "pointer",
                     }}
                   />
                 ))}

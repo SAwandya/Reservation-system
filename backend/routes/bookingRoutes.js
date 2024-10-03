@@ -1,5 +1,6 @@
 const express = require("express");
-const Booking = require("../models/booking");
+const { Booking } = require("../models/booking");
+const { Theater } = require("../models/theater");
 
 const router = express.Router();
 
@@ -15,15 +16,20 @@ router.post("/", async (req, res) => {
       bookingTime,
     } = req.body;
 
+    const theaterData = await Theater.findById(theater);
+    if(!theaterData) res.status(404).json({ error: "Theater not found" });
+
+    const theaterName = theaterData.name;
     // Create a new booking
     const newBooking = new Booking({
       theater: theater, // Cast the theater ID to ObjectId
-      seats: seats.map((seat) => seat), 
+      seats: seats.map((seat) => seat),
       customerName,
       customerEmail,
       totalAmount,
       bookingDate,
       bookingTime,
+      theaterName,
     });
 
     const savedBooking = await newBooking.save();
@@ -40,10 +46,25 @@ router.post("/", async (req, res) => {
 // Get all bookings
 router.get("/", async (req, res) => {
   try {
-    const bookings = await Booking.find().populate("showtime seats");
+    const bookings = await Booking.find();
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/customer", async (req, res) => {
+  const { customerEmail } = req.body;
+
+  if (!customerEmail) {
+    return res.status(400).json({ error: "Customer email is required" });
+  }
+
+  try {
+    const bookings = await Booking.find({ customerEmail });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch bookings" });
   }
 });
 
