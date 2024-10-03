@@ -123,14 +123,17 @@ const FeedbackPage = () => {
 
 
               <Typography component="legend" sx={{ marginTop: '20px', textAlign: 'center' }}>How would your rate your experience?</Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
               <Rating 
                 name="rating"
                 value={feedback.rating}
                 onChange={handleRatingChange}
                 precision={1}
+                sx={{ fontSize: '2rem' }}
 
               />
-              <Typography>
+              </Box>
+              <Typography sx={{ marginTop: '20px', textAlign: 'center' }}>
               <Button
                 type="submit"
                 variant="contained"
@@ -144,7 +147,7 @@ const FeedbackPage = () => {
             </form>
           </>
         ) : (
-          <Typography variant="h5" color="success.main">
+          <Typography variant="h5" color="success.main" sx={{ textAlign: 'center' }}>
             Thank you for your feedback!
           </Typography>
         )}
