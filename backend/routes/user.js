@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
   user = await user.save();
 
   let token = jwt.sign(
-    { _id: user._id, name: user.name, email: user.email },
+    { _id: user._id, name: user.name, email: user.email, role: user.role },
     config.get("jwtPrivateKey")
   );
 

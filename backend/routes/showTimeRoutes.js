@@ -5,6 +5,17 @@ const { default: mongoose } = require("mongoose");
 
 const router = express.Router();
 
+router.get("/available", async (req, res) => {
+  try {
+    // Fetch all showtimes
+    const showtimes = await Showtime.find().select("date -_id"); // Fetch only the date field
+    res.status(200).json(showtimes);
+  } catch (error) {
+    console.error("Error fetching showtimes:", error);
+    res.status(500).send("Server error");
+  }
+});
+
 // Create a new showtime
 router.post("/", async (req, res) => {
   const { theater, date, times } = req.body;

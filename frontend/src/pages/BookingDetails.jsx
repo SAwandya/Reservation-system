@@ -5,6 +5,7 @@ import seatService from "../services/seatService";
 import bookingService from "../services/bookingService";
 import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const bookSeat = async (bookingDataStr, userId, accessToken) => {
   console.log(accessToken, userId);
@@ -42,8 +43,9 @@ const BookingDetails = () => {
   const userId = getCurrentUser()._id;
   const accessToken = getCurrentUser().accessToken;
 
+  const navigate = useNavigate();
+
   const handleConfirm = () => {
-    bookSeat(bookingDataStr, userId, accessToken);
     Swal.fire({
       title: "Are you want to Confirm?",
       text: "You won't be able to revert this!",
@@ -55,6 +57,7 @@ const BookingDetails = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         console.log(bookingDataStr);
+        bookSeat(bookingDataStr, userId, accessToken);
 
         Swal.fire({
           title: "",
@@ -65,19 +68,19 @@ const BookingDetails = () => {
           .CreateSeat({ theaterId, selectedSeats })
           .then((response) => {
             console.log(response.data);
-             bookingService
-               .Create(bookingDataStr)
-               .then((response) => {
-                 console.log(response.data);
-               })
-               .catch((error) => {
-                 console.error("Error booking seats:", error);
-               });
+            bookingService
+              .Create(bookingDataStr)
+              .then((response) => {
+                navigate('/');
+                console.log(response.data);
+              })
+              .catch((error) => {
+                console.error("Error booking seats:", error);
+              });
           })
           .catch((error) => {
             console.error("Error booking seats:", error);
           });
-       
       }
     });
   };
@@ -93,7 +96,7 @@ const BookingDetails = () => {
           Event Name:
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          {bookingDataStr.theater}
+          {bookingDataStr.theaterName}
         </Typography>
 
         <Typography variant="h6" component="h2">

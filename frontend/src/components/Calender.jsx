@@ -5,6 +5,7 @@ import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import useGameQueryStore from "../store";
+import dayjs from "dayjs"; // Import dayjs to handle dates
 
 const CustomCalendar = styled(StaticDatePicker)(({ theme }) => ({
   "& .MuiPickersDay-root": {
@@ -33,8 +34,7 @@ const CustomCalendar = styled(StaticDatePicker)(({ theme }) => ({
   },
 }));
 
-
-const Calender = () => {
+const Calendar = () => {
   const SetSelectedDate = useGameQueryStore((s) => s.SetSelectedDate);
   const selectedDate = useGameQueryStore((s) => s.selectedDate);
 
@@ -64,6 +64,7 @@ const Calender = () => {
           displayStaticWrapperAs="desktop"
           value={selectedDate}
           onChange={(newDate) => SetSelectedDate(newDate)}
+          minDate={dayjs()} // Disable dates before today
           sx={{
             "& .MuiPickerStaticWrapper-root": {
               transform: { xs: "scale(1)", sm: "scale(1.1)", md: "scale(1.2)" }, // Adjust scale based on screen size
@@ -84,4 +85,4 @@ const Calender = () => {
   );
 };
 
-export default Calender;
+export default Calendar;
