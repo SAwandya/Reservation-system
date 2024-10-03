@@ -11,21 +11,17 @@ const user = require("./routes/user");
 const auth = require("./routes/auth");
 require("./config/passport"); // Import your passport configuration
 const passport = require("passport");
-require('dotenv').config(); // Load environment variables
-const session = require('express-session'); // Import express-session
-
+require("dotenv").config(); // Load environment variables
+const session = require("express-session"); // Import express-session
 
 mongoose
   .connect(
-    "mongodb+srv://sachilaawandya:sachila20000816@cluster0.jpluo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://new_acc:db12345@cluster0.qtpwbey.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   )
   .then(() => console.log("Connect to MongoDB"))
   .catch((err) => console.log("Could not connect to MongoDB", err));
 
 app.use(cors()); // Enable CORS for all routes
-
-
-
 
 // Increase payload size for JSON and URL-encoded form data
 app.use(express.json({ limit: "10mb" })); // Set the limit (e.g., 10MB)
