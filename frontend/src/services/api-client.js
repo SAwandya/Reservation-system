@@ -17,10 +17,10 @@ class APIClient {
     return axiosInstance.post(this.endpoint, config).then((res) => res.data);
   };
 
-  getAll = () => {
+  getAll = (config) => {
     axiosInstance.defaults.headers.common["x-auth-token"] =
       localStorage.getItem("token");
-    return axiosInstance.get(this.endpoint).then((res) => res.data);
+    return axiosInstance.get(this.endpoint, config).then((res) => res.data);
   };
 
   delete = (params) => {
@@ -54,7 +54,8 @@ class APIClient {
         theaterId: theaterId,
       },
     });
-  }
+  };
+
 }
 
 export { CanceledError, APIClient };

@@ -39,15 +39,8 @@ router.post("/", async (req, res) => {
         },
         { isAvailable: false }
       );
-      //  const newSeat = new Seat({
-      //    theater: theaterId, // Use theaterId from the request
-      //    row,
-      //    number: seatNumber,
-      //    section,
-      //    isAvailable: true, // You can change this based on your business logic
-      //  });
-
-      //  await newSeat.save();
+      
+      
     }
 
     return res.send("Seats booked successfully");

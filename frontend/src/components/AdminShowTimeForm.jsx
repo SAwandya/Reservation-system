@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { TextField, Button, MenuItem, IconButton, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import axios from "axios";
 import useTheaters from "../hooks/useTheaters";
+import showTimeService from "../services/showTimeService";
 
 const AdminShowTimeForm = () => {
   const { control, handleSubmit, reset } = useForm({
@@ -23,19 +30,20 @@ const AdminShowTimeForm = () => {
   });
 
   const onSubmit = async (formData) => {
-    try {
-      // Transform formData.times to just an array of time strings
-      const formattedData = {
-        ...formData,
-        times: formData.times.map((item) => item.time),
-      };
+    const formattedData = {
+      ...formData,
+      times: formData.times.map((item) => item.time),
+    };
 
-      await axios.post("/api/showtimes", formattedData);
-      alert("Showtime created successfully!");
-      reset();
-    } catch (error) {
-      console.error("Error creating showtime", error);
-    }
+    showTimeService
+      .Create(formattedData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   };
 
   return (
@@ -96,6 +104,7 @@ const AdminShowTimeForm = () => {
                   label={`Time ${index + 1}`}
                   fullWidth
                   margin="normal"
+                  type="time"
                   required
                 />
               )}

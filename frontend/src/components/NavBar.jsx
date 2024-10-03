@@ -116,7 +116,7 @@ const NavBar = () => {
         <Link to="/">HOME</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
-        <Link to="/salesorders">MY BOOKINGS</Link>
+        <Link to="/mybookings">MY BOOKINGS</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>
         <Link to="/salescarts"></Link>
@@ -183,7 +183,7 @@ const NavBar = () => {
             <Link to="/">
               <Button sx={buttonStyles}>HOME</Button>
             </Link>
-            <Link to="/salesorders">
+            <Link to="/mybookings">
               <Button sx={buttonStyles}>MY ORDERS</Button>
             </Link>
             <Link to="/salescarts">

@@ -14,8 +14,11 @@ const bookingSchema = new mongoose.Schema(
     totalAmount: { type: Number, required: true },
     bookingDate: { type: String, required: true },
     bookingTime: { type: String, required: true },
+    theaterName: { type: String, required: true}
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Booking", bookingSchema);
+const Booking = mongoose.model("Booking", bookingSchema);
+
+exports.Booking = Booking;

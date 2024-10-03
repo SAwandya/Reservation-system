@@ -12,6 +12,7 @@ import Content from "./components/Content";
 import BookingDetails from "./pages/BookingDetails";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MyBooking from "./pages/MyBooing";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <BookingDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/mybookings",
+        element: (
+          <ProtectedRoute>
+            <MyBooking />
           </ProtectedRoute>
         ),
       },

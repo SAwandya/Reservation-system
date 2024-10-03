@@ -7,7 +7,6 @@ import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
 
 const bookSeat = async (bookingDataStr, userId, accessToken) => {
-
   console.log(accessToken, userId);
 
   try {
@@ -37,7 +36,7 @@ const BookingDetails = () => {
 
   const bookingDataStr = JSON.parse(bookingData);
 
-  const theaterId = bookingDataStr.theaterId;
+  const theaterId = bookingDataStr.theater;
   const selectedSeats = bookingDataStr.seats;
   const { getCurrentUser } = useAuth();
   const userId = getCurrentUser()._id;
@@ -45,41 +44,42 @@ const BookingDetails = () => {
 
   const handleConfirm = () => {
     bookSeat(bookingDataStr, userId, accessToken);
-    // Swal.fire({
-    //   title: "Are you want to Confirm?",
-    //   text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: "#d33",
-    //   confirmButtonText: "Confirm",
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     console.log(bookingDataStr);
+    Swal.fire({
+      title: "Are you want to Confirm?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(bookingDataStr);
 
-    //     Swal.fire({
-    //       title: "",
-    //       text: "Booking process complted",
-    //       icon: "success",
-    //     });
-    //     // seatService
-    //     //   .CreateSeat({ theaterId, selectedSeats })
-    //     //   .then((response) => {
-    //     //     console.log(response.data);
-    //     //   })
-    //     //   .catch((error) => {
-    //     //     console.error("Error booking seats:", error);
-    //     //   });
-    //     bookingService
-    //       .Create(bookingDataStr)
-    //       .then((response) => {
-    //         console.log(response.data);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error booking seats:", error);
-    //       });
-    //   }
-    // });
+        Swal.fire({
+          title: "",
+          text: "Booking process complted",
+          icon: "success",
+        });
+        seatService
+          .CreateSeat({ theaterId, selectedSeats })
+          .then((response) => {
+            console.log(response.data);
+             bookingService
+               .Create(bookingDataStr)
+               .then((response) => {
+                 console.log(response.data);
+               })
+               .catch((error) => {
+                 console.error("Error booking seats:", error);
+               });
+          })
+          .catch((error) => {
+            console.error("Error booking seats:", error);
+          });
+       
+      }
+    });
   };
 
   return (
