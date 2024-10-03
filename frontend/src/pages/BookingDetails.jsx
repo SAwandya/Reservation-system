@@ -3,7 +3,7 @@ import { Box, Typography, Paper, Button } from "@mui/material";
 import Swal from "sweetalert2";
 import seatService from "../services/seatService";
 import bookingService from "../services/bookingService";
-import bgImage from "../assets/bg3.jpg"; // Importing the background image
+import bgImage from "../assets/bg3.jpg"; 
 
 const BookingDetails = () => {
   const bookingData = localStorage.getItem("bookingData");
@@ -49,13 +49,13 @@ const BookingDetails = () => {
         maxWidth:"full",
         margin: "auto",
         marginTop: 0,
-        backgroundImage: `url(${bgImage})`, // Use the imported image
+        backgroundImage: `url(${bgImage})`, 
         backgroundSize: "cover",
         backgroundPosition: "center",
-        minHeight: "100vh", // Ensures the image covers the full height of the viewport
+        minHeight: "100vh", 
         display: "flex",
-        alignItems: "center", // Centers the content vertically
-        justifyContent: "center", // Centers the content horizontally
+        alignItems: "center", 
+        justifyContent: "center", 
       }}
     >
       <Paper
@@ -64,8 +64,8 @@ const BookingDetails = () => {
           padding: 3,
           width:"500px",
           borderRadius:"20px",
-          backgroundColor: "rgba(255, 255, 255, 0.5)", // Semi-transparent white background
-          backdropFilter: "blur(5px)", // Optional: adds a blur effect behind the content
+          backgroundColor: "rgba(255, 255, 255, 0.5)", 
+          backdropFilter: "blur(5px)", 
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
