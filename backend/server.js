@@ -13,6 +13,7 @@ require("./config/passport"); // Import your passport configuration
 const passport = require("passport");
 require('dotenv').config(); // Load environment variables
 const session = require('express-session'); // Import express-session
+const feedbackRoutes = require("./routes/feedbackRoutes"); // Feedback routes
 
 
 mongoose
@@ -49,6 +50,7 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/user", user);
 app.use("/api/auth", auth);
+app.use("/api/feedback", feedbackRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
