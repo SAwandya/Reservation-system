@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Rating } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import bgImage from '../assets/bg2.jpg'; 
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const FeedbackPage = () => {
   const [feedback, setFeedback] = useState({
@@ -85,8 +86,8 @@ const FeedbackPage = () => {
       >
         {!submitted ? (
           <>
-            <Typography variant="h4" gutterBottom>
-              We'd Love to Hear Your Feedback!
+            <Typography variant="h4" gutterBottom sx={{ textAlign: 'center' }}>
+              We'd Love to Hear Your Feedback<FavoriteIcon color="error" sx={{ fontSize: '1.8rem' }}/>!
             </Typography>
             {error && <Typography color="error">{error}</Typography>}
             <form onSubmit={handleSubmit}>
