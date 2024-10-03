@@ -189,6 +189,9 @@ const NavBar = () => {
             <Link to="/salescarts">
               <Button sx={buttonStyles}>CART</Button>
             </Link>
+            <Link to="/feedbackpage">
+              <Button sx={buttonStyles}>FEEDBACK</Button>
+            </Link>
             <IconButton
               size="large"
               aria-label="show notifications"
@@ -218,11 +221,19 @@ const NavBar = () => {
 
 // Button styles for links
 const buttonStyles = {
-  backgroundColor: "rgba(155, 207, 83, 0.8)",
-  fontSize: "17px",
+  background: "linear-gradient(90deg, rgba(228,177,240,1) 0%, rgba(167,223,119,1) 100%)",
+  color: "#000000",
   fontWeight: "bold",
-  color: "#191919",
-  borderRadius: "10px",
+  fontSize: "16px",
+  textTransform: "none",
+  width: "150px",
+  margin:"5px",
+  marginTop: "10px",
+  borderRadius: "8px", 
+  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+  "&:hover": {
+    background: "linear-gradient(to right, rgba(173,216,230,0), #388E3C)",
+  },
 };
 
 export default NavBar;

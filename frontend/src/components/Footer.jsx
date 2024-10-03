@@ -37,29 +37,29 @@ const Footer = () => {
         {/* Quick Links */}
         <Grid item xs={12} sm={4}>
           <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "#191919" }}>
-            Quick Links
+            QUICK LINKS
           </Typography>
           <Button href="/" variant="contained" color="primary" sx={buttonStyles}>
-            Home
+            HOME
           </Button>
           
           <Button href="/salesorders" variant="contained" color="primary" sx={buttonStyles}>
-            My Orders
+            MY ORDERS
           </Button>
           <br />
           <Button href="/salescarts" variant="contained" color="primary" sx={buttonStyles}>
-            Cart
+            CART
           </Button>
           
           <Button href="/feedbackpage" variant="contained" color="primary" sx={buttonStyles}>
-            Feedback
+            FEEDBACK
           </Button>
         </Grid>
 
         {/* Social Media Links */}
         <Grid item xs={12} sm={4}>
           <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "#191919" }}>
-            Follow Us
+            FOLLOW US
           </Typography>
           <Box>
             <IconButton href="https://facebook.com" color="inherit" sx={iconStyles}>
