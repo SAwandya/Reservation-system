@@ -1,34 +1,156 @@
-const express = require('express');
-const router = express.Router();
-const Feedback = require('../models/Feedback');
+import React, { useState } from 'react';
+import { TextField, Button, Typography, Box, Rating } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import bgImage from '../assets/bg2.jpg'; 
 
-// @route   POST /api/feedback
-// @desc    Save feedback to the database
-router.post('/', async (req, res) => {
-  const { name, email, message, rating } = req.body;
+const FeedbackPage = () => {
+  const [feedback, setFeedback] = useState({
+    name: '',
+    email: '',
+    message: '',
+    rating: 0,  
+  });
 
-  try {
-    
-    if (rating < 1 || rating > 5) {
-      return res.status(400).json({ message: 'Rating must be between 1 and 5.' });
-    }
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
-    // Create a new feedback document
-    const feedback = new Feedback({
-      name,
-      email,
-      message,
-      rating,
+  const handleChange = (e) => {
+    setFeedback({
+      ...feedback,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    // Save to the database
-    await feedback.save();
+  const handleRatingChange = (event, newRating) => {
+    setFeedback({
+      ...feedback,
+      rating: newRating,  
+    });
+  };
 
-    res.status(201).json({ message: 'Feedback submitted successfully!' });
-  } catch (error) {
-    console.error('Error saving feedback:', error.message);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
-  }
-});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-module.exports = router;
+    try {
+      const response = await fetch('http://localhost:3000/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(feedback),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 201) {
+        setSubmitted(true);
+        setFeedback({
+          name: '',
+          email: '',
+          message: '',
+          rating: 0,  
+        });
+        setError('');
+      } else {
+        setError(data.message || 'An error occurred.');
+      }
+    } catch (err) {
+      setError('Failed to send feedback. Please try again later.');
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        padding: '20px',
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+          padding: '40px',
+          borderRadius: '10px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          width: '100%',
+          maxWidth: '600px',
+        }}
+      >
+        {!submitted ? (
+          <>
+            <Typography variant="h4" gutterBottom>
+              We'd Love to Hear Your Feedback!
+            </Typography>
+            {error && <Typography color="error">{error}</Typography>}
+            <form onSubmit={handleSubmit}>
+              <TextField
+                label="Name"
+                name="name"
+                value={feedback.name}
+                onChange={handleChange}
+                fullWidth
+                required
+                margin="normal"
+              />
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                value={feedback.email}
+                onChange={handleChange}
+                fullWidth
+                required
+                margin="normal"
+              />
+              <TextField
+                label="Message"
+                name="message"
+                value={feedback.message}
+                onChange={handleChange}
+                fullWidth
+                multiline
+                rows={4}
+                required
+                margin="normal"
+              />
+
+
+              <Typography component="legend" sx={{ marginTop: '20px', textAlign: 'center' }}>How would your rate your experience?</Typography>
+              <Rating 
+                name="rating"
+                value={feedback.rating}
+                onChange={handleRatingChange}
+                precision={1}
+
+              />
+              <Typography>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                endIcon={<SendIcon />}
+                sx={{ marginTop: '20px' }}
+              >
+                Send Feedback
+              </Button>
+              </Typography>
+            </form>
+          </>
+        ) : (
+          <Typography variant="h5" color="success.main">
+            Thank you for your feedback!
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+export default FeedbackPage;
