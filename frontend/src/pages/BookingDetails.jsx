@@ -3,10 +3,10 @@ import { Box, Typography, Paper, Button } from "@mui/material";
 import Swal from "sweetalert2";
 import seatService from "../services/seatService";
 import bookingService from "../services/bookingService";
+import bgImage from "../assets/bg3.jpg"; // Importing the background image
 
 const BookingDetails = () => {
   const bookingData = localStorage.getItem("bookingData");
-
   const bookingDataStr = JSON.parse(bookingData);
 
   const theaterId = bookingDataStr.theaterId;
@@ -27,17 +27,9 @@ const BookingDetails = () => {
 
         Swal.fire({
           title: "",
-          text: "Booking process complted",
+          text: "Booking process completed",
           icon: "success",
         });
-        // seatService
-        //   .CreateSeat({ theaterId, selectedSeats })
-        //   .then((response) => {
-        //     console.log(response.data);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error booking seats:", error);
-        //   });
         bookingService
           .Create(bookingDataStr)
           .then((response) => {
@@ -51,8 +43,31 @@ const BookingDetails = () => {
   };
 
   return (
-    <Box sx={{ padding: 3, maxWidth: 600, margin: "auto" }}>
-      <Paper elevation={3} sx={{ padding: 3 }}>
+    <Box
+      sx={{
+        padding: 3,
+        maxWidth:"full",
+        margin: "auto",
+        marginTop: 0,
+        backgroundImage: `url(${bgImage})`, // Use the imported image
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh", // Ensures the image covers the full height of the viewport
+        display: "flex",
+        alignItems: "center", // Centers the content vertically
+        justifyContent: "center", // Centers the content horizontally
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 3,
+          width:"500px",
+          borderRadius:"20px",
+          backgroundColor: "rgba(255, 255, 255, 0.5)", // Semi-transparent white background
+          backdropFilter: "blur(5px)", // Optional: adds a blur effect behind the content
+        }}
+      >
         <Typography variant="h4" component="h1" gutterBottom>
           Booking Details
         </Typography>
@@ -89,7 +104,7 @@ const BookingDetails = () => {
           Seats:
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          {bookingDataStr.seats}
+          {bookingDataStr.seats.join(", ")}
         </Typography>
 
         <Button
