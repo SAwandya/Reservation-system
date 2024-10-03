@@ -10,6 +10,7 @@ import ShowtimeForm from "./components/showTimeForm";
 import DashboardLayout from "./pages/DashboardLayout";
 import Content from "./components/Content";
 import BookingDetails from "./pages/BookingDetails";
+import FeedbackPage from "./components/FeedbackPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/bookingdetails",
         element: <BookingDetails />,
+      },
+      {
+        path: "/feedbackpage",
+        element: <FeedbackPage />,
       },
     ],
   },
