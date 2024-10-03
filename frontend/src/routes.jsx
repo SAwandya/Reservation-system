@@ -10,6 +10,8 @@ import ShowtimeForm from "./components/showTimeForm";
 import DashboardLayout from "./pages/DashboardLayout";
 import Content from "./components/Content";
 import BookingDetails from "./pages/BookingDetails";
+import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -18,19 +20,35 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/moviedetails/:id",
-        element: <MovieDetailsPage />,
+        element: (
+          <ProtectedRoute>
+            <MovieDetailsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/seatselection",
-        element: <SeatSelection />,
+        element: (
+          <ProtectedRoute>
+            <SeatSelection />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/bookingdetails",
-        element: <BookingDetails />,
+        element: (
+          <ProtectedRoute>
+            <BookingDetails />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
@@ -48,11 +66,19 @@ const router = createBrowserRouter([
 
   {
     path: "/moviepostform",
-    element: <MoviePostForm />,
+    element: (
+      <ProtectedRoute>
+        <MoviePostForm />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/showtimeform",
-    element: <ShowtimeForm />,
+    element: (
+      <ProtectedRoute>
+        <ShowtimeForm />
+      </ProtectedRoute>
+    ),
   },
 
   {
@@ -63,6 +89,10 @@ const router = createBrowserRouter([
   {
     path: "/signin",
     element: <SignInForm />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
