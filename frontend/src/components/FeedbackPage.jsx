@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
   const { name, email, message, rating } = req.body;
 
   try {
-    // Ensure rating is between 1 and 5
+    
     if (rating < 1 || rating > 5) {
       return res.status(400).json({ message: 'Rating must be between 1 and 5.' });
     }
