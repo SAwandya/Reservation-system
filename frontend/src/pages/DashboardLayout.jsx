@@ -1,13 +1,10 @@
 import { useState } from "react";
-import {
-  CssBaseline,
-  Typography,
-  Grid,
-} from "@mui/material";
+import { CssBaseline, Typography, Grid } from "@mui/material";
 import SideBar from "../Components/SideBar";
 import { Outlet } from "react-router-dom";
 import { RenderContentProvider } from "../Context/RenderContentContext";
 import AdminSeatConfigurator from "../components/AdminSeatConfigurator";
+import AdminUserTable from "../components/AdminUserTable.jsx";
 
 const DashboardLayout = () => {
   // State to manage the active content
@@ -19,7 +16,7 @@ const DashboardLayout = () => {
       case "Employee":
         return <AdminSeatConfigurator />;
       case "Department":
-        return <AdminSeatConfigurator />;
+        return <AdminUserTable />;
       case "Profile":
         return <Typography variant="h4">Profile Page</Typography>;
       default:
