@@ -108,12 +108,21 @@ const AllBookings = () => {
     return <CircularProgress />;
   }
 
+  // const [query, setQuery] = React.useState("");
+
+  // const keys = ["theaterName"];
+
+  // const search = (data) => {
+  //   return data?.filter((item) =>
+  //     keys.some((key) => item[key].toLowerCase().includes(query))
+  //   );
+  // };
+
   return (
     <div style={{ padding: "20px", marginRight: "60px" }}>
       <Typography variant="h4" gutterBottom style={{ fontSize: "2rem" }}>
         All Bookings
       </Typography>
-
       {/* PDF Generation Button */}
       <Button
         variant="contained"
