@@ -83,7 +83,7 @@ const BookingDetails = () => {
     <Box sx={{ padding: 3, maxWidth: 600, margin: "auto", marginTop: "100px" }}>
       <Paper
         elevation={4}
-        sx={{ padding: 4, borderRadius: "20px", backgroundColor: "#F5F5F5" }}
+        sx={{ padding: 4, borderRadius: "20px", backgroundColor: "#E5D9F2" }}
       >
         <Typography
           variant="h4"

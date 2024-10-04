@@ -44,7 +44,7 @@ const UsersTable = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:3000/api/users/${id}`);
+        await axios.put(`http://localhost:3000/api/users/${id}`);
         Swal.fire("Deleted!", "The user has been deleted.", "success");
         fetchUsers(); // Refresh the user list
       } catch (error) {
