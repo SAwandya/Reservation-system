@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import axios from "axios"; // For making API requests
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+
 
 const AdminSeatConfigurator = () => {
   const [theater, setTheater] = useState("");
@@ -66,6 +68,17 @@ const AdminSeatConfigurator = () => {
         "http://localhost:3000/api/seats/create",
         requestBody
       );
+       toast.success("Theater added successfully!", {
+         position: "top-right",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+         transition: Bounce,
+       });
       console.log(response); // Log success message
     } catch (error) {
       console.error("Error uploading seats:", error);
@@ -81,13 +94,26 @@ const AdminSeatConfigurator = () => {
         marginRight: "70px",
       }}
     >
+      {" "}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
       <Typography
         variant="h4"
         sx={{ mb: 4, color: "#5C2FC2", fontWeight: "bold" }}
       >
         Theater Seat Configurator
       </Typography>
-
       <Box sx={{ mb: 4 }}>
         <TextField
           label="Theater Name"
@@ -137,7 +163,6 @@ const AdminSeatConfigurator = () => {
           Add Section
         </Button>
       </Box>
-
       {/* Display Sections */}
       {sections.map((section) => (
         <Box
@@ -185,7 +210,6 @@ const AdminSeatConfigurator = () => {
           </Grid>
         </Box>
       ))}
-
       <Button
         variant="contained"
         sx={{ backgroundColor: "#5C2FC2", color: "white" }}
