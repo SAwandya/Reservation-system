@@ -24,7 +24,7 @@ passport.use(
           });
         }else{
           user.accessToken = accessToken;
-          user.save
+          user.save();
         }
         return done(null, user);
       } catch (error) {
