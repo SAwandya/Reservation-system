@@ -11,6 +11,7 @@ import AdminSeatConfigurator from "../components/AdminSeatConfigurator";
 import AdminShowTimeForm from "../components/AdminShowTimeForm";
 import { useAuth } from "../Context/AuthContext";
 import AllBookings from "../components/AllBookings";
+import UsersTable from "./UsersTable";
 
 const DashboardLayout = () => {
   // State to manage the active content
@@ -36,8 +37,8 @@ const DashboardLayout = () => {
         );
       case "Bookings":
         return <AllBookings />;
-      case "Profile":
-        return <Typography variant="h4">Profile Page</Typography>;
+      case "Users":
+        return <UsersTable/>;
       default:
         return <Typography variant="h4">Welcome to the Home Page</Typography>;
     }

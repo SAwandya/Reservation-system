@@ -14,6 +14,7 @@ import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyBooking from "./pages/MyBooing";
 import DashboardProtectedRoute from "./components/DashboardProtectedRoute";
+import ImageSlider2 from "./components/ImageSlider2";
 
 const router = createBrowserRouter([
   {
@@ -107,6 +108,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/slider",
+    element: <ImageSlider2 />,
   },
 ]);
 

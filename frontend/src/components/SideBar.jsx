@@ -2,11 +2,19 @@ import React from "react";
 import { Box, Button, Drawer, Typography } from "@mui/material";
 import SideBarButton from "./SideBarButton";
 import { useAuth } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({ setActiveContent, activeContent }) => {
   const drawerWidth = 240;
 
   const {logout} = useAuth();
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  }
 
   return (
     <Drawer
@@ -56,7 +64,7 @@ const SideBar = ({ setActiveContent, activeContent }) => {
         <SideBarButton
           activeContent={activeContent}
           setActiveContent={setActiveContent}
-          title="Profile"
+          title="Users"
         />
 
         <Button
@@ -69,7 +77,7 @@ const SideBar = ({ setActiveContent, activeContent }) => {
             borderRadius: "5px",
             
           }}
-          onClick={logout}
+          onClick={handleLogout}
           fullWidth
         >
           Logout

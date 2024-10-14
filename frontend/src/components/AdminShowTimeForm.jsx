@@ -11,6 +11,8 @@ import {
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import useTheaters from "../hooks/useTheaters";
 import showTimeService from "../services/showTimeService";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+
 
 const AdminShowTimeForm = () => {
   const { control, handleSubmit, reset, watch } = useForm({
@@ -29,19 +31,30 @@ const AdminShowTimeForm = () => {
     name: "times",
   });
 
+  // Submit handler
   const onSubmit = async (formData) => {
     const formattedData = {
       ...formData,
-      times: formData.times.map((item) => item.time),
+      times: formData.times.map((item) => item.time), // Convert array of objects to array of times
     };
 
     try {
-      const response = await showTimeService.Create(formattedData);
-      console.log(response.data);
-      // Reset form after submission if needed
+      const response = await showTimeService.Create(formattedData); // Replace with your API call
+      console.log("Showtime created successfully:", response.data);
+       toast.success("Times added successfully!", {
+         position: "top-right",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+         theme: "colored",
+         transition: Bounce,
+       });
       reset();
     } catch (error) {
-      console.error(error);
+      console.error("Error creating showtime:", error);
     }
   };
 
@@ -59,6 +72,8 @@ const AdminShowTimeForm = () => {
 
   return (
     <Box
+      component="form" // Add form attribute
+      onSubmit={handleSubmit(onSubmit)} // Bind onSubmit to handleSubmit
       sx={{
         padding: 2,
         backgroundColor: "#E5D9F2",
@@ -68,13 +83,26 @@ const AdminShowTimeForm = () => {
         marginBottom: "40px",
       }}
     >
+      {" "}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
       <Typography
         variant="h4"
         sx={{ mb: 4, color: "#5C2FC2", fontWeight: "bold" }}
       >
         Create Showtimes
       </Typography>
-
       {/* Theater Dropdown */}
       <Controller
         name="theater"
@@ -97,7 +125,6 @@ const AdminShowTimeForm = () => {
           </TextField>
         )}
       />
-
       {/* Date Input */}
       <Controller
         name="date"
@@ -120,7 +147,6 @@ const AdminShowTimeForm = () => {
           />
         )}
       />
-
       {/* Times Input (Dynamic Array) */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6">Times:</Typography>
@@ -167,9 +193,8 @@ const AdminShowTimeForm = () => {
           Add Time
         </Button>
       </Box>
-
       <Button
-        type="submit"
+        type="submit" // Make the button submit the form
         variant="contained"
         color="primary"
         sx={{ backgroundColor: "#5C2FC2", color: "white" }}

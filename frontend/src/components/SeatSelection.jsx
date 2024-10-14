@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 const sectionPrices = {
   VIP: 15,
   Standard: 10,
-  primium: 15
 };
 
 const getFormattedDate = (dayjsObject) => {

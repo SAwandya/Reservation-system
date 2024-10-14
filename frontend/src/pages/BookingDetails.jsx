@@ -6,6 +6,8 @@ import bookingService from "../services/bookingService";
 import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+
 
 const bookSeat = async (bookingDataStr, userId, accessToken) => {
   try {
@@ -65,6 +67,17 @@ const BookingDetails = () => {
             bookingService
               .Create(bookingDataStr)
               .then((response) => {
+                 toast.success("Set reminder to the Google calender", {
+                   position: "top-right",
+                   autoClose: 5000,
+                   hideProgressBar: false,
+                   closeOnClick: true,
+                   pauseOnHover: true,
+                   draggable: true,
+                   progress: undefined,
+                   theme: "colored",
+                   transition: Bounce,
+                 });
                 navigate("/");
                 console.log(response.data);
               })
@@ -81,9 +94,23 @@ const BookingDetails = () => {
 
   return (
     <Box sx={{ padding: 3, maxWidth: 600, margin: "auto", marginTop: "100px" }}>
+      {" "}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
       <Paper
         elevation={4}
-        sx={{ padding: 4, borderRadius: "20px", backgroundColor: "#F5F5F5" }}
+        sx={{ padding: 4, borderRadius: "20px", backgroundColor: "#E5D9F2" }}
       >
         <Typography
           variant="h4"

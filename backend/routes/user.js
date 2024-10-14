@@ -6,11 +6,12 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 const auth = require("../middleware/auth");
 
-router.get("/", auth, async (req, res) => {
+router.get("/",  async (req, res) => {
   const users = await User.find().sort("name");
 
   res.send(users);
 });
+
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
