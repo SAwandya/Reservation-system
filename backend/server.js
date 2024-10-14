@@ -13,10 +13,9 @@ require("./config/passport"); // Import your passport configuration
 const passport = require("./config/passport");
 require('dotenv').config(); // Load environment variables
 const session = require('express-session'); // Import express-session
-const config = require('config'); 
 const calenderRoutes = require('./routes/calenderRoutes'); // Add this line
 
-const mongo_url = config.get('MONGO_URL');
+const mongo_url = process.env.MONGO_URL;
 
 mongoose
   .connect(mongo_url)
@@ -48,7 +47,7 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/user", user);
 app.use("/api/auth", auth);
-app.use("/api", calenderRoutes); // Add this line
+app.use("/api", calenderRoutes); 
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

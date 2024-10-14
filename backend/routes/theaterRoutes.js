@@ -4,6 +4,7 @@ const {
   getAllTheatersEvent,
   getTheaterByIdEvent,
   updateTheaterByIdEvent,
+  deleteTheaterByIdEvent,
 } = require("../controllers/theaterController");
 
 const router = express.Router();

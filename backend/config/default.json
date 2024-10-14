@@ -1,7 +1,0 @@
-{
-  "jwtPrivateKey": "1234",
-  "GOOGLE_CLIENT_ID": "130634797957-3nomoq3u697vsc0kpht36manaik0r5qm.apps.googleusercontent.com",
-  "GOOGLE_CLIENT_SECRET": "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",
-  "REFRESH_TOKEN_SECRET": "123456",
-  "MONGO_URL": "mongodb+srv://sachilaawandya:sachila20000816@cluster0.jpluo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-}
