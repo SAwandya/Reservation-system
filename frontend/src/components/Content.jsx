@@ -19,7 +19,6 @@ const Content = () => {
             sx={{
               textAlign: "left",
               marginBottom: "20px",
-              fontWeight: "bold",
               marginRight: "10px",
               color: "#8072b3",
               fontSize: "27px",
