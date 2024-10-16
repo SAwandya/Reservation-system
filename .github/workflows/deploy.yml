@@ -1,40 +1,40 @@
-name: Deploy to Azure
+name: Deploy to Azure Web App
 
 on:
   push:
     branches:
-      - main  # Adjust this if you're using a different branch
+      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20'  # Change to your Node.js version
+        node-version: '20'  # Adjust this to your Node.js version
 
-    - name: Install backend dependencies
+    - name: Install dependencies for backend
       run: |
         cd backend
-        npm install          # Install backend dependencies
+        npm install
 
-    - name: Install frontend dependencies
+    - name: Install dependencies and build frontend
       run: |
         cd frontend
-        npm install          # Install frontend dependencies
+        npm install
+        npm run build
 
-    - name: Build the React app
+    - name: Move frontend build files to backend
       run: |
-        cd frontend
-        npm run build  # Build the React app
+        mv frontend/build backend/build  # Move the frontend build to backend
 
-    - name: Deploy to Azure
+    - name: Deploy to Azure Web App
       uses: Azure/webapps-deploy@v2
       with:
-        app-name: tsr  # Replace with your Azure App Service name
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # Store your publish profile in GitHub Secrets
+        app-name: tsr   # Replace with your Azure app name
+        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
