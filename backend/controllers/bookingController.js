@@ -14,7 +14,7 @@ exports.createBookingEvent = async (req, res) => {
     } = req.body;
 
     const theaterData = await Theater.findById(theater);
-    if (!theaterData) res.status(404).json({ error: "Theater not found" });
+    if (!theaterData) return res.status(404).json({ error: "Theater not found" });
 
     const theaterName = theaterData.name;
     // Create a new booking
@@ -31,12 +31,12 @@ exports.createBookingEvent = async (req, res) => {
 
     const savedBooking = await newBooking.save();
 
-    res
+    return res
       .status(201)
       .json({ message: "Booking created successfully", savedBooking });
   } catch (error) {
     console.error("Error creating booking:", error);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 

@@ -46,6 +46,8 @@ const SeatSelection = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  console.log("seat array: ", data);
+
   // Media query to detect screen size
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isMediumScreen = useMediaQuery("(max-width:960px)");

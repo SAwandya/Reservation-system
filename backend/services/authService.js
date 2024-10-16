@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken');
-const config = require('config');
 const { access } = require('fs');
 
 exports.generateToken = (user) => {
     return jwt.sign(
       { _id: user._id, name: user.name, email: user.email, accessToken: user.accessToken },
-      config.get("GOOGLE_CLIENT_SECRET"),
+      process.env.GOOGLE_CLIENT_SECRET,
       {
         expiresIn: "7d",
       }
@@ -20,7 +19,7 @@ exports.generateRefreshToken = (user) => {
         email: user.email,
         accessToken: user.accessToken,
       },
-      config.get("REFRESH_TOKEN_SECRET"),
+      process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: "7d",
       }
@@ -31,7 +30,7 @@ exports.refreshToken = async (refreshToken) => {
     try {
         const decoded = jwt.verify(
           refreshToken,
-          config.get("REFRESH_TOKEN_SECRET")
+          process.env.REFRESH_TOKEN_SECRET
         );
         return this.generateToken({
           _id: decoded.id,

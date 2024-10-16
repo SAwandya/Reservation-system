@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,6 @@
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.0",
-    "config": "^3.3.12",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
@@ -21,8 +20,15 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.3",
+    "node-mocks-http": "^1.16.1",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "sinon": "^19.0.2",
+    "sinon-chai": "^4.0.0"
   }
 }
