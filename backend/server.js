@@ -26,7 +26,7 @@ mongoose
 app.use(cors()); // Enable CORS for all routes
 
 // Serve static files from the React frontend app
-// app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Increase payload size for JSON and URL-encoded form data
 app.use(express.json({ limit: "10mb" })); // Set the limit (e.g., 10MB)
@@ -53,9 +53,9 @@ app.use("/api/auth", auth);
 app.use("/api", calenderRoutes);
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
