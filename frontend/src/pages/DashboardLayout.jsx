@@ -4,7 +4,6 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
-import SideBar from "../Components/SideBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import { RenderContentProvider } from "../Context/RenderContentContext";
 import AdminSeatConfigurator from "../components/AdminSeatConfigurator";
@@ -12,6 +11,7 @@ import AdminShowTimeForm from "../components/AdminShowTimeForm";
 import { useAuth } from "../Context/AuthContext";
 import AllBookings from "../components/AllBookings";
 import UsersTable from "./UsersTable";
+import SideBar from "../components/SideBar";
 
 const DashboardLayout = () => {
   // State to manage the active content
