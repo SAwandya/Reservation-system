@@ -31,7 +31,7 @@ jobs:
 
     - name: Move frontend build files to backend
       run: |
-        mv frontend/build backend/build  # Move the frontend build to backend
+        mv frontend/dist backend/dist  # Move the frontend build to backend
 
     - name: Deploy to Azure Web App
       uses: Azure/webapps-deploy@v2
