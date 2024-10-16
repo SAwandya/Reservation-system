@@ -50,11 +50,11 @@ app.use("/api/auth", auth);
 app.use("/api", calenderRoutes);
 
 // Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Catch-all route that serves the React frontend's index.html file for any route that isn't an API call
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const port = process.env.PORT || 3000;
