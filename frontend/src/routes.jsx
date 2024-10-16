@@ -6,7 +6,6 @@ import SeatSelection from "./components/SeatSelection";
 import MoviePostForm from "./components/MoviePostForm";
 import RegisterForm from "./pages/RegisterForm";
 import SignInForm from "./pages/SignInForm";
-import ShowtimeForm from "./components/showTimeForm";
 import DashboardLayout from "./pages/DashboardLayout";
 import Content from "./components/Content";
 import BookingDetails from "./pages/BookingDetails";
@@ -15,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import MyBooking from "./pages/MyBooing";
 import DashboardProtectedRoute from "./components/DashboardProtectedRoute";
 import ImageSlider2 from "./components/ImageSlider2";
+import ShowtimeForm from "./components/ShowTimeForm";
 
 const router = createBrowserRouter([
   {
