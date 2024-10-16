@@ -5,16 +5,11 @@ exports.getByTheaterIdEvent = async (req, res) => {
   const { theaterId } = req.params;
 
   try {
-    const seats = await Seat.find({ theater: theaterId }).sort({
-      section: 1,
-      row: 1,
-      number: 1,
-    });
-
-    res.json(seats);
+    const seats = await Seat.find({ theater: theaterId })
+    return res.json(seats);
   } catch (error) {
     console.error("Error fetching seats:", error);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -49,7 +44,7 @@ exports.createMultipleSeatsEvent = async (req, res) => {
     const { theater, sections, location } = req.body;
 
     let newtheater = await Theater.findOne({ name: theater, location });
-    if (newtheater) res.status(404).json({ error: "Theater Already exist" });
+    if (newtheater) return res.status(404).json({ error: "Theater Already exist" });
 
     // Create a new theater
     newTheater = new Theater({ name: theater, location });

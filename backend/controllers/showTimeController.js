@@ -3,11 +3,11 @@ const { Showtime } = require("../models/showtime");
 exports.getAllShowTimesEvent = async (req, res) => {
   try {
     // Fetch all showtimes
-    const showtimes = await Showtime.find().select("date -_id"); // Fetch only the date field
+    const showtimes = await Showtime.find({}, "date -_id");
     res.status(200).json(showtimes);
   } catch (error) {
     console.error("Error fetching showtimes:", error);
-    res.status(500).send("Server error");
+    res.status(500).json("Server error");
   }
 };
 
@@ -30,10 +30,10 @@ exports.createShowTimeEvent = async (req, res) => {
     });
 
     // Save the document to the database
-    await newShowtime.save();
+    const savedNewShowtime = await newShowtime.save();
 
     // Respond with the created showtime
-    res.status(201).json(newShowtime);
+    res.status(201).json(savedNewShowtime);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error, please try again later." });
@@ -76,9 +76,7 @@ exports.getShowTimeByTheaterAndDateEvent = async (req, res) => {
 
 exports.getShowTimeByIdEvent = async (req, res) => {
   try {
-    const showtime = await Showtime.findById(req.params.id).populate(
-      "movie theater"
-    );
+    const showtime = await Showtime.findById(req.params.id);
     if (!showtime) return res.status(404).json({ error: "Showtime not found" });
     res.json(showtime);
   } catch (error) {

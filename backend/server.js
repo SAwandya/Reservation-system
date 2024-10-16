@@ -11,9 +11,10 @@ const user = require("./routes/user");
 const auth = require("./routes/auth");
 require("./config/passport"); // Import your passport configuration
 const passport = require("./config/passport");
-require('dotenv').config(); // Load environment variables
-const session = require('express-session'); // Import express-session
-const calenderRoutes = require('./routes/calenderRoutes'); // Add this line
+require("dotenv").config(); // Load environment variables
+const session = require("express-session"); // Import express-session
+const calenderRoutes = require("./routes/calenderRoutes"); // Add this line
+const path = require("path");
 
 const mongo_url = process.env.MONGO_URL;
 
@@ -24,6 +25,8 @@ mongoose
 
 app.use(cors()); // Enable CORS for all routes
 
+// Serve static files from the React frontend app
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // Increase payload size for JSON and URL-encoded form data
 app.use(express.json({ limit: "10mb" })); // Set the limit (e.g., 10MB)
@@ -47,7 +50,12 @@ app.use("/api/showtimes", showtimeRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/user", user);
 app.use("/api/auth", auth);
-app.use("/api", calenderRoutes); 
+app.use("/api", calenderRoutes);
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

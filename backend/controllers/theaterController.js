@@ -3,8 +3,8 @@ const { Theater } = require("../models/theater");
 exports.createTheaterEvent = async (req, res) => {
   try {
     const theater = new Theater(req.body);
-    await theater.save();
-    res.status(201).json(theater);
+    const savedTheater = await theater.save();
+    res.status(201).json(savedTheater);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
