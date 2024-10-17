@@ -1,12 +1,12 @@
-name: Deploy to Azure
+name: Deploy Backend
 
 on:
   push:
     branches:
-      - main  # Adjust this to the branch you want to deploy from
+      - main  # Replace with your branch
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,26 +16,23 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # Specify your Node.js version
+          node-version: '20'  # Adjust to your Node.js version
 
-      - name: Install backend dependencies
+      - name: Install Backend Dependencies
         working-directory: ./backend
         run: npm install
 
-      - name: Install frontend dependencies
+      - name: Build Frontend
         working-directory: ./frontend
-        run: npm install
+        run: npm run build  # Adjust this to your actual build command
 
-      - name: Build frontend
-        working-directory: ./frontend
-        run: npm run build
-
-      - name: Move frontend build to backend public folder
-        run: mv ./frontend/dist ./backend
+      - name: Copy Frontend Build to Backend Public
+        run: |
+          cp -r ./frontend/dist/* ./backend/public/
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ''  # Replace with your Azure Web App name
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # Add your Azure publish profile secret
-          package: ./backend  # Path to the backend directory to deploy
+          app-name: Reservation-system  # Replace with your Azure app name
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: ./backend  # Specify the backend directory
