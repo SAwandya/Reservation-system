@@ -1,40 +1,45 @@
-name: Deploy to Azure Web App
+name: Deploy to Azure
 
 on:
   push:
     branches:
-      - main
+      - main  # Adjust this to the branch you want to deploy from
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'  # Adjust this to your Node.js version
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'  # Specify your Node.js version
 
-    - name: Install dependencies for backend
-      run: |
-        cd backend
-        npm install
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm install
 
-    - name: Install dependencies and build frontend
-      run: |
-        cd frontend
-        npm install
-        npm run build
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
 
-    - name: Move frontend build files to backend
-      run: |
-        mv frontend/dist backend/dist  # Move the frontend build to backend
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
 
-    - name: Deploy to Azure Web App
-      uses: Azure/webapps-deploy@v2
-      with:
-        app-name: tsr   # Replace with your Azure app name
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+      - name: Move frontend build to backend public folder
+        run: mv ./frontend/build/* ./backend/public/
+
+      - name: Start backend server
+        working-directory: ./backend
+        run: npm start  # Adjust this if your start command is different
+
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ''  # Replace with your Azure Web App name
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}  # Add your Azure publish profile secret
+          package: ./backend  # Path to the backend directory to deploy
