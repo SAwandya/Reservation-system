@@ -32,7 +32,7 @@ jobs:
 
       - name: Copy Frontend Build to Backend Public
         run: |
-          cp -r ./frontend/dist/* ./backend/public/
+          cp -r ./frontend/dist/* ./backend
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
