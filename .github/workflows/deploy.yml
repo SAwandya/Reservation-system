@@ -31,7 +31,7 @@ jobs:
         run: npm run build
 
       - name: Move frontend build to backend public folder
-        run: mv ./frontend/build/* ./backend/public/
+        run: mv ./frontend/dist ./backend
 
       - name: Start backend server
         working-directory: ./backend
