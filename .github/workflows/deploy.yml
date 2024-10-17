@@ -33,10 +33,6 @@ jobs:
       - name: Move frontend build to backend public folder
         run: mv ./frontend/dist ./backend
 
-      - name: Start backend server
-        working-directory: ./backend
-        run: npm start  # Adjust this if your start command is different
-
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
         with:
