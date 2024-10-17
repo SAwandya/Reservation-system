@@ -1,7 +1,7 @@
 import axios, { CanceledError } from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: `https://Reservation-system:80/api`,
+  baseURL: `https://reservation-system.azurewebsites.net/api`,
 });
 
 class APIClient {
