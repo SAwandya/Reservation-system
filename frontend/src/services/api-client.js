@@ -1,8 +1,7 @@
 import axios, { CanceledError } from "axios";
-require("dotenv").config();
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND_URL}/api`,
+  baseURL: `https://reservation-system-b4b6hpa0hhe7d5ed.ukwest-01.azurewebsites.net/api`,
 });
 
 class APIClient {
