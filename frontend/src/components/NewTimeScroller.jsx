@@ -5,17 +5,17 @@ import { styled } from "@mui/system";
 const ScrollerWrapper = styled(Paper)(({ theme }) => ({
   width: "100%",
   maxWidth: "280px",
-  backgroundColor: "#E5D9F2",
-  borderRadius: "15px",
+  backgroundColor: "rgba(255, 255, 255, 0.05)",
+  borderRadius: "16px",
   padding: "15px",
   margin: "20px auto",
-  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+  border: "1px solid rgba(255, 255, 255, 0.1)",
 }));
 
 const ScrollerContainer = styled(Box)(({ theme }) => ({
   width: "100%",
-  height: "180px",
-  backgroundColor: "#F7F5FB", // Lighter background for contrast
+  height: "400px",
+  backgroundColor: "rgba(255, 255, 255, 0.02)",
   borderRadius: "12px",
   overflow: "hidden",
   position: "relative",
@@ -31,7 +31,7 @@ const TimeWheel = styled(Box)({
   margin: "0 10px",
   borderRadius: "8px",
   "&:hover": {
-    backgroundColor: "rgba(92, 47, 194, 0.08)",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
 });
 
@@ -41,13 +41,13 @@ const SelectionHighlight = styled(Box)({
   height: "45px",
   left: "10px",
   top: "67.5px",
-  backgroundColor: "rgba(92, 47, 194, 0.12)",
+  backgroundColor: "rgba(255, 255, 255, 0.05)",
   borderRadius: "8px",
   pointerEvents: "none",
-  border: "2px solid rgba(92, 47, 194, 0.2)",
+  border: "1px solid rgba(255, 255, 255, 0.1)",
 });
 
-const NewTimeScroller = ({ availableTimes, onTimeSelect }) => {
+const TimeScroller = ({ availableTimes, onTimeSelect }) => {
   const [selectedTime, setSelectedTime] = useState(null);
 
   const handleTimeSelect = (time) => {
@@ -64,8 +64,8 @@ const NewTimeScroller = ({ availableTimes, onTimeSelect }) => {
         sx={{
           textAlign: "center",
           mb: 2,
-          color: "#5C2FC2",
-          fontWeight: 600,
+          color: "#e2e8f0",
+          fontWeight: 500,
         }}
       >
         Available Times
@@ -80,14 +80,14 @@ const NewTimeScroller = ({ availableTimes, onTimeSelect }) => {
               width: "6px",
             },
             "&::-webkit-scrollbar-track": {
-              backgroundColor: "rgba(92, 47, 194, 0.05)",
+              backgroundColor: "rgba(255, 255, 255, 0.02)",
               borderRadius: "3px",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#5C2FC2",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
               borderRadius: "3px",
               "&:hover": {
-                backgroundColor: "#4925A3",
+                backgroundColor: "rgba(255, 255, 255, 0.3)",
               },
             },
           }}
@@ -100,9 +100,10 @@ const NewTimeScroller = ({ availableTimes, onTimeSelect }) => {
               sx={{
                 backgroundColor:
                   selectedTime === time
-                    ? "rgba(92, 47, 194, 0.15)"
+                    ? "rgba(255, 255, 255, 0.1)"
                     : "transparent",
-                color: selectedTime === time ? "#5C2FC2" : "#666",
+                color:
+                  selectedTime === time ? "#fff" : "rgba(255, 255, 255, 0.7)",
                 fontWeight: selectedTime === time ? 600 : 400,
               }}
             >
@@ -123,4 +124,4 @@ const NewTimeScroller = ({ availableTimes, onTimeSelect }) => {
   );
 };
 
-export default NewTimeScroller;
+export default TimeScroller;

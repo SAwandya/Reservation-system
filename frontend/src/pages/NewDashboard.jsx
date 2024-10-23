@@ -150,18 +150,18 @@ const NewDashboard = () => {
             >
               Book Your Seats
             </Typography>
-            <Grid item xs={12} sm={8} md={8}>
+            <Grid item xs={12} sm={8} md={9}>
               {" "}
               <SeatSelection />
             </Grid>
-            <Grid item xs={12} sm={8} md={4}>
+            <Grid item xs={12} sm={8} md={3}>
               {" "}
               <Box
-                sx={{
-                  backgroundColor: "#A594F9",
-                  padding: "20px",
-                  borderRadius: "20px",
-                }}
+                // sx={{
+                //   backgroundColor: "#A594F9",
+                //   padding: "20px",
+                //   borderRadius: "20px",
+                // }}
               >
                 <Typography variant="h5" sx={{ textAlign: "center", mb: 2 }}>
                   Select Time
