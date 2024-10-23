@@ -15,6 +15,7 @@ import MyBooking from "./pages/MyBooing";
 import DashboardProtectedRoute from "./components/DashboardProtectedRoute";
 import ImageSlider2 from "./components/ImageSlider2";
 import ShowtimeForm from "./components/ShowTimeForm";
+import NewDashboard from "./pages/NewDashboard";
 
 const router = createBrowserRouter([
   {
@@ -112,6 +113,10 @@ const router = createBrowserRouter([
   {
     path: "/slider",
     element: <ImageSlider2 />,
+  },
+  {
+    path: "/newdashboard",
+    element: <NewDashboard />,
   },
 ]);
 

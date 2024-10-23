@@ -129,7 +129,7 @@ const SeatSelection = () => {
 
       // Save valid booking data to local storage
       localStorage.setItem("bookingData", JSON.stringify(bookingData));
-      
+
       navigate("/bookingdetails");
       setSnackbarOpen(true);
 
@@ -158,12 +158,24 @@ const SeatSelection = () => {
         key={section}
         sx={{
           mb: 4,
-          borderRadius: "10px",
-          padding: "10px",
-          backgroundColor: "#E5D9F2",
+          borderRadius: "12px",
+          padding: "20px",
+          backgroundColor: "background.paper",
+          boxShadow: 1,
+          transition: "all 0.3s ease",
+          "&:hover": {
+            boxShadow: 3,
+          },
         }}
       >
-        <Typography sx={{ mb: 2, fontSize: "15px" }}>
+        <Typography
+          sx={{
+            mb: 2,
+            fontSize: "16px",
+            fontWeight: "bold",
+            color: "text.primary",
+          }}
+        >
           {section} Seats - ${sectionPrices[section]}
         </Typography>
         <Grid container justifyContent="center" sx={{ mb: 2 }}>
@@ -176,10 +188,18 @@ const SeatSelection = () => {
                 container
                 key={rowKey}
                 justifyContent="center"
-                sx={{ mb: 1, flexWrap: "nowrap" }} // Prevent row from breaking
+                sx={{ mb: 1, flexWrap: "nowrap" }}
               >
                 <Grid item sx={{ mr: 1, alignSelf: "center" }}>
-                  <Typography variant="h6">{rowIndex}</Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: "medium",
+                      color: "text.secondary",
+                    }}
+                  >
+                    {rowIndex}
+                  </Typography>
                 </Grid>
                 {row.map((isAvailable, colIndex) => {
                   const seatId = `${section}-${rowIndex}-${colIndex}`;
@@ -191,19 +211,23 @@ const SeatSelection = () => {
                       onClick={() => handleSeatClick(section, rowKey, colIndex)}
                       disabled={!isAvailable}
                       sx={{
-                        width: buttonSize, // Dynamically set the button width
-                        height: buttonSize, // Dynamically set the button height
+                        width: buttonSize,
+                        height: buttonSize,
                         margin: 0.3,
                         backgroundColor: !isAvailable
-                          ? "gray"
+                          ? "action.disabledBackground"
                           : isSelected
-                          ? "green"
-                          : "#80C4E9",
+                          ? "primary.main"
+                          : "primary.light",
+                        opacity: !isAvailable ? 0.5 : 1,
+                        transition: "all 0.2s ease",
+                        cursor: isAvailable ? "pointer" : "not-allowed",
                         "&:hover": {
                           backgroundColor:
-                            isAvailable && !isSelected ? "#5C2FC2" : "",
+                            isAvailable && !isSelected ? "primary.dark" : "",
+                          transform: isAvailable ? "scale(1.05)" : "none",
                         },
-                        borderRadius: "10px",
+                        borderRadius: "8px",
                       }}
                     />
                   );
@@ -220,24 +244,54 @@ const SeatSelection = () => {
     <Box
       sx={{
         textAlign: "center",
-        padding: 2,
-        backgroundColor: "#A594F9",
-        borderRadius: "20px",
+        padding: 3,
+        backgroundColor: "background.default",
+        borderRadius: "16px",
         margin: "20px",
+        boxShadow: 2,
       }}
     >
-      <Typography variant="h4" sx={{ mb: 4 }}>
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 4,
+          fontWeight: "bold",
+          color: "text.primary",
+        }}
+      >
         Select Your Seats
       </Typography>
       {renderSeats()}
-      <Typography variant="h6" sx={{ mt: 4 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          mt: 4,
+          color: "text.primary",
+          fontWeight: "medium",
+        }}
+      >
         Total Price: ${totalPrice}
       </Typography>
       <Button
         variant="contained"
         onClick={handleConfirm}
         disabled={selectedSeats.length === 0}
-        sx={{ backgroundColor: "#5C2FC2", color: "white", mt: 4 }}
+        sx={{
+          mt: 4,
+          px: 4,
+          py: 1.5,
+          backgroundColor: "primary.main",
+          color: "primary.contrastText",
+          borderRadius: "8px",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            backgroundColor: "primary.dark",
+            transform: "translateY(-2px)",
+          },
+          "&:disabled": {
+            backgroundColor: "action.disabledBackground",
+          },
+        }}
       >
         Confirm Selection
       </Button>
