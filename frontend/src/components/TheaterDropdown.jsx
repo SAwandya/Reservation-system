@@ -13,6 +13,8 @@ import { styled } from "@mui/system";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import movie3 from "../assets/movie3.jpg";
+import useTheaters from "../hooks/useTheaters";
+import useGameQueryStore from "../store";
 
 const StyledButton = styled(Button)(({ theme }) => ({
   width: "100%",
@@ -89,40 +91,13 @@ const TheaterInfo = styled(Box)(({ theme }) => ({
   color: "white",
 }));
 
-const theaters = [
-  {
-    id: 1,
-    name: "Cinema Plaza",
-    image: movie3,
-    location: "123 Main Street",
-    description: "Experience luxury cinema at its finest",
-  },
-  {
-    id: 2,
-    name: "Star Movies",
-    image: movie3,
-    location: "456 Park Avenue",
-    description: "Your premier destination for entertainment",
-  },
-  {
-    id: 3,
-    name: "Grand Theater",
-    image: movie3,
-    location: "789 Broadway",
-    description: "Where movies come to life",
-  },
-  {
-    id: 4,
-    name: "Luxury Cinema",
-    image: movie3,
-    location: "321 Fifth Avenue",
-    description: "Ultimate comfort meets entertainment",
-  },
-];
-
 const TheaterDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedTheater, setSelectedTheater] = useState(null);
+  const [selectedTheater, setSelectedTheaters] = useState(null);
+
+  const setSelectedTheater = useGameQueryStore((s) => s.SetSelectedTheater);
+
+  const { data: theaters } = useTheaters();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -133,7 +108,9 @@ const TheaterDropdown = () => {
   };
 
   const handleTheaterSelect = (theater) => {
-    setSelectedTheater(theater);
+    console.log("Selected theater:", theater);
+    setSelectedTheaters(theater);
+    setSelectedTheater(theater._id);
     handleClose();
   };
 
@@ -165,12 +142,12 @@ const TheaterDropdown = () => {
         }}
       >
         <Grid container spacing={2}>
-          {theaters.map((theater) => (
+          {theaters?.map((theater) => (
             <Grid item xs={12} key={theater.id}>
               <TheaterMenuItem onClick={() => handleTheaterSelect(theater)}>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={4}>
-                    <TheaterImage src={theater.image} alt={theater.name} />
+                    <TheaterImage src={theater.imageUrl} alt={theater.name} />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography
@@ -198,7 +175,7 @@ const TheaterDropdown = () => {
       {selectedTheater && (
         <SelectedTheaterImage className="visible" sx={{ position: "relative" }}>
           <TheaterImage
-            src={selectedTheater.image}
+            src={selectedTheater.imageUrl}
             alt={selectedTheater.name}
             style={{ height: "100%", width: "100%" }}
           />

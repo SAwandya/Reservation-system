@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/system";
 import movie3 from "../assets/movie3.jpg";
 import EventPopup from "./EventPopup";
+import useMovies from "../hooks/useMovies";
 
 const SliderContainer = styled(Box)({
   width: "100%",
@@ -48,18 +49,22 @@ const NewCardSlider = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
-  const cards = [
-    { id: 1, image: movie3, description: "Event 1 description" },
-    { id: 2, image: movie3, description: "Event 2 description" },
-    { id: 3, image: movie3, description: "Event 3 description" },
-    { id: 4, image: movie3, description: "Event 4 description" },
-    { id: 5, image: movie3, description: "Event 5 description" },
-    { id: 6, image: movie3, description: "Event 6 description" },
-    { id: 7, image: movie3, description: "Event 7 description" },
-    { id: 8, image: movie3, description: "Event 8 description" },
-    { id: 9, image: movie3, description: "Event 9 description" },
-    { id: 10, image: movie3, description: "Event 10 description" },
-  ];
+  const { data: cards } = useMovies()
+
+  console.log(" My events :", cards)
+
+  // const cards = [
+  //   { id: 1, image: movie3, description: "Event 1 description" },
+  //   { id: 2, image: movie3, description: "Event 2 description" },
+  //   { id: 3, image: movie3, description: "Event 3 description" },
+  //   { id: 4, image: movie3, description: "Event 4 description" },
+  //   { id: 5, image: movie3, description: "Event 5 description" },
+  //   { id: 6, image: movie3, description: "Event 6 description" },
+  //   { id: 7, image: movie3, description: "Event 7 description" },
+  //   { id: 8, image: movie3, description: "Event 8 description" },
+  //   { id: 9, image: movie3, description: "Event 9 description" },
+  //   { id: 10, image: movie3, description: "Event 10 description" },
+  // ];
 
   useEffect(() => {
     const slider = sliderRef.current;
@@ -124,6 +129,7 @@ const NewCardSlider = () => {
   };
 
   const handleCardClick = (card) => {
+    console.log("Selected card:", card);
     setSelectedCard(card);
     setOpenPopup(true);
   };
@@ -138,9 +144,13 @@ const NewCardSlider = () => {
         onMouseMove={handleMouseMove}
       >
         <SliderTrack ref={trackRef}>
-          {cards.map((card) => (
-            <Card key={card.id} className="card" data-card-id={card.id}>
-              <CardImage src={card.image} alt={`Card ${card.id}`} />
+          {cards?.map((card) => (
+            <Card key={card._id} className="card" data-card-id={card.id}>
+              <CardImage
+                onClick={() => handleCardClick(card)}
+                src={card.imageUrl}
+                alt={`Card ${card.id}`}
+              />
             </Card>
           ))}
         </SliderTrack>

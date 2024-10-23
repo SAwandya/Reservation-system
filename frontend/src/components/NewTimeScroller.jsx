@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import { styled } from "@mui/system";
+import useGameQueryStore from "../store";
+import axios from "axios";
 
 const ScrollerWrapper = styled(Paper)(({ theme }) => ({
   width: "100%",
@@ -47,15 +49,59 @@ const SelectionHighlight = styled(Box)({
   border: "1px solid rgba(255, 255, 255, 0.1)",
 });
 
-const TimeScroller = ({ availableTimes, onTimeSelect }) => {
+function formatToCustomISO(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+}
+
+const TimeScroller = ({ onTimeSelect }) => {
   const [selectedTime, setSelectedTime] = useState(null);
 
+  const [availableTimes, setShowtimes] = useState([]);
+  const theaterId = useGameQueryStore((s) => s.selectedTheater);
+  const date = useGameQueryStore((s) => s.selectedDate);
+  const SetSelectedTime = useGameQueryStore((s) => s.SetSelectedTime);
+  const convertedDate = formatToCustomISO(date);
+
   const handleTimeSelect = (time) => {
+
+    SetSelectedTime(time);
+
     setSelectedTime(time);
     if (onTimeSelect) {
       onTimeSelect(time);
     }
   };
+
+  useEffect(() => {
+    const fetchShowtimes = async () => {
+
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/showtimes",
+          {
+            params: {
+              theater: theaterId,
+              date: convertedDate,
+            },
+          }
+        );
+        setShowtimes(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (theaterId) {
+      fetchShowtimes();
+    }
+  }, [theaterId, date]);
 
   return (
     <ScrollerWrapper elevation={0}>
@@ -93,7 +139,7 @@ const TimeScroller = ({ availableTimes, onTimeSelect }) => {
           }}
         >
           <Box sx={{ height: "67.5px" }} />
-          {availableTimes.map((time, index) => (
+          {availableTimes[0]?.times.map((time, index) => (
             <TimeWheel
               key={index}
               onClick={() => handleTimeSelect(time)}

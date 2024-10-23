@@ -1,59 +1,19 @@
 import React from "react";
 import {
-  Modal,
+  Dialog,
+  DialogContent,
   Typography,
-  Grid,
   Box,
+  Grid,
+  Chip,
   IconButton,
   Button,
 } from "@mui/material";
-import { styled } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
-
-const PopupContent = styled(Box)(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "90%",
-  maxWidth: "900px",
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[24],
-  borderRadius: theme.shape.borderRadius,
-  padding: theme.spacing(4),
-  [theme.breakpoints.down("md")]: {
-    padding: theme.spacing(3),
-  },
-}));
-
-const PopupImage = styled("img")({
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
-  borderRadius: "8px",
-});
-
-const CloseButton = styled(IconButton)(({ theme }) => ({
-  position: "absolute",
-  right: theme.spacing(2),
-  top: theme.spacing(2),
-  color: theme.palette.grey[500],
-}));
-
-const ContinueButton = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(3),
-  width: "100%",
-  padding: theme.spacing(1.5),
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
-  "&:hover": {
-    backgroundColor: theme.palette.primary.dark,
-  },
-}));
+import { format } from "date-fns";
 
 const EventPopup = ({ open, onClose, event }) => {
-  const dummyDescription =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  if (!event) return null;
 
   const handleContinue = () => {
     onClose();
@@ -65,39 +25,236 @@ const EventPopup = ({ open, onClose, event }) => {
   };
 
   return (
-    <Modal
+    <Dialog
       open={open}
       onClose={onClose}
-      aria-labelledby="event-popup"
-      aria-describedby="event-description"
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
+        sx: {
+          background: "linear-gradient(135deg, #1e2a38 0%, #181818 100%)",
+          borderRadius: 4,
+          maxWidth: "90%",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        },
+      }}
     >
-      <PopupContent>
-        <CloseButton onClick={onClose}>
+      <Box
+        sx={{
+          position: "relative",
+          p: 4,
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
+        <IconButton
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 16,
+            top: 16,
+            color: "#e2e8f0",
+          }}
+        >
           <CloseIcon />
-        </CloseButton>
-        {event && (
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <PopupImage src={event.image} alt={`Event ${event.id}`} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h4" component="h2" gutterBottom>
-                Event {event.id}
-              </Typography>
-              <Typography variant="body1" paragraph>
-                {event.description}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {dummyDescription}
-              </Typography>
-              <ContinueButton variant="contained" onClick={handleContinue}>
-                Continue
-              </ContinueButton>
-            </Grid>
+        </IconButton>
+
+        <Typography
+          variant="h4"
+          sx={{ mb: 4, color: "#e2e8f0", fontWeight: "bold" }}
+        >
+          {event.title}
+        </Typography>
+
+        <Grid container spacing={4}>
+          {/* Left side - Image */}
+          <Grid item xs={12} md={4}>
+            <Box
+              component="img"
+              src={event.imageUrl}
+              alt={event.title}
+              sx={{
+                width: "100%",
+                borderRadius: 3,
+                boxShadow: "0 8px 16px rgba(0,0,0,0.4)",
+              }}
+            />
           </Grid>
-        )}
-      </PopupContent>
-    </Modal>
+
+          {/* Right side - Details */}
+          <Grid item xs={12} md={8}>
+            <Box
+              sx={{
+                bgcolor: "rgba(255, 255, 255, 0.05)",
+                borderRadius: 4,
+                p: 3,
+                boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+              }}
+            >
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold" }}
+                  >
+                    Description
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ mb: 2, color: "#e2e8f0", opacity: 0.8 }}
+                  >
+                    {event.description}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold" }}
+                  >
+                    Director
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#e2e8f0", opacity: 0.8 }}
+                  >
+                    {event.director}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold" }}
+                  >
+                    Duration
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#e2e8f0", opacity: 0.8 }}
+                  >
+                    {event.duration} minutes
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold" }}
+                  >
+                    Release Date
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#e2e8f0", opacity: 0.8 }}
+                  >
+                    {format(new Date(event.releaseDate), "MMMM dd, yyyy")}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold" }}
+                  >
+                    Rating
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#e2e8f0", opacity: 0.8 }}
+                  >
+                    {event.rating}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold", mb: 1 }}
+                  >
+                    Genre
+                  </Typography>
+                  <Box
+                    sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}
+                  >
+                    {event.genre.map((g, index) => (
+                      <Chip
+                        key={index}
+                        label={g}
+                        sx={{
+                          backgroundColor: "rgba(255, 255, 255, 0.1)",
+                          color: "#e2e8f0",
+                          "&:hover": {
+                            backgroundColor: "rgba(255, 255, 255, 0.15)",
+                          },
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#e2e8f0", fontWeight: "bold", mb: 1 }}
+                  >
+                    Cast
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                    {event.cast.map((actor, index) => (
+                      <Chip
+                        key={index}
+                        label={actor}
+                        sx={{
+                          backgroundColor: "rgba(255, 255, 255, 0.1)",
+                          color: "#e2e8f0",
+                          "&:hover": {
+                            backgroundColor: "rgba(255, 255, 255, 0.15)",
+                          },
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
+        </Grid>
+
+        {/* Continue Button */}
+        <Box
+          sx={{
+            mt: 4,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleContinue}
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              color: "#e2e8f0",
+              padding: "10px 40px",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+              },
+            }}
+          >
+            Continue to Book
+          </Button>
+        </Box>
+      </Box>
+    </Dialog>
   );
 };
 

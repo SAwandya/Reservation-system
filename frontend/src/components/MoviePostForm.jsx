@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -17,6 +17,7 @@ import movieService from "../services/movieService";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import useTheaters from "../hooks/useTheaters";
 
 const FormWrapper = styled(Box)({
   background: "rgba(255, 255, 255, 0.05)",
@@ -102,7 +103,11 @@ const MoviePostForm = () => {
   const [image, setImage] = React.useState("");
   const [cast, setCast] = React.useState([]);
   const [genre, setGenre] = React.useState([]);
+  const [theaterType, setTheaterType] = useState("");
+
   const navigate = useNavigate();
+
+  const { data: theaters } = useTheaters();
 
   const ratings = ["G", "PG", "PG-13", "R", "NC-17"];
 
@@ -126,10 +131,13 @@ const MoviePostForm = () => {
   const onFormSubmit = async (data) => {
     const formData = {
       ...data,
+      theater: theaterType,
       cast,
       genre,
       image,
     };
+
+    console.log(formData);
 
     try {
       await movieService.CreateMovie(formData);
@@ -138,7 +146,7 @@ const MoviePostForm = () => {
         theme: "dark",
         transition: Bounce,
       });
-      navigate("/");
+      navigate("/Dashboard");
     } catch (error) {
       toast.error("Error adding movie", {
         position: "top-right",
@@ -166,7 +174,7 @@ const MoviePostForm = () => {
             textAlign: "center",
           }}
         >
-          Upload Movie
+          Publish Event
         </Typography>
 
         <Grid
@@ -177,12 +185,50 @@ const MoviePostForm = () => {
         >
           <Grid item xs={12}>
             <StyledTextField
-              label="Movie Title"
+              label="Event Title"
               {...register("title", { required: "Title is required" })}
               error={!!errors.title}
               helperText={errors.title?.message}
               fullWidth
             />
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl
+              fullWidth
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "rgba(255, 255, 255, 0.02)",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.1)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+                "& .MuiSelect-icon": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                },
+              }}
+            >
+              <InputLabel>Theater Type</InputLabel>
+              <Select
+                value={theaterType}
+                onChange={(e) => setTheaterType(e.target.value)}
+                label="Theater"
+                sx={{
+                  color: "#e2e8f0",
+                }}
+              >
+                {theaters.map((theater) => (
+                  <MenuItem value={theater._id}>{theater.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
@@ -197,7 +243,7 @@ const MoviePostForm = () => {
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Release Date"
+              label="Date"
               type="date"
               InputLabelProps={{ shrink: true }}
               {...register("releaseDate")}
@@ -216,7 +262,7 @@ const MoviePostForm = () => {
 
           <Grid item xs={12} md={6}>
             <StyledTextField
-              label="Director"
+              label="Organizer"
               {...register("director")}
               fullWidth
             />
@@ -261,7 +307,7 @@ const MoviePostForm = () => {
               startIcon={<CloudUploadIcon />}
               fullWidth
             >
-              Upload Movie Poster
+              Upload Event Poster
               <VisuallyHiddenInput
                 onChange={setFileToBase}
                 type="file"
@@ -287,7 +333,7 @@ const MoviePostForm = () => {
                 },
               }}
             >
-              Submit Movie
+              Publish Event
             </Button>
           </Grid>
         </Grid>
