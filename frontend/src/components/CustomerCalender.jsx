@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import { Box, Typography, Grid } from '@mui/material';
 import { styled } from '@mui/system';
 import 'react-calendar/dist/Calendar.css';
+import useGameQueryStore from '../store';
 
 const CalendarWrapper = styled(Box)({
   display: 'flex',
@@ -83,7 +84,31 @@ const StyledCalendar = styled(Calendar)({
 });
 
 const CustomCalendar = () => {
-  const [date, setDate] = useState(new Date(2021, 6, 2)); // July 2, 2021
+
+  const [date, setDate] = useState(new Date());
+
+  const SetSelectedDate = useGameQueryStore((s) => s.SetSelectedDate);
+
+  console.log("new date: ", date);
+
+  const handleDateChange = (newDate) => {
+    setDate(newDate);
+
+    SetSelectedDate(newDate)
+
+    // Format the date to a more readable string
+    const formattedDate = {
+      day: newDate.getDate(),
+      month: newDate.toLocaleString("default", { month: "long" }),
+      year: newDate.getFullYear(),
+      fullDate: newDate.toISOString(), // Full ISO date string if needed
+    };
+
+    // // Pass the formatted date up to parent component
+    // if (onDateSelect) {
+    //   onDateSelect(formattedDate);
+    // }
+  };
 
   const tileClassName = ({ date, view }) => {
     if (view === 'month') {
@@ -98,45 +123,63 @@ const CustomCalendar = () => {
   return (
     <CalendarWrapper>
       <SidebarWrapper>
-        <Typography variant="h1" sx={{ fontSize: '72px', fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontSize: "72px", fontWeight: "bold" }}>
           02
         </Typography>
-        <Typography variant="h4" sx={{ textTransform: 'uppercase' }}>
+        <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
           July
         </Typography>
         <Typography variant="h4">2021</Typography>
-        <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>TO DO</Typography>
-        <Box sx={{ bgcolor: 'rgba(255,255,255,0.2)', p: 1, mb: 1 }}>
+        <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
+          TO DO
+        </Typography>
+        <Box sx={{ bgcolor: "rgba(255,255,255,0.2)", p: 1, mb: 1 }}>
           <Typography variant="body2">NOTES TO BE MADE</Typography>
         </Box>
-        <Box sx={{ bgcolor: 'rgba(255,255,255,0.2)', p: 1 }}>
+        <Box sx={{ bgcolor: "rgba(255,255,255,0.2)", p: 1 }}>
           <Typography variant="body2">DON'T FORGET ABOUT B-DAY</Typography>
         </Box>
-        <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>SCHEDULE</Typography>
+        <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
+          SCHEDULE
+        </Typography>
         <Grid container spacing={1}>
           {[
-            { time: '10:00 - 01:10', task: 'CLASSES' },
-            { time: '02:00 - 05:00', task: 'GAMING' },
-            { time: '07:00 - 08:30', task: 'HOMEWORK' },
-            { time: '10:00 - 12:30', task: 'CODING' },
+            { time: "10:00 - 01:10", task: "CLASSES" },
+            { time: "02:00 - 05:00", task: "GAMING" },
+            { time: "07:00 - 08:30", task: "HOMEWORK" },
+            { time: "10:00 - 12:30", task: "CODING" },
           ].map((item, index) => (
             <React.Fragment key={index}>
               <Grid item xs={5}>
-                <Typography variant="body2" sx={{ bgcolor: 'rgba(255,255,255,0.2)', p: 0.5 }}>{item.time}</Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ bgcolor: "rgba(255,255,255,0.2)", p: 0.5 }}
+                >
+                  {item.time}
+                </Typography>
               </Grid>
               <Grid item xs={7}>
-                <Typography variant="body2" sx={{ bgcolor: 'rgba(255,255,255,0.2)', p: 0.5 }}>{item.task}</Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ bgcolor: "rgba(255,255,255,0.2)", p: 0.5 }}
+                >
+                  {item.task}
+                </Typography>
               </Grid>
             </React.Fragment>
           ))}
         </Grid>
       </SidebarWrapper>
       <CalendarContent>
-        <Typography variant="h6" sx={{ mb: 2 }}>CALENDAR</Typography>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          CALENDAR
+        </Typography>
         <StyledCalendar
-          onChange={setDate}
+          onChange={handleDateChange}
           value={date}
-          formatShortWeekday={(locale, date) => ['SUN', 'MON', 'TUS', 'WED', 'THUR', 'FRI', 'SAT'][date.getDay()]}
+          formatShortWeekday={(locale, date) =>
+            ["SUN", "MON", "TUS", "WED", "THUR", "FRI", "SAT"][date.getDay()]
+          }
           tileClassName={tileClassName}
         />
       </CalendarContent>

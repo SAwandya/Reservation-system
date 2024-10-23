@@ -120,6 +120,8 @@ const SeatSelection = () => {
         bookingTime: selectedTime,
       };
 
+      console.log("Booking data:", bookingData);
+
       // Validate booking data
       const { error } = bookingSchema.validate(bookingData);
       if (error) {

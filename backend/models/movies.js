@@ -5,6 +5,7 @@ const Joi = require("joi");
 
 const movieSchema = new mongoose.Schema(
   {
+    theater: { type: mongoose.Schema.Types.ObjectId, ref: "Theater" },
     title: { type: String, required: true },
     description: { type: String, required: true },
     releaseDate: { type: Date, required: true },

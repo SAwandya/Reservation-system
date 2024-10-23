@@ -2,7 +2,10 @@ const { Theater } = require("../models/theater");
 
 exports.createTheaterEvent = async (req, res) => {
   try {
-    const theater = new Theater(req.body);
+    const result = await cloudinary.uploader.upload(req.body.image, {
+      folder: "events",
+    });
+    const theater = new Theater({...req.body, imageUrl: result.secure_url});
     const savedTheater = await theater.save();
     res.status(201).json(savedTheater);
   } catch (error) {

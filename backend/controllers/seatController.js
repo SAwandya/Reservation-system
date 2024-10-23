@@ -1,5 +1,14 @@
 const { Seat } = require("../models/seat");
 const { Theater } = require("../models/theater");
+const cloudinary = require("cloudinary").v2;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: "dh8aemmkc",
+  api_key: 175951413584161,
+  api_secret: "H_NzmnwTakj9zjYOhY_672-KmRo",
+});
+
 
 exports.getByTheaterIdEvent = async (req, res) => {
   const { theaterId } = req.params;
@@ -43,11 +52,24 @@ exports.createMultipleSeatsEvent = async (req, res) => {
   try {
     const { theater, sections, location } = req.body;
 
-    let newtheater = await Theater.findOne({ name: theater, location });
+    const result = await cloudinary.uploader.upload(req.body.image, {
+      folder: "events",
+    });
+
+    console.log("Result", result.secure_url);
+
+    let newtheater = await Theater.findOne({
+      name: theater,
+      location,
+    });
     if (newtheater) return res.status(404).json({ error: "Theater Already exist" });
 
     // Create a new theater
-    newTheater = new Theater({ name: theater, location });
+    newTheater = new Theater({
+      name: theater,
+      location,
+      imageUrl: result.secure_url,
+    });
     await newTheater.save();
 
     if (!newTheater) res.status(404).json({ error: "Theater not created" });

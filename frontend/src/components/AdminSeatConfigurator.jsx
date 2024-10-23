@@ -10,7 +10,21 @@ import {
 import axios from "axios"; // For making API requests
 import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/system";
 
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const AdminSeatConfigurator = () => {
   const [theater, setTheater] = useState("");
@@ -19,9 +33,22 @@ const AdminSeatConfigurator = () => {
   const [sectionName, setSectionName] = useState("");
   const [rows, setRows] = useState(0);
   const [cols, setCols] = useState(0);
+  const [image, setImage] = useState(null);
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const buttonSize = isSmallScreen ? 30 : 50; // Button size adjustment
+
+  const setFileToBase = (e) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = () => {
+      setImage(reader.result); // Storing the image as Base64
+    };
+
+    reader.onerror = (error) => {
+      console.log("Error:", error);
+    };
+  };
 
   // Add a new section
   const handleAddSection = () => {
@@ -62,23 +89,24 @@ const AdminSeatConfigurator = () => {
         location, // Theater location
         theater, // Theater ID or name
         sections, // Sections with seat layouts
+        image
       };
       console.log(requestBody);
       const response = await axios.post(
         "http://localhost:3000/api/seats/create",
         requestBody
       );
-       toast.success("Theater added successfully!", {
-         position: "top-right",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-         theme: "colored",
-         transition: Bounce,
-       });
+      toast.success("Theater added successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       console.log(response); // Log success message
     } catch (error) {
       console.error("Error uploading seats:", error);
@@ -210,6 +238,19 @@ const AdminSeatConfigurator = () => {
           </Grid>
         </Box>
       ))}
+      <Button
+        component="label"
+        variant="contained"
+        startIcon={<CloudUploadIcon />}
+      >
+        Upload file
+        <VisuallyHiddenInput
+          onChange={setFileToBase}
+          type="file"
+          accept=".jpg, .jpeg"
+          id="avatar"
+        />
+      </Button>
       <Button
         variant="contained"
         sx={{ backgroundColor: "#5C2FC2", color: "white" }}
