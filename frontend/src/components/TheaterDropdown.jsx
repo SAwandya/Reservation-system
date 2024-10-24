@@ -39,7 +39,7 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
     borderRadius: "20px",
     marginTop: theme.spacing(1),
     padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#002548",
     boxShadow: theme.shadows[3],
   },
 }));
@@ -116,7 +116,7 @@ const TheaterDropdown = () => {
 
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", backgroundColor: "#002548" }}>
       <StyledButton
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}

@@ -6,82 +6,109 @@ import 'react-calendar/dist/Calendar.css';
 import useGameQueryStore from '../store';
 
 const CalendarWrapper = styled(Box)({
-  display: 'flex',
-  width: '100%',
-  maxWidth: '800px',
-  height: '400px',
-  borderRadius: '10px',
-  overflow: 'hidden',
+  display: "flex",
+  width: "100%",
+  maxWidth: "1000px",
+  height: "600px",
+  borderRadius: "20px",
+  overflow: "hidden",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
 });
 
 const SidebarWrapper = styled(Box)({
   width: "30%",
-  backgroundColor: "#03346E",
+  backgroundColor: "#001529", // Darker blue to match dashboard
   padding: "20px",
   color: "white",
 });
 
 const CalendarContent = styled(Box)({
   width: "70%",
-  backgroundColor: "#6EACDA",
+  backgroundColor: "#002548", // Slightly lighter than sidebar but still dark
   padding: "20px",
   color: "white",
 });
 
 const StyledCalendar = styled(Calendar)({
-  width: '100%',
-  backgroundColor: 'transparent',
-  border: 'none',
-  color: 'white',
+  width: "100%",
+  backgroundColor: "transparent",
+  border: "none",
+  color: "white",
 
-  '.react-calendar__navigation': {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: '20px',
+  ".react-calendar__navigation": {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "20px",
   },
 
-  '.react-calendar__navigation__label': {
-    color: 'white',
-    fontSize: '18px',
-    fontWeight: 'bold',
-  },
-
-  '.react-calendar__navigation__arrow': {
-    color: 'white',
-    fontSize: '24px',
-    background: 'none',
-    border: 'none',
-  },
-
-  '.react-calendar__month-view__weekdays': {
-    textTransform: 'uppercase',
-    fontWeight: 'normal',
-    fontSize: '14px',
-    marginBottom: '10px',
-  },
-
-  '.react-calendar__month-view__days__day': {
-    color: 'white',
-    fontSize: '16px',
-  },
-
-  '.react-calendar__tile': {
-    padding: '10px',
-    backgroundColor: 'transparent',
-    borderRadius: '50%',
-    '&:enabled:hover, &:enabled:focus': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  ".react-calendar__navigation__label": {
+    color: "#fff",
+    fontSize: "18px",
+    fontWeight: "bold",
+    backgroundColor: "transparent",
+    "&:hover": {
+      backgroundColor: "rgba(255,255,255,0.1)",
     },
   },
 
-  '.react-calendar__tile--now': {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  ".react-calendar__navigation__arrow": {
+    color: "#fff",
+    fontSize: "24px",
+    background: "none",
+    border: "none",
+    "&:hover": {
+      backgroundColor: "rgba(255,255,255,0.1)",
+    },
   },
 
-  '.react-calendar__tile--active': {
-    backgroundColor: '#ff4081',
+  ".react-calendar__month-view__weekdays": {
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    fontSize: "14px",
+    marginBottom: "10px",
+    color: "#4f9eff", // Light blue for weekday headers
+  },
+
+  ".react-calendar__month-view__weekdays__weekday": {
+    color: "#4f9eff",
+    abbr: {
+      textDecoration: "none",
+    },
+  },
+
+  ".react-calendar__month-view__days__day": {
+    color: "#fff",
+    fontSize: "16px",
+  },
+
+  ".react-calendar__tile": {
+    padding: "10px",
+    backgroundColor: "transparent",
+    borderRadius: "50%",
+    color: "#fff",
+    "&:enabled:hover, &:enabled:focus": {
+      backgroundColor: "rgba(79, 158, 255, 0.3)", // Light blue with opacity
+    },
+  },
+
+  ".react-calendar__tile--now": {
+    backgroundColor: "rgba(79, 158, 255, 0.2)", // Current date highlight
+    color: "#fff",
+  },
+
+  ".react-calendar__tile--active": {
+    backgroundColor: "#4f9eff", // Selected date
+    color: "#fff",
+    "&:enabled:hover": {
+      backgroundColor: "#4f9eff",
+    },
+  },
+
+  ".react-calendar__month-view__days__day--neighboringMonth": {
+    color: "rgba(255,255,255,0.3)", // Dimmed color for days from other months
   },
 });
+
 
 const CustomCalendar = () => {
 
@@ -172,7 +199,7 @@ const CustomCalendar = () => {
       </SidebarWrapper>
       <CalendarContent>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          CALENDAR
+          SELECT DATE
         </Typography>
         <StyledCalendar
           onChange={handleDateChange}

@@ -18,6 +18,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 
 const StyledAppBar = styled(AppBar)({
   background: "#001529",
@@ -80,9 +81,11 @@ const NewTopNavBar = () => {
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
-    console.log("Logging out...");
+    logout()
+    navigate('/signin')
   };
+
+  const { logout } = useAuth();
 
   return (
     <StyledAppBar position="fixed">

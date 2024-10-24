@@ -17,9 +17,9 @@ const EventPopup = ({ open, onClose, event }) => {
 
   const handleContinue = () => {
     onClose();
-    // Smooth scroll to the bottom of the dashboard
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
+    window.scrollBy({
+      top: 590,
+      left: 0,
       behavior: "smooth",
     });
   };

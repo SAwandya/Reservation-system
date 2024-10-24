@@ -12,6 +12,9 @@ import NewTimeScroller from "../components/NewTimeScroller";
 import NewFooter from "../components/NewFooter";
 import NewTopNavBar from "../components/NewTopNavBar";
 import { styled } from "@mui/system";
+import useGameQueryStore from "../store";
+import { CSSTransition } from "react-transition-group";
+import "../styles/NewDashboard.css"; // Import the CSS file for animations
 
 const RadiantBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -53,6 +56,14 @@ const darkTheme = createTheme({
 
 const NewDashboard = () => {
   const [activeButton, setActiveButton] = useState("home");
+
+  const selectedCard = useGameQueryStore((s) => s.selectedCard);
+
+  const theaterId = useGameQueryStore((s) => s.selectedTheater);
+
+  const selectedDate = useGameQueryStore((s) => s.selectedDate);
+
+  console.log("Selected Card:", selectedCard);
 
   const renderContent = () => {
     switch (activeButton) {
@@ -142,76 +153,84 @@ const NewDashboard = () => {
                 </Box>
               </Grid>
 
-              <Typography
-                variant="h3"
-                component="div"
-                sx={{
-                  color: "#e2e8f0",
-                  mb: 4,
-                  marginLeft: "14px",
-                  marginTop: "40px",
-                  width: "100%",
-                  fontSize: "2.6rem",
-                }}
-              >
-                Add Reservation
-              </Typography>
+              {selectedCard && (
+                <CSSTransition
+                  in={!!selectedCard}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <>
+                    <Typography
+                      variant="h3"
+                      component="div"
+                      sx={{
+                        color: "#e2e8f0",
+                        mb: 4,
+                        marginLeft: "14px",
+                        marginTop: "40px",
+                        width: "100%",
+                        fontSize: "2.6rem",
+                      }}
+                    >
+                      Add Reservation
+                    </Typography>
 
-              <Grid item xs={12} md={4} lg={4}>
-                <RadiantBox
-                  elevation={0}
-                  sx={{
-                    p: 2,
-                    height: "100%",
-                    backgroundColor: "background.paper",
-                    borderRadius: 6,
-                  }}
-                >
-                  <Typography variant="h6" gutterBottom>
-                    Select Theater
+                    <Grid item xs={12} md={4} lg={4}>
+                      <RadiantBox
+                        elevation={0}
+                        sx={{
+                          p: 2,
+                          height: "100%",
+                          backgroundColor: "#002548",
+                          borderRadius: 6,
+                          color: "white",
+                        }}
+                      >
+                        <Typography variant="h6" gutterBottom>
+                          Select Theater
+                        </Typography>
+                        <TheaterDropdown />
+                      </RadiantBox>
+                    </Grid>
+                    <Grid item xs={12} sm={8} md={8}>
+                      <CustomCalendar />
+                    </Grid>
+                  </>
+                </CSSTransition>
+              )}
+
+                            {selectedDate && theaterId && (
+                <>
+                  <Typography
+                    variant="h3"
+                    component="div"
+                    sx={{
+                      color: "#e2e8f0",
+                      mb: 4,
+                      marginLeft: "14px",
+                      marginTop: "40px",
+                      width: "100%",
+                    }}
+                  >
+                    Book Your Seats
                   </Typography>
-                  <TheaterDropdown />
-                </RadiantBox>
-              </Grid>
-              <Grid item xs={12} sm={8} md={8}>
-                {" "}
-                <CustomCalendar />
-              </Grid>
-              <Typography
-                variant="h3"
-                component="div"
-                sx={{
-                  color: "#e2e8f0",
-                  mb: 4,
-                  marginLeft: "14px",
-                  marginTop: "40px",
-                  width: "100%",
-                }}
-              >
-                Book Your Seats
-              </Typography>
-              <Grid item xs={12} sm={8} md={9}>
-                {" "}
-                <SeatSelection />
-              </Grid>
-              <Grid item xs={12} sm={8} md={3}>
-                {" "}
-                <Box
-                // sx={{
-                //   backgroundColor: "#A594F9",
-                //   padding: "20px",
-                //   borderRadius: "20px",
-                // }}
-                >
-                  <Typography variant="h5" sx={{ textAlign: "center", mb: 2 }}>
-                    Select Time
-                  </Typography>
-                  <NewTimeScroller
-                    availableTimes={availableTimes}
-                    onTimeSelect={handleTimeSelection}
-                  />
-                </Box>
-              </Grid>
+                  <Grid item xs={12} sm={8} md={9}>
+                    <SeatSelection />
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={3}>
+                    <Box>
+                      <Typography variant="h5" sx={{ textAlign: "center", mb: 2 }}>
+                        Select Time
+                      </Typography>
+                      <NewTimeScroller
+                        availableTimes={availableTimes}
+                        onTimeSelect={handleTimeSelection}
+                      />
+                    </Box>
+                  </Grid>
+                </>
+              )}
             </Grid>
           </Box>
         </Box>

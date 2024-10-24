@@ -7,17 +7,18 @@ import axios from "axios";
 const ScrollerWrapper = styled(Paper)(({ theme }) => ({
   width: "100%",
   maxWidth: "280px",
-  backgroundColor: "rgba(255, 255, 255, 0.05)",
+  backgroundColor: "#001529", // Dark blue background
   borderRadius: "16px",
   padding: "15px",
   margin: "20px auto",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
+  border: "1px solid rgba(79, 158, 255, 0.15)",
+  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
 }));
 
 const ScrollerContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   height: "400px",
-  backgroundColor: "rgba(255, 255, 255, 0.02)",
+  backgroundColor: "#002548", // Slightly lighter dark blue
   borderRadius: "12px",
   overflow: "hidden",
   position: "relative",
@@ -33,7 +34,7 @@ const TimeWheel = styled(Box)({
   margin: "0 10px",
   borderRadius: "8px",
   "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "rgba(79, 158, 255, 0.2)", // Light blue hover
   },
 });
 
@@ -43,10 +44,10 @@ const SelectionHighlight = styled(Box)({
   height: "45px",
   left: "10px",
   top: "67.5px",
-  backgroundColor: "rgba(255, 255, 255, 0.05)",
+  backgroundColor: "rgba(79, 158, 255, 0.15)",
   borderRadius: "8px",
   pointerEvents: "none",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
+  border: "1px solid rgba(79, 158, 255, 0.3)",
 });
 
 function formatToCustomISO(dateString) {
@@ -60,17 +61,17 @@ function formatToCustomISO(dateString) {
 
 const TimeScroller = ({ onTimeSelect }) => {
   const [selectedTime, setSelectedTime] = useState(null);
-
   const [availableTimes, setShowtimes] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const theaterId = useGameQueryStore((s) => s.selectedTheater);
   const date = useGameQueryStore((s) => s.selectedDate);
   const SetSelectedTime = useGameQueryStore((s) => s.SetSelectedTime);
   const convertedDate = formatToCustomISO(date);
 
   const handleTimeSelect = (time) => {
-
     SetSelectedTime(time);
-
     setSelectedTime(time);
     if (onTimeSelect) {
       onTimeSelect(time);
@@ -79,7 +80,7 @@ const TimeScroller = ({ onTimeSelect }) => {
 
   useEffect(() => {
     const fetchShowtimes = async () => {
-
+      setLoading(true);
       try {
         const response = await axios.get(
           "http://localhost:3000/api/showtimes",
@@ -110,8 +111,8 @@ const TimeScroller = ({ onTimeSelect }) => {
         sx={{
           textAlign: "center",
           mb: 2,
-          color: "#e2e8f0",
-          fontWeight: 500,
+          color: "#4f9eff",
+          fontWeight: 600,
         }}
       >
         Available Times
@@ -126,14 +127,14 @@ const TimeScroller = ({ onTimeSelect }) => {
               width: "6px",
             },
             "&::-webkit-scrollbar-track": {
-              backgroundColor: "rgba(255, 255, 255, 0.02)",
+              backgroundColor: "rgba(79, 158, 255, 0.05)",
               borderRadius: "3px",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              backgroundColor: "rgba(79, 158, 255, 0.2)",
               borderRadius: "3px",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.3)",
+                backgroundColor: "rgba(79, 158, 255, 0.3)",
               },
             },
           }}
@@ -146,10 +147,12 @@ const TimeScroller = ({ onTimeSelect }) => {
               sx={{
                 backgroundColor:
                   selectedTime === time
-                    ? "rgba(255, 255, 255, 0.1)"
+                    ? "rgba(79, 158, 255, 0.3)"
                     : "transparent",
                 color:
-                  selectedTime === time ? "#fff" : "rgba(255, 255, 255, 0.7)",
+                  selectedTime === time
+                    ? "#4f9eff"
+                    : "rgba(255, 255, 255, 0.8)",
                 fontWeight: selectedTime === time ? 600 : 400,
               }}
             >

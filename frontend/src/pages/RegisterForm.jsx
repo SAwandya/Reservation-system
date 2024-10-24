@@ -8,6 +8,77 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import userService from "../services/userService";
 import Login from "../components/Login";
+import { styled } from "@mui/system";
+
+
+// Styled components
+const FormWrapper = styled(Box)({
+  padding: "60px",
+  backgroundColor: "#001529",
+  borderRadius: "20px",
+  width: "100%",
+  maxWidth: "500px",
+  margin: "30px auto",
+  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+});
+
+const LogoBox = styled(Box)({
+  backgroundImage: "url(../src/assets/Register.png)",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center",
+  width: "50px",
+  height: "50px",
+  margin: "0 auto 20px",
+});
+
+const StyledTextField = styled(TextField)({
+  marginBottom: "20px",
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'rgba(79, 158, 255, 0.3)',
+    },
+    '&:hover fieldset': {
+      borderColor: 'rgba(79, 158, 255, 0.5)',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#4f9eff',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  '& .MuiInputBase-input': {
+    color: '#fff',
+  },
+  '& .MuiFormHelperText-root': {
+    color: '#ff4d4d',
+  },
+});
+
+const RegisterButton = styled(Button)({
+  backgroundColor: "#4f9eff",
+  color: "#fff",
+  height: "50px",
+  borderRadius: "8px",
+  marginTop: "20px",
+  '&:hover': {
+    backgroundColor: "#3a7bd5",
+    transform: "translateY(-2px)",
+  },
+  transition: "all 0.3s ease",
+});
+
+const StyledLink = styled(Link)({
+  textDecoration: "none",
+  '& .MuiTypography-root': {
+    color: "#4f9eff",
+    marginTop: "10px",
+    '&:hover': {
+      color: "#3a7bd5",
+    },
+  },
+});
 
 // Joi schema for validation
 const schema = Joi.object({
@@ -131,90 +202,55 @@ const RegisterForm = () => {
         transition={Bounce}
       />
       {authToken && <Navigate to="/" replace={true} />}
-      <Box
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          backgroundColor: "#F5F4FA",
-          borderRadius: "20px",
-          padding: { xs: "30px", sm: "40px", md: "60px" }, // Responsive padding
-          marginTop: "30px",
-          maxWidth: { xs: "90%", sm: "80%", md: "50%" }, // Responsive width
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <Box
-            sx={{
-              backgroundImage: "url(../src/assets/Register.png)",
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              width: "43px",
-              height: "43px",
-            }}
-          ></Box>
-        </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <Typography variant="h5" sx={{ textAlign: "center" }} gutterBottom>
+      <FormWrapper>
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <LogoBox />
+          <Typography variant="h5" sx={{ color: "#4f9eff", fontWeight: 600 }}>
             Sign Up
           </Typography>
         </Box>
+
         <form onSubmit={handleSubmit}>
-          <TextField
+          <StyledTextField
             fullWidth
             label="Name"
             variant="outlined"
-            onKeyPress={(e) => {
-              const char = String.fromCharCode(e.keyCode || e.which);
-              if (!/^[a-zA-Z\s]*$/.test(char)) {
-                e.preventDefault(); // Prevents the user from entering numbers or special characters
-              }
-            }}
-            margin="normal"
             name="name"
             value={formData.name || ""}
             onChange={handleChange}
             error={!!errors.name}
             helperText={errors.name}
+            onKeyPress={(e) => {
+              const char = String.fromCharCode(e.keyCode || e.which);
+              if (!/^[a-zA-Z\s]*$/.test(char)) {
+                e.preventDefault();
+              }
+            }}
           />
-          <TextField
+
+          <StyledTextField
             fullWidth
             label="Email"
             variant="outlined"
-            margin="normal"
             type="email"
-            onKeyPress={(e) => {
-              const char = String.fromCharCode(e.keyCode || e.which);
-              if (!/^[a-zA-Z0-9.@]*$/.test(char)) {
-                e.preventDefault(); // Prevents the user from entering numbers or special characters
-              }
-            }}
             name="email"
             value={formData.email || ""}
             onChange={handleChange}
             error={!!errors.email}
             helperText={errors.email}
+            onKeyPress={(e) => {
+              const char = String.fromCharCode(e.keyCode || e.which);
+              if (!/^[a-zA-Z0-9.@]*$/.test(char)) {
+                e.preventDefault();
+              }
+            }}
           />
-          <TextField
+
+          <StyledTextField
             fullWidth
             label="Password"
             variant="outlined"
-            margin="normal"
             type="password"
             name="password"
             value={formData.password || ""}
@@ -223,39 +259,30 @@ const RegisterForm = () => {
             helperText={errors.password}
           />
 
-          <Link to="/signin" style={{ textDecoration: "none" }}>
-            <Typography
-              variant="subtitle1"
-              sx={{ textAlign: "left", marginTop: "10px" }}
-            >
+          <StyledLink to="/signin">
+            <Typography variant="subtitle2">
               Already have an account? Sign In
             </Typography>
-          </Link>
+          </StyledLink>
 
-          {errors && Object.keys(errors).length > 0 && (
-            <Alert severity="error">{Object.values(errors).join(", ")}</Alert>
-          )}
-
-          {/* Add Button */}
-          <Box mt={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              type="submit"
+          {errors && typeof errors === "string" && (
+            <Typography
               sx={{
-                borderRadius: "8px",
-                backgroundColor: "#7350F5",
-                height: "50px",
-                marginTop: "20px",
+                color: "#ff4d4d",
+                mt: 2,
+                textAlign: "center",
               }}
             >
-              Register
-            </Button>
-          </Box>
+              {errors}
+            </Typography>
+          )}
+
+          <RegisterButton fullWidth type="submit">
+            Register
+          </RegisterButton>
         </form>
         <Login />
-      </Box>
+      </FormWrapper>
     </>
   );
 };
