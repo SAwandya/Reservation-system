@@ -114,6 +114,7 @@ const TheaterDropdown = () => {
     handleClose();
   };
 
+
   return (
     <Box sx={{ width: "100%" }}>
       <StyledButton

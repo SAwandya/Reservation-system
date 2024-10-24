@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  Button,
+} from "@mui/material";
 import { styled } from "@mui/system";
 import movie1 from "../assets/movie1.jpg";
 import movie2 from "../assets/movie2.jpg";
@@ -79,6 +85,25 @@ const SliderImage = styled("img")({
   transform: "translate(-50%, -50%)",
 });
 
+const BookNowButton = styled(Button)(({ color }) => ({
+  marginTop: "20px",
+  backgroundColor: color,
+  color: "#091057",
+  padding: "12px 32px",
+  borderRadius: "8px",
+  fontSize: "16px",
+  fontWeight: "bold",
+  width: "fit-content",
+  textTransform: "none",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    backgroundColor: color,
+    opacity: 0.9,
+    transform: "translateY(-2px)",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+  },
+}));
+
 const NewImageSlider = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const theme = useTheme();
@@ -92,36 +117,62 @@ const NewImageSlider = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleScroll = () => {
+    window.scrollBy({
+      top: 570,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <SliderContainer>
-      <BackgroundBlur
-        style={{
-          backgroundImage: `url(${images[currentImage]})`,
-        }}
-      />
-      <ContentContainer>
-        <TextContainer>
-          <Typography
-            variant={isMobile ? "h4" : "h3"}
-            sx={{ color: dominantColors[currentImage], marginBottom: 2 }}
-          >
-            Your Next Great Event Starts Here!
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: dominantColors[currentImage] }}
-          >
-            Experience Unforgettable Moments, One Click Away!
-          </Typography>
-        </TextContainer>
-        <ImageContainer>
-          <SliderImage
-            src={images[currentImage]}
-            alt={`Slide ${currentImage + 1}`}
-          />
-        </ImageContainer>
-      </ContentContainer>
-    </SliderContainer>
+    <Box sx={{ width: "100%", padding: 0, margin: 0 }}>
+      <SliderContainer>
+        <BackgroundBlur
+          style={{
+            backgroundImage: `url(${images[currentImage]})`,
+          }}
+        />
+        <ContentContainer>
+          <TextContainer>
+            <Typography
+              variant={isMobile ? "h4" : "h3"}
+              sx={{
+                color: dominantColors[currentImage],
+                marginBottom: 2,
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+              }}
+            >
+              Your Next Great Event Starts Here!
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: dominantColors[currentImage],
+                marginBottom: 3,
+                fontSize: "1.1rem",
+                textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
+              }}
+            >
+              Experience Unforgettable Moments, One Click Away!
+            </Typography>
+            <BookNowButton
+              color={dominantColors[currentImage]}
+              onClick={handleScroll}
+            >
+              Book Now
+            </BookNowButton>
+          </TextContainer>
+          <ImageContainer>
+            <SliderImage
+              src={images[currentImage]}
+              alt={`Slide ${currentImage + 1}`}
+            />
+          </ImageContainer>
+        </ContentContainer>
+      </SliderContainer>
+    </Box>
   );
 };
 
