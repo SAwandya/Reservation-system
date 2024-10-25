@@ -63,7 +63,9 @@ const NewDashboard = () => {
 
   const selectedDate = useGameQueryStore((s) => s.selectedDate);
 
-  console.log("Selected Card:", selectedCard);
+  const availableTime = useGameQueryStore((s) => s.availableTime);
+
+  console.log("Available Time:", availableTime);
 
   const renderContent = () => {
     switch (activeButton) {
@@ -200,7 +202,7 @@ const NewDashboard = () => {
                 </CSSTransition>
               )}
 
-                            {selectedDate && theaterId && (
+              {selectedDate && theaterId && (
                 <>
                   <Typography
                     variant="h3"
@@ -220,7 +222,10 @@ const NewDashboard = () => {
                   </Grid>
                   <Grid item xs={12} sm={8} md={3}>
                     <Box>
-                      <Typography variant="h5" sx={{ textAlign: "center", mb: 2 }}>
+                      <Typography
+                        variant="h5"
+                        sx={{ textAlign: "center", mb: 2 }}
+                      >
                         Select Time
                       </Typography>
                       <NewTimeScroller

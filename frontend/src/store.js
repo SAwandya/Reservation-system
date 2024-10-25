@@ -10,6 +10,8 @@ const useGameQueryStore = create((set) => ({
   SetSelectedTime: (selectedTime) => set({ selectedTime: selectedTime }),
   selectedCard: null,
   SetSelectedCard: (selectedCard) => set({ selectedCard: selectedCard }),
+  availableTime: null,
+  SetaVailableTime: (availableTime) => set({ availableTime: availableTime }),
 }));
 
 export default useGameQueryStore;

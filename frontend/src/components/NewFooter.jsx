@@ -57,19 +57,28 @@ const NewFooter = () => {
     <StyledFooter>
       <Container maxWidth="lg">
         {/* Why work with us section */}
-        <Typography variant="h2" sx={{ mb: 6, fontWeight: 'bold', fontSize: { xs: '32px', md: '48px' } }}>
-          Why you should work with us?
+        <Typography
+          variant="h2"
+          sx={{
+            mb: 6,
+            fontWeight: "bold",
+            fontSize: { xs: "32px", md: "48px" },
+          }}
+        >
+          Why Book with Us?
         </Typography>
 
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
             <FeatureCard>
               <AccessTimeIcon className="icon" />
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: '500' }}>
-                Effective time utilization
+              <Typography variant="h5" sx={{ mb: 2, fontWeight: "500" }}>
+                Seamless Booking Experience
               </Typography>
               <Typography className="description">
-                Acknowledging the intrinsic inefficiency of good design, we rely on clear processes and communication to enhance our efficiency. Additionally, our development process is remarkably efficient.
+                Our platform ensures an easy and hassle-free booking process,
+                allowing you to quickly find and reserve your spot at the best
+                events with just a few clicks.
               </Typography>
             </FeatureCard>
           </Grid>
@@ -77,11 +86,13 @@ const NewFooter = () => {
           <Grid item xs={12} md={4}>
             <FeatureCard>
               <EmojiEventsIcon className="icon" />
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: '500' }}>
-                Design award-winning
+              <Typography variant="h5" sx={{ mb: 2, fontWeight: "500" }}>
+                Curated Events
               </Typography>
               <Typography className="description">
-                Years of honing our skills in design development empower us to produce one-of-a-kind, cohesive experiences that stand out and receive acknowledgment.
+                We bring you a handpicked selection of top-rated events across
+                various genres, ensuring you never miss out on the most exciting
+                and exclusive experiences.
               </Typography>
             </FeatureCard>
           </Grid>
@@ -89,11 +100,13 @@ const NewFooter = () => {
           <Grid item xs={12} md={4}>
             <FeatureCard>
               <TrackChangesIcon className="icon" />
-              <Typography variant="h5" sx={{ mb: 2, fontWeight: '500' }}>
-                Target-driven work
+              <Typography variant="h5" sx={{ mb: 2, fontWeight: "500" }}>
+                Secure Payments{" "}
               </Typography>
               <Typography className="description">
-                Every project we handle is driven by the goal of achieving tangible results. With a focus on your business objectives, to create a design that maximizes conversions and offers substantial value.
+                Your transactions are safe with us. We prioritize security by
+                providing encrypted and reliable payment options for a
+                worry-free booking experience.
               </Typography>
             </FeatureCard>
           </Grid>
@@ -101,65 +114,169 @@ const NewFooter = () => {
 
         {/* CTA Section */}
         <CTASection>
-          <Typography variant="h3" sx={{ 
-            color: '#000', 
-            fontWeight: 'bold',
-            fontSize: { xs: '24px', md: '32px' }
-          }}>
-            Are you ready to kick off a project together?
+          <Typography
+            variant="h3"
+            sx={{
+              color: "#000",
+              fontWeight: "bold",
+              fontSize: { xs: "24px", md: "32px" },
+            }}
+          >
+            Ready to Experience the Best Events?
           </Typography>
           <Button
             variant="contained"
             startIcon={<EmailIcon />}
             sx={{
-              backgroundColor: '#000',
-              color: '#fff',
-              padding: '12px 24px',
-              '&:hover': { backgroundColor: '#333' },
+              backgroundColor: "#000",
+              color: "#fff",
+              padding: "12px 24px",
+              "&:hover": { backgroundColor: "#333" },
             }}
           >
-            Take the first step
+            Let’s get started on your next adventure.
           </Button>
         </CTASection>
 
         {/* Footer Links */}
         <Grid container spacing={4} sx={{ mt: 4 }}>
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-              ADITAMA
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+              ReserveNow
             </Typography>
-            <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>© 2024</Typography>
+            <Typography sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+              © 2024
+            </Typography>
           </Grid>
 
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: '500' }}>Services</Typography>
-            <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>User Interface Design</Link></li>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>Digital Imaging</Link></li>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>Motion Ads</Link></li>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>Visual Documentation</Link></li>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: "500" }}>
+              Services
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  Event Ticket Booking
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  VIP & Group Bookings
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  Venue Information
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  Event Promotions & Discounts
+                </Link>
+              </li>
             </Box>
           </Grid>
 
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: '500' }}>Company</Typography>
-            <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>About Us</Link></li>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>Careers</Link></li>
-              <li><Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', lineHeight: 2, '&:hover': { color: '#FFB800' } }}>Contact Us</Link></li>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: "500" }}>
+              Company
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    textDecoration: "none",
+                    lineHeight: 2,
+                    "&:hover": { color: "#FFB800" },
+                  }}
+                >
+                  Contact Us
+                </Link>
+              </li>
             </Box>
           </Grid>
 
           <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: '500' }}>Connect with Us</Typography>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <Link href="#" sx={{ color: '#FFB800', '&:hover': { color: '#fff' } }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: "500" }}>
+              Connect with Us
+            </Typography>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Link
+                href="#"
+                sx={{ color: "#FFB800", "&:hover": { color: "#fff" } }}
+              >
                 <BehanceIcon sx={{ fontSize: 24 }} />
               </Link>
-              <Link href="#" sx={{ color: '#FFB800', '&:hover': { color: '#fff' } }}>
+              <Link
+                href="#"
+                sx={{ color: "#FFB800", "&:hover": { color: "#fff" } }}
+              >
                 <InstagramIcon sx={{ fontSize: 24 }} />
               </Link>
-              <Link href="#" sx={{ color: '#FFB800', '&:hover': { color: '#fff' } }}>
+              <Link
+                href="#"
+                sx={{ color: "#FFB800", "&:hover": { color: "#fff" } }}
+              >
                 <LinkedInIcon sx={{ fontSize: 24 }} />
               </Link>
             </Box>
@@ -167,16 +284,47 @@ const NewFooter = () => {
         </Grid>
 
         {/* Terms and Certification */}
-        <Box sx={{ mt: 6, pt: 4, borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+        <Box
+          sx={{
+            mt: 6,
+            pt: 4,
+            borderTop: "1px solid rgba(255,255,255,0.1)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 2,
+          }}
+        >
           <Box>
-            <Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', mr: 3, '&:hover': { color: '#FFB800' } }}>
+            <Link
+              href="#"
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                textDecoration: "none",
+                mr: 3,
+                "&:hover": { color: "#FFB800" },
+              }}
+            >
               Terms & Conditions
             </Link>
-            <Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none', '&:hover': { color: '#FFB800' } }}>
+            <Link
+              href="#"
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                textDecoration: "none",
+                "&:hover": { color: "#FFB800" },
+              }}
+            >
               Privacy Policy
             </Link>
           </Box>
-          <Box component="img" src="/path-to-bcorp-logo.png" alt="B Corporation" sx={{ height: 40 }} />
+          <Box
+            component="img"
+            src="../src/assets/mainlogo.png"
+            alt="B Corporation"
+            sx={{ height: 40 }}
+          />
         </Box>
       </Container>
     </StyledFooter>

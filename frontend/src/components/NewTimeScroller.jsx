@@ -68,6 +68,8 @@ const TimeScroller = ({ onTimeSelect }) => {
   const theaterId = useGameQueryStore((s) => s.selectedTheater);
   const date = useGameQueryStore((s) => s.selectedDate);
   const SetSelectedTime = useGameQueryStore((s) => s.SetSelectedTime);
+  const SetaVailableTime = useGameQueryStore((s) => s.SetaVailableTime);
+
   const convertedDate = formatToCustomISO(date);
 
   const handleTimeSelect = (time) => {
@@ -92,6 +94,7 @@ const TimeScroller = ({ onTimeSelect }) => {
           }
         );
         setShowtimes(response.data);
+        SetaVailableTime(response.data);
       } catch (err) {
         setError(err);
       } finally {
