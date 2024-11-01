@@ -14,6 +14,8 @@ const StyledContainer = styled(Box)({
   maxWidth: 600,
   margin: "auto",
   marginTop: "100px",
+  marginTop: "170px",
+  marginBottom: "90px",
 });
 
 const StyledPaper = styled(Paper)({
@@ -86,8 +88,10 @@ const BookingDetails = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      background: "#1e2a38",
+      color: "#e2e8f0",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#5C2FC2",
       confirmButtonText: "Confirm",
     }).then((result) => {
       if (result.isConfirmed) {

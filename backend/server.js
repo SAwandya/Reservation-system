@@ -15,6 +15,8 @@ require("dotenv").config(); // Load environment variables
 const session = require("express-session"); // Import express-session
 const calenderRoutes = require("./routes/calenderRoutes"); // Add this line
 const path = require("path");
+const swaggerDocs = require("./swagger"); // Path to swagger setup
+
 
 const mongo_url = process.env.MONGO_URL;
 
@@ -40,6 +42,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Serve Swagger docs
+swaggerDocs(app); // Initialize Swagger
+
 app.use("/api/movies", movieRoutes);
 app.use("/api/theaters", theaterRoutes);
 app.use("/api/seats", seatRoutes);
@@ -49,13 +54,13 @@ app.use("/api/user", user);
 app.use("/api/auth", auth);
 app.use("/api", calenderRoutes);
 
-// Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, 'dist')));
+// // Serve static files from the React frontend app
+// app.use(express.static(path.join(__dirname, 'dist')));
 
-// Catch-all route that serves the React frontend's index.html file for any route that isn't an API call
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
+// // Catch-all route that serves the React frontend's index.html file for any route that isn't an API call
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
