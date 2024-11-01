@@ -7,7 +7,48 @@ import { useAuth } from "../Context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import { styled } from "@mui/system";
 
+const StyledContainer = styled(Box)({
+  padding: 3,
+  maxWidth: 600,
+  margin: "auto",
+  marginTop: "100px",
+  marginTop: "170px",
+  marginBottom: "90px",
+});
+
+const StyledPaper = styled(Paper)({
+  padding: "32px",
+  borderRadius: "16px",
+  background: "rgba(255, 255, 255, 0.05)",
+  border: "1px solid rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(10px)",
+});
+
+const DetailLabel = styled(Typography)({
+  color: "#e2e8f0",
+  fontWeight: 500,
+  marginBottom: "8px",
+});
+
+const DetailValue = styled(Typography)({
+  color: "#94a3b8",
+  marginBottom: "16px",
+  fontSize: "1.1rem",
+});
+
+const ConfirmButton = styled(Button)({
+  backgroundColor: "#5C2FC2",
+  color: "#ffffff",
+  padding: "12px",
+  marginTop: "24px",
+  "&:hover": {
+    backgroundColor: "#4925A3",
+    transform: "translateY(-2px)",
+  },
+  transition: "all 0.3s ease",
+});
 
 const bookSeat = async (bookingDataStr, userId, accessToken) => {
   try {
@@ -47,8 +88,10 @@ const BookingDetails = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      background: "#1e2a38",
+      color: "#e2e8f0",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#5C2FC2",
       confirmButtonText: "Confirm",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -67,17 +110,17 @@ const BookingDetails = () => {
             bookingService
               .Create(bookingDataStr)
               .then((response) => {
-                 toast.success("Set reminder to the Google calender", {
-                   position: "top-right",
-                   autoClose: 5000,
-                   hideProgressBar: false,
-                   closeOnClick: true,
-                   pauseOnHover: true,
-                   draggable: true,
-                   progress: undefined,
-                   theme: "colored",
-                   transition: Bounce,
-                 });
+                toast.success("Set reminder to the Google calender", {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                  transition: Bounce,
+                });
                 navigate("/");
                 console.log(response.data);
               })
@@ -93,84 +136,65 @@ const BookingDetails = () => {
   };
 
   return (
-    <Box sx={{ padding: 3, maxWidth: 600, margin: "auto", marginTop: "100px" }}>
-      {" "}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition:Bounce
-      />
-      <Paper
-        elevation={4}
-        sx={{ padding: 4, borderRadius: "20px", backgroundColor: "#E5D9F2" }}
-      >
+    <StyledContainer>
+      <ToastContainer />
+      <StyledPaper elevation={0}>
         <Typography
           variant="h4"
           component="h1"
           gutterBottom
-          sx={{ color: "#5C2FC2" }}
+          sx={{
+            color: "#e2e8f0",
+            fontWeight: "600",
+            marginBottom: "32px",
+            letterSpacing: "0.5px",
+          }}
         >
           Booking Details
         </Typography>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography variant="h6">Event Name:</Typography>
-            <Typography
-              variant="body1"
-              sx={{ marginBottom: 2, fontWeight: "bold" }}
-            >
+            <DetailLabel variant="h6">Event Name</DetailLabel>
+            <DetailValue variant="body1">
               {bookingDataStr.theaterName}
-            </Typography>
+            </DetailValue>
           </Grid>
 
           <Grid item xs={6}>
-            <Typography variant="h6">Date:</Typography>
-            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+            <DetailLabel variant="h6">Date</DetailLabel>
+            <DetailValue variant="body1">
               {bookingDataStr.bookingDate}
-            </Typography>
+            </DetailValue>
           </Grid>
 
           <Grid item xs={6}>
-            <Typography variant="h6">Time:</Typography>
-            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+            <DetailLabel variant="h6">Time</DetailLabel>
+            <DetailValue variant="body1">
               {bookingDataStr.bookingTime}
-            </Typography>
+            </DetailValue>
           </Grid>
 
           <Grid item xs={6}>
-            <Typography variant="h6">Total Price:</Typography>
-            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+            <DetailLabel variant="h6">Total Price</DetailLabel>
+            <DetailValue variant="body1">
               ${bookingDataStr.totalAmount}
-            </Typography>
+            </DetailValue>
           </Grid>
 
           <Grid item xs={6}>
-            <Typography variant="h6">Seats:</Typography>
-            <Typography variant="body1" sx={{ marginBottom: 2 }}>
+            <DetailLabel variant="h6">Seats</DetailLabel>
+            <DetailValue variant="body1">
               {bookingDataStr.seats.join(", ")}
-            </Typography>
+            </DetailValue>
           </Grid>
         </Grid>
 
-        <Button
-          variant="contained"
-          onClick={handleConfirm}
-          sx={{ backgroundColor: "#5C2FC2", color: "white", mt: 4 }}
-          fullWidth
-        >
+        <ConfirmButton variant="contained" onClick={handleConfirm} fullWidth>
           Confirm Booking
-        </Button>
-      </Paper>
-    </Box>
+        </ConfirmButton>
+      </StyledPaper>
+    </StyledContainer>
   );
 };
 

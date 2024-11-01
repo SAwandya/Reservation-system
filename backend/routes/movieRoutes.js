@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {Movie, validate} = require("../models/movies"); // Adjust the path as needed
+const { Movie, validate } = require("../models/movies"); // Adjust the path as needed
 const cloudinary = require("cloudinary").v2;
+const { Theater } = require("../models/theater");
 
 // Configure Cloudinary
 cloudinary.config({
@@ -11,27 +12,26 @@ cloudinary.config({
 });
 
 // Create a new movie
- router.post("/", async (req, res) => {
-   try {
-     const { error } = validate(req.body); 
-     if (error) return res.status(400).send(error.details[0].message);
+router.post("/", async (req, res) => {
+  try {
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-     const result = await cloudinary.uploader.upload(req.body.image, {
-       folder: "movies", 
-     });
+    const result = await cloudinary.uploader.upload(req.body.image, {
+      folder: "movies",
+    });
 
-     const movie = new Movie({
-       ...req.body,
-       imageUrl: result.secure_url, 
-     });
+    const movie = new Movie({
+      ...req.body,
+      imageUrl: result.secure_url,
+    });
 
-     await movie.save();
-     res.status(201).json(movie);
-   } catch (error) {
-     res.status(400).json({ error: error.message });
-   }
- });
-
+    await movie.save();
+    res.status(201).json(movie);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 // Get all movies
 router.get("/", async (req, res) => {

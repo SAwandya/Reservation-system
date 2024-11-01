@@ -3,6 +3,7 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import axios from "axios";
 import useGameQueryStore from "../store";
+import useMovies from "../hooks/useMovies";
 
 function formatToCustomISO(dateString) {
   const date = new Date(dateString);

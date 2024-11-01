@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./pages/Layout";
-import HomePage from "./pages/HomePage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
 import SeatSelection from "./components/SeatSelection";
 import MoviePostForm from "./components/MoviePostForm";
@@ -11,10 +10,11 @@ import Content from "./components/Content";
 import BookingDetails from "./pages/BookingDetails";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import MyBooking from "./pages/MyBooing";
+import MyBooking from "./pages/MyBooking";
 import DashboardProtectedRoute from "./components/DashboardProtectedRoute";
 import ImageSlider2 from "./components/ImageSlider2";
 import ShowtimeForm from "./components/ShowTimeForm";
+import NewDashboard from "./pages/NewDashboard";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +24,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <ProtectedRoute>
-            <HomePage />
-          </ProtectedRoute>
+            <NewDashboard />
         ),
       },
       {
@@ -112,6 +110,10 @@ const router = createBrowserRouter([
   {
     path: "/slider",
     element: <ImageSlider2 />,
+  },
+  {
+    path: "/newdashboard",
+    element: <NewDashboard />,
   },
 ]);
 

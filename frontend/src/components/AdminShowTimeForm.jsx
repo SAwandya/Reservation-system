@@ -9,10 +9,55 @@ import {
   Box,
 } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
+import { styled } from "@mui/system";
 import useTheaters from "../hooks/useTheaters";
 import showTimeService from "../services/showTimeService";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 
+const FormContainer = styled(Box)({
+  padding: "24px",
+  background: "rgba(255, 255, 255, 0.05)",
+  borderRadius: "16px",
+  border: "1px solid rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(10px)",
+  marginTop: "20px",
+  marginRight: "24px",
+  marginBottom: "40px",
+});
+
+const StyledTextField = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: "rgba(255, 255, 255, 0.02)",
+    "& fieldset": {
+      borderColor: "rgba(255, 255, 255, 0.1)",
+    },
+    "&:hover fieldset": {
+      borderColor: "rgba(255, 255, 255, 0.2)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#5C2FC2",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "rgba(255, 255, 255, 0.7)",
+  },
+  "& .MuiInputBase-input": {
+    color: "#e2e8f0",
+  },
+  "& .MuiSelect-icon": {
+    color: "rgba(255, 255, 255, 0.7)",
+  },
+});
+
+const ActionButton = styled(Button)({
+  backgroundColor: "#5C2FC2",
+  color: "#fff",
+  "&:hover": {
+    backgroundColor: "#4925A3",
+    transform: "translateY(-2px)",
+  },
+  transition: "all 0.3s ease",
+});
 
 const AdminShowTimeForm = () => {
   const { control, handleSubmit, reset, watch } = useForm({
@@ -24,184 +69,153 @@ const AdminShowTimeForm = () => {
   });
 
   const { data } = useTheaters();
-
-  // Manage dynamic times array
   const { fields, append, remove } = useFieldArray({
     control,
     name: "times",
   });
 
-  // Submit handler
-  const onSubmit = async (formData) => {
-    const formattedData = {
-      ...formData,
-      times: formData.times.map((item) => item.time), // Convert array of objects to array of times
-    };
+  const today = new Date().toISOString().split("T")[0];
+  const currentTime = new Date().toTimeString().split(" ")[0].substring(0, 5);
+  const selectedDate = watch("date");
+  const minTime = selectedDate === today ? currentTime : "00:00";
 
+  const onSubmit = async (formData) => {
     try {
-      const response = await showTimeService.Create(formattedData); // Replace with your API call
-      console.log("Showtime created successfully:", response.data);
-       toast.success("Times added successfully!", {
-         position: "top-right",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-         theme: "colored",
-         transition: Bounce,
-       });
+      const formattedData = {
+        ...formData,
+        times: formData.times.map((item) => item.time),
+      };
+
+      await showTimeService.Create(formattedData);
+      toast.success("Times added successfully!", {
+        position: "top-right",
+        theme: "dark",
+        transition: Bounce,
+      });
       reset();
     } catch (error) {
-      console.error("Error creating showtime:", error);
+      toast.error("Error adding showtimes", {
+        position: "top-right",
+        theme: "dark",
+      });
     }
   };
 
-  // Get today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split("T")[0];
-
-  // Get current time in HH:MM format
-  const currentTime = new Date().toTimeString().split(" ")[0].substring(0, 5);
-
-  // Watch the selected date
-  const selectedDate = watch("date");
-
-  // Determine minimum time based on selected date
-  const minTime = selectedDate === today ? currentTime : "00:00"; // Set to midnight if not today
-
   return (
-    <Box
-      component="form" // Add form attribute
-      onSubmit={handleSubmit(onSubmit)} // Bind onSubmit to handleSubmit
-      sx={{
-        padding: 2,
-        backgroundColor: "#E5D9F2",
-        borderRadius: "10px",
-        marginTop: "20px",
-        marginRight: "70px",
-        marginBottom: "40px",
-      }}
-    >
-      {" "}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition:Bounce
-      />
+    <FormContainer component="form" onSubmit={handleSubmit(onSubmit)}>
+      <ToastContainer />
+
       <Typography
         variant="h4"
-        sx={{ mb: 4, color: "#5C2FC2", fontWeight: "bold" }}
+        sx={{
+          mb: 4,
+          color: "#e2e8f0",
+          fontWeight: "600",
+          letterSpacing: "0.5px",
+        }}
       >
         Create Showtimes
       </Typography>
-      {/* Theater Dropdown */}
+
       <Controller
         name="theater"
         control={control}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
             select
             label="Select Theater"
             fullWidth
             margin="normal"
             required
-            sx={{ backgroundColor: "white", borderRadius: "5px" }}
           >
             {data?.map((theater) => (
               <MenuItem key={theater._id} value={theater._id}>
                 {theater.name}
               </MenuItem>
             ))}
-          </TextField>
+          </StyledTextField>
         )}
       />
-      {/* Date Input */}
+
       <Controller
         name="date"
         control={control}
         render={({ field }) => (
-          <TextField
+          <StyledTextField
             {...field}
             type="date"
             label="Date"
             fullWidth
             margin="normal"
             required
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              min: today, // Prevent selecting past dates
-            }}
-            sx={{ backgroundColor: "white", borderRadius: "5px" }}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ min: today }}
           />
         )}
       />
-      {/* Times Input (Dynamic Array) */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6">Times:</Typography>
+
+      <Box sx={{ mb: 4, mt: 3 }}>
+        <Typography variant="h6" sx={{ color: "#e2e8f0", mb: 2 }}>
+          Show Times
+        </Typography>
+
         {fields.map((item, index) => (
           <Box
             key={item.id}
-            sx={{ display: "flex", alignItems: "center", mb: 2 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              mb: 2,
+            }}
           >
             <Controller
               name={`times[${index}].time`}
               control={control}
               render={({ field }) => (
-                <TextField
+                <StyledTextField
                   {...field}
                   label={`Time ${index + 1}`}
                   fullWidth
-                  margin="normal"
                   type="time"
                   required
-                  inputProps={{
-                    min: minTime, // Set the minimum time based on selected date
-                  }}
-                  sx={{ backgroundColor: "white", borderRadius: "5px" }}
+                  inputProps={{ min: minTime }}
                 />
               )}
             />
             <IconButton
               onClick={() => remove(index)}
-              aria-label="remove time"
-              color="secondary"
-              sx={{ ml: 1 }}
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                "&:hover": { color: "#ff4444" },
+              }}
             >
               <RemoveIcon />
             </IconButton>
           </Box>
         ))}
+
         <Button
-          type="button"
-          variant="outlined"
           onClick={() => append({ time: "" })}
           startIcon={<AddIcon />}
-          sx={{ mb: 2 }}
+          sx={{
+            color: "#e2e8f0",
+            borderColor: "rgba(255, 255, 255, 0.1)",
+            "&:hover": {
+              borderColor: "#5C2FC2",
+              backgroundColor: "rgba(92, 47, 194, 0.1)",
+            },
+          }}
         >
           Add Time
         </Button>
       </Box>
-      <Button
-        type="submit" // Make the button submit the form
-        variant="contained"
-        color="primary"
-        sx={{ backgroundColor: "#5C2FC2", color: "white" }}
-      >
-        Submit
-      </Button>
-    </Box>
+
+      <ActionButton type="submit" variant="contained" fullWidth>
+        Submit Showtimes
+      </ActionButton>
+    </FormContainer>
   );
 };
 

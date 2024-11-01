@@ -1,8 +1,42 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Paper, Button } from "@mui/material";
-// import GoogleIcon from "@mui/icons-material/Google";
+import { Box, Button } from "@mui/material";
+import { styled } from "@mui/system";
 import googleIcon from "../assets/googleIcon.png";
+
+const GoogleButton = styled(Button)({
+  width: "100%",
+  backgroundColor: "#002548",
+  color: "#fff",
+  border: "1px solid rgba(79, 158, 255, 0.3)",
+  padding: "10px 16px",
+  textTransform: "none",
+  fontSize: "14px",
+  fontWeight: 500,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "12px",
+  marginTop: "20px",
+  borderRadius: "8px",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    backgroundColor: "rgba(79, 158, 255, 0.1)",
+    borderColor: "rgba(79, 158, 255, 0.5)",
+    transform: "translateY(-2px)",
+  },
+});
+
+const GoogleIcon = styled(Box)({
+  width: "20px",
+  height: "20px",
+  backgroundColor: "#fff",
+  borderRadius: "50%",
+  padding: "2px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
 
 const Login = () => {
   const location = useLocation();
@@ -22,35 +56,15 @@ const Login = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", marginTop: "20px" }}>
-      <Button
-        variant="outlined"
-        startIcon={
-          <Box
-            component="img"
-            sx={{ marginRight: "20px" }}
-            src={googleIcon}
-            alt="Google logo"
-            sx={{ width: "20px", height: "20px" }} // Customize size as needed
-          />
-        }
+    <Box sx={{ width: "100%" }}>
+      <GoogleButton
         onClick={handleLogin}
-        sx={{
-          textTransform: "none", // Ensure the button text is not all uppercase
-          backgroundColor: "#fff", // Google button white background
-          color: "#000", // Google button black text
-          borderColor: "#dcdcdc", // Light grey border
-          "&:hover": {
-            backgroundColor: "#f5f5f5",
-            borderColor: "#c2c2c2",
-          },
-          padding: "8px 16px",
-          fontWeight: 500,
-          fontSize: "14px",
-        }}
+        startIcon={
+          <GoogleIcon component="img" src={googleIcon} alt="Google logo" />
+        }
       >
         Sign in with Google
-      </Button>
+      </GoogleButton>
     </Box>
   );
 };
