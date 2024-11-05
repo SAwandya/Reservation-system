@@ -25,7 +25,21 @@ router.get(
   }
 );
 
+// Route to initiate Facebook authentication
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 
+// Callback route after Facebook authentication
+router.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/" }),
+  (req, res) => {
+    const token = generateToken(req.user);
+    res.redirect(`http://localhost:4000/login/?token=${token}`); // Redirect to frontend with token
+  }
+);
 
 router.post("/", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });

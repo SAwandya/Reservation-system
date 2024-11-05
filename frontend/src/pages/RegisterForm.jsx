@@ -9,6 +9,7 @@ import { useAuth } from "../Context/AuthContext";
 import userService from "../services/userService";
 import Login from "../components/Login";
 import { styled } from "@mui/system";
+import FacebookLogin from "../components/FacebookLogin";
 
 
 // Styled components
@@ -282,6 +283,7 @@ const RegisterForm = () => {
           </RegisterButton>
         </form>
         <Login />
+        <FacebookLogin/>
       </FormWrapper>
     </>
   );

@@ -11,12 +11,12 @@ const user = require("./routes/user");
 const auth = require("./routes/auth");
 require("./config/passport"); // Import your passport configuration
 const passport = require("./config/passport");
+const facebookPassport = require("./config/passport-facebook");
 require("dotenv").config(); // Load environment variables
 const session = require("express-session"); // Import express-session
 const calenderRoutes = require("./routes/calenderRoutes"); // Add this line
 const path = require("path");
 const swaggerDocs = require("./swagger"); // Path to swagger setup
-const facebookAuth = require("./routes/facebookAuth"); 
 
 const mongo_url = process.env.MONGO_URL;
 
@@ -42,9 +42,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(facebookPassport.initialize());
+app.use(facebookPassport.session());
+
 // Serve Swagger docs
 swaggerDocs(app); // Initialize Swagger
-app.use(facebookAuth);
 
 app.use("/api/movies", movieRoutes);
 app.use("/api/theaters", theaterRoutes);
