@@ -16,7 +16,7 @@ const session = require("express-session"); // Import express-session
 const calenderRoutes = require("./routes/calenderRoutes"); // Add this line
 const path = require("path");
 const swaggerDocs = require("./swagger"); // Path to swagger setup
-
+const facebookAuth = require("./routes/facebookAuth"); 
 
 const mongo_url = process.env.MONGO_URL;
 
@@ -44,6 +44,7 @@ app.use(passport.session());
 
 // Serve Swagger docs
 swaggerDocs(app); // Initialize Swagger
+app.use(facebookAuth);
 
 app.use("/api/movies", movieRoutes);
 app.use("/api/theaters", theaterRoutes);
