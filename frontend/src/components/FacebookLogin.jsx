@@ -28,8 +28,8 @@ const FacebookButton = styled(Button)({
 });
 
 const FacebookIcon = styled(Box)({
-  width: "20px",
-  height: "20px",
+  width: "30px",
+  height: "30px",
   backgroundColor: "#fff",
   borderRadius: "50%",
   padding: "2px",

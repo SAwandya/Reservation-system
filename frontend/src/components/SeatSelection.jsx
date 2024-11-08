@@ -46,13 +46,16 @@ const SeatSelection = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  console.log("seat array: ", data);
-
   // Media query to detect screen size
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isMediumScreen = useMediaQuery("(max-width:960px)");
   const selectedDate = useGameQueryStore((s) => s.selectedDate);
   const selectedTime = useGameQueryStore((s) => s.selectedTime);
+
+  const { getCurrentUser } = useAuth();
+  const { _id, name, email } = getCurrentUser();
+
+  console.log("Current User :", _id, name, email);
 
   // Effect to handle seat layout when data changes
   useEffect(() => {
@@ -99,9 +102,6 @@ const SeatSelection = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
-  const { getCurrentUser } = useAuth();
-  const { _id, name, email } = getCurrentUser();
 
   const navigate = useNavigate();
 

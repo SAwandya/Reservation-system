@@ -19,8 +19,6 @@ passport.use(
         // Check if a user already exists
         let user = await User.findOne({ facebookId: profile.id });
 
-        console.log("profile: ", profile);
-
         if (!user) {
           // Create a new user if one doesn't exist
           user = await User.create({

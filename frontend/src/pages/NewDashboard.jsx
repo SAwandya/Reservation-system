@@ -65,8 +65,6 @@ const NewDashboard = () => {
 
   const availableTime = useGameQueryStore((s) => s.availableTime);
 
-  console.log("Available Time:", availableTime);
-
   const renderContent = () => {
     switch (activeButton) {
       case "home":
