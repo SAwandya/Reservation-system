@@ -1,17 +1,13 @@
 // Dashboard.jsx
 import React, { useState } from "react";
-import { Box, Typography, Grid, Paper } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import NewSideBar from "../components/newSideBar";
 import CustomCalendar from "../components/CustomerCalender";
 import NewImageSlider from "../components/NewImageSlider";
 import NewCardSlider from "../components/NewCardSlider";
 import TheaterDropdown from "../components/TheaterDropdown";
 import SeatSelection from "../components/SeatSelection";
 import NewTimeScroller from "../components/NewTimeScroller";
-import NewFooter from "../components/NewFooter";
-import NewTopNavBar from "../components/NewTopNavBar";
-import { styled } from "@mui/system";
 import useGameQueryStore from "../store";
 import { CSSTransition } from "react-transition-group";
 import "../styles/NewDashboard.css"; // Import the CSS file for animations
