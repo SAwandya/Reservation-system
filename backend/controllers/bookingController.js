@@ -1,5 +1,7 @@
 const { Theater } = require("../models/theater");
 const { Booking } = require("../models/booking");
+const nodemailer = require("nodemailer");
+const Mailgen = require("mailgen");
 
 exports.createBookingEvent = async (req, res) => {
   try {
@@ -14,7 +16,8 @@ exports.createBookingEvent = async (req, res) => {
     } = req.body;
 
     const theaterData = await Theater.findById(theater);
-    if (!theaterData) return res.status(404).json({ error: "Theater not found" });
+    if (!theaterData)
+      return res.status(404).json({ error: "Theater not found" });
 
     const theaterName = theaterData.name;
     // Create a new booking
@@ -31,9 +34,68 @@ exports.createBookingEvent = async (req, res) => {
 
     const savedBooking = await newBooking.save();
 
-    return res
-      .status(201)
-      .json({ message: "Booking created successfully", savedBooking });
+    if (savedBooking) {
+      // send email using nodemailer
+      let config = {
+        service: "gmail",
+        auth: {
+          user: "nevilnutrifeeds@gmail.com",
+          pass: "ugel zylt zrcy fhjb",
+        },
+      };
+
+      let transpoter = nodemailer.createTransport(config);
+
+      let MailGenerator = new Mailgen({
+        them: "default",
+        product: {
+          name: "ReserveNow",
+          link: "https://mailgen.js/",
+        },
+      });
+
+      let response = {};
+
+      response = {
+        body: {
+          name: customerName,
+          intro: "Your booking has been confirmed!!!",
+          table: {
+            data: [
+              {
+                name: customerName,
+                Location: theaterName,
+                time: bookingTime,
+                payment: totalAmount + "LKR",
+              },
+            ],
+          },
+          outro: "Looking forward to serve you",
+        },
+      };
+
+      let mail = MailGenerator.generate(response);
+
+      let message = {
+        from: "nevilnutrifeeds@gmail.com",
+        to: customerEmail,
+        subject: "Booking Confirmation",
+        html: mail,
+      };
+
+      transpoter
+        .sendMail(message)
+        .then(() => {
+          return res
+            .status(201)
+            .json({ message: "Booking created successfully", savedBooking });
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+
+      // ---------------------------
+    }
   } catch (error) {
     console.error("Error creating booking:", error);
     return res.status(500).json({ message: "Server error" });
