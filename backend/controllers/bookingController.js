@@ -2,6 +2,9 @@ const { Theater } = require("../models/theater");
 const { Booking } = require("../models/booking");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
+const QRCode = require("qrcode");
+const fs = require("fs");
+const path = require("path");
 
 exports.createBookingEvent = async (req, res) => {
   try {
@@ -35,7 +38,19 @@ exports.createBookingEvent = async (req, res) => {
     const savedBooking = await newBooking.save();
 
     if (savedBooking) {
-      // send email using nodemailer
+      const qrData = JSON.stringify({
+        bookingId: savedBooking._id,
+        customerName,
+        theaterName,
+        seats,
+        bookingDate,
+        bookingTime,
+      });
+
+      // Generate the QR code as a buffer
+      const qrCodePath = path.join(__dirname, "qrcode.png");
+      await QRCode.toFile(qrCodePath, qrData);
+
       let config = {
         service: "gmail",
         auth: {
@@ -44,57 +59,63 @@ exports.createBookingEvent = async (req, res) => {
         },
       };
 
-      let transpoter = nodemailer.createTransport(config);
+      let transporter = nodemailer.createTransport(config);
 
       let MailGenerator = new Mailgen({
-        them: "default",
+        theme: "default",
         product: {
           name: "ReserveNow",
           link: "https://mailgen.js/",
         },
       });
 
-      let response = {};
-
-      response = {
+      let response = {
         body: {
           name: customerName,
-          intro: "Your booking has been confirmed!!!",
+          intro: "Your booking has been confirmed!",
           table: {
             data: [
               {
                 name: customerName,
                 Location: theaterName,
                 time: bookingTime,
-                payment: totalAmount + "LKR",
+                payment: totalAmount + " LKR",
               },
             ],
           },
-          outro: "Looking forward to serve you",
+          outro: "Looking forward to serving you",
         },
       };
 
-      let mail = MailGenerator.generate(response);
+      let mailContent = MailGenerator.generate(response);
 
       let message = {
         from: "nevilnutrifeeds@gmail.com",
         to: customerEmail,
         subject: "Booking Confirmation",
-        html: mail,
+        html: `${mailContent}<p><strong>Your QR Code:</strong></p><img src="cid:qrcode" alt="QR Code" />`,
+        attachments: [
+          {
+            filename: "qrcode.png",
+            path: qrCodePath,
+            cid: "qrcode", // same as the cid used in the HTML
+          },
+        ],
       };
 
-      transpoter
+      transporter
         .sendMail(message)
         .then(() => {
+          // Delete the QR code file after sending the email
+          fs.unlinkSync(qrCodePath);
           return res
             .status(201)
             .json({ message: "Booking created successfully", savedBooking });
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log("Error sending email:", error.message);
+          res.status(500).json({ error: "Failed to send confirmation email" });
         });
-
-      // ---------------------------
     }
   } catch (error) {
     console.error("Error creating booking:", error);
