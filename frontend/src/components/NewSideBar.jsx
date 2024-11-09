@@ -11,6 +11,7 @@ const NewSideBar = ({ activeButton, setActiveButton }) => {
     { icon: <HomeIcon />, value: "home" },
     { icon: <BarChartIcon />, value: "chart" },
     { icon: <SettingsIcon />, value: "settings" },
+    
   ];
 
   return (

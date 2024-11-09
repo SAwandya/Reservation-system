@@ -2,6 +2,10 @@ const { Theater } = require("../models/theater");
 const { Booking } = require("../models/booking");
 const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
+const QRCode = require("qrcode");
+const fs = require("fs");
+const path = require("path");
+const { Seat } = require("../models/seat");
 
 exports.createBookingEvent = async (req, res) => {
   try {
@@ -35,7 +39,19 @@ exports.createBookingEvent = async (req, res) => {
     const savedBooking = await newBooking.save();
 
     if (savedBooking) {
-      // send email using nodemailer
+      const qrData = JSON.stringify({
+        bookingId: savedBooking._id,
+        customerName,
+        theaterName,
+        seats,
+        bookingDate,
+        bookingTime,
+      });
+
+      // Generate the QR code as a buffer
+      const qrCodePath = path.join(__dirname, "qrcode.png");
+      await QRCode.toFile(qrCodePath, qrData);
+
       let config = {
         service: "gmail",
         auth: {
@@ -44,57 +60,63 @@ exports.createBookingEvent = async (req, res) => {
         },
       };
 
-      let transpoter = nodemailer.createTransport(config);
+      let transporter = nodemailer.createTransport(config);
 
       let MailGenerator = new Mailgen({
-        them: "default",
+        theme: "default",
         product: {
           name: "ReserveNow",
           link: "https://mailgen.js/",
         },
       });
 
-      let response = {};
-
-      response = {
+      let response = {
         body: {
           name: customerName,
-          intro: "Your booking has been confirmed!!!",
+          intro: "Your booking has been confirmed!",
           table: {
             data: [
               {
                 name: customerName,
                 Location: theaterName,
                 time: bookingTime,
-                payment: totalAmount + "LKR",
+                payment: totalAmount + " LKR",
               },
             ],
           },
-          outro: "Looking forward to serve you",
+          outro: "Looking forward to serving you",
         },
       };
 
-      let mail = MailGenerator.generate(response);
+      let mailContent = MailGenerator.generate(response);
 
       let message = {
         from: "nevilnutrifeeds@gmail.com",
         to: customerEmail,
         subject: "Booking Confirmation",
-        html: mail,
+        html: `${mailContent}<p><strong>Your QR Code:</strong></p><img src="cid:qrcode" alt="QR Code" />`,
+        attachments: [
+          {
+            filename: "qrcode.png",
+            path: qrCodePath,
+            cid: "qrcode", // same as the cid used in the HTML
+          },
+        ],
       };
 
-      transpoter
+      transporter
         .sendMail(message)
         .then(() => {
+          // Delete the QR code file after sending the email
+          fs.unlinkSync(qrCodePath);
           return res
             .status(201)
             .json({ message: "Booking created successfully", savedBooking });
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log("Error sending email:", error.message);
+          res.status(500).json({ error: "Failed to send confirmation email" });
         });
-
-      // ---------------------------
     }
   } catch (error) {
     console.error("Error creating booking:", error);
@@ -151,11 +173,38 @@ exports.updateBookingEvent = async (req, res) => {
 };
 
 exports.deleteBookingEvent = async (req, res) => {
-  try {
-    const booking = await Booking.findByIdAndDelete(req.params.id);
-    if (!booking) return res.status(404).json({ error: "Booking not found" });
-    res.json({ message: "Booking deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+ try {
+   // Step 1: Find the booking by ID
+   const booking = await Booking.findById(req.params.id);
+   if (!booking) {
+     return res.status(404).json({ message: "Booking not found" });
+   }
+
+   // Step 2: Extract theater ID and seats array from the booking
+   const theaterId = booking.theater;
+   const seats = booking.seats; // Example: ["VIP-1-12", "VIP-1-13"]
+
+   // Step 3: Iterate over each seat in the booking and update availability
+   const updatePromises = seats.map(async (seatIdentifier) => {
+     // Split the seatIdentifier (e.g., "VIP-1-12") into section, row, and number
+     const [section, row, number] = seatIdentifier.split("-");
+
+     // Find the seat by theater, section, row, and number, and set isAvailable to true
+     await Seat.findOneAndUpdate(
+       { theater: theaterId, section, row, number },
+       { isAvailable: true }
+     );
+   });
+
+   // Wait for all update operations to complete
+   await Promise.all(updatePromises);
+
+   // Step 4: Delete the booking
+   await Booking.findByIdAndDelete(req.params.id);
+
+   res.json({ message: "Booking deleted and seats released successfully" });
+ } catch (error) {
+   console.error("Error deleting booking and updating seats:", error);
+   res.status(500).json({ error: "Server error" });
+ }
 };

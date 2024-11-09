@@ -59,7 +59,7 @@ const SideBar = ({ setActiveContent, activeContent }) => {
     navigate("/signin");
   };
 
-  const menuItems = ["Layout", "Bookings", "Events", "Users"];
+  const menuItems = ["Layout", "Bookings", "Events", "Users", "Mail Service"];
 
   return (
     <StyledDrawer variant="permanent" anchor="left">
