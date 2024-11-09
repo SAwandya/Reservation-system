@@ -13,22 +13,11 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      # Setup Node.js for backend and frontend
-      - name: Set up Node.js for backend
+      # Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'  # Specify Node.js version as per your app's requirements
-
-      - name: Change directory to backend
-        run: cd backend
-
-      - name: Set up Node.js for frontend
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'  # Specify Node.js version as per your app's requirements
-
-      - name: Change directory to frontend
-        run: cd frontend
 
       # Install dependencies for backend
       - name: Install backend dependencies
@@ -48,7 +37,7 @@ jobs:
       - name: Move frontend build to backend
         run: |
           rm -rf backend/public  # Clear any previous build
-          mv frontend/dist backend/public
+          mv frontend/dist backend/public  # Update "dist" to correct build output if needed
 
       # Deploy to Azure Web App using publish profile
       - name: Deploy to Azure Web App
@@ -58,4 +47,3 @@ jobs:
           slot-name: "production"
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: ./backend  # Deploy the backend folder with frontend build included
-
