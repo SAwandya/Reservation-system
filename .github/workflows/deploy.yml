@@ -48,14 +48,14 @@ jobs:
       - name: Move frontend build to backend
         run: |
           rm -rf backend/public  # Clear any previous build
-          mv frontend/build backend/public
+          mv frontend/dist backend/public
 
       # Deploy to Azure Web App using publish profile
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "your-azure-webapp-name"  # Replace with your Web App name
+          app-name: "ReserveNow"  # Replace with your Web App name
           slot-name: "production"
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: ./backend  # Deploy the backend folder with frontend build included
 
