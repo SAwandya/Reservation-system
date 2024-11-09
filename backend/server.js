@@ -17,6 +17,7 @@ const session = require("express-session"); // Import express-session
 const calenderRoutes = require("./routes/calenderRoutes"); // Add this line
 const path = require("path");
 const swaggerDocs = require("./swagger"); // Path to swagger setup
+const mailRoutes = require("./routes/mailRoutes");
 
 const mongo_url = process.env.MONGO_URL;
 
@@ -56,6 +57,7 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/user", user);
 app.use("/api/auth", auth);
 app.use("/api", calenderRoutes);
+app.use("/api/mail", mailRoutes);
 
 // // Serve static files from the React frontend app
 // app.use(express.static(path.join(__dirname, 'dist')));

@@ -5,6 +5,7 @@ const Mailgen = require("mailgen");
 const QRCode = require("qrcode");
 const fs = require("fs");
 const path = require("path");
+const { Seat } = require("../models/seat");
 
 exports.createBookingEvent = async (req, res) => {
   try {
@@ -172,11 +173,38 @@ exports.updateBookingEvent = async (req, res) => {
 };
 
 exports.deleteBookingEvent = async (req, res) => {
-  try {
-    const booking = await Booking.findByIdAndDelete(req.params.id);
-    if (!booking) return res.status(404).json({ error: "Booking not found" });
-    res.json({ message: "Booking deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+ try {
+   // Step 1: Find the booking by ID
+   const booking = await Booking.findById(req.params.id);
+   if (!booking) {
+     return res.status(404).json({ message: "Booking not found" });
+   }
+
+   // Step 2: Extract theater ID and seats array from the booking
+   const theaterId = booking.theater;
+   const seats = booking.seats; // Example: ["VIP-1-12", "VIP-1-13"]
+
+   // Step 3: Iterate over each seat in the booking and update availability
+   const updatePromises = seats.map(async (seatIdentifier) => {
+     // Split the seatIdentifier (e.g., "VIP-1-12") into section, row, and number
+     const [section, row, number] = seatIdentifier.split("-");
+
+     // Find the seat by theater, section, row, and number, and set isAvailable to true
+     await Seat.findOneAndUpdate(
+       { theater: theaterId, section, row, number },
+       { isAvailable: true }
+     );
+   });
+
+   // Wait for all update operations to complete
+   await Promise.all(updatePromises);
+
+   // Step 4: Delete the booking
+   await Booking.findByIdAndDelete(req.params.id);
+
+   res.json({ message: "Booking deleted and seats released successfully" });
+ } catch (error) {
+   console.error("Error deleting booking and updating seats:", error);
+   res.status(500).json({ error: "Server error" });
+ }
 };

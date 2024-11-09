@@ -1,42 +1,61 @@
-name: Deploy Backend
+name: Deploy MERN Application to Azure Web App
 
 on:
   push:
     branches:
-      - main  # Replace with your branch
+      - redesign-home  # Set the branch you want to trigger deployments on
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      # Setup Node.js for backend and frontend
+      - name: Set up Node.js for backend
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Adjust to your Node.js version
+          node-version: '20'  # Specify Node.js version as per your app's requirements
 
-      - name: Install Backend Dependencies
-        working-directory: ./backend
+      - name: Change directory to backend
+        run: cd backend
+
+      - name: Set up Node.js for frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # Specify Node.js version as per your app's requirements
+
+      - name: Change directory to frontend
+        run: cd frontend
+
+      # Install dependencies for backend
+      - name: Install backend dependencies
         run: npm install
+        working-directory: backend
 
-      - name: Install Frontend Dependencies
-        working-directory: ./frontend
+      # Install dependencies for frontend
+      - name: Install frontend dependencies
         run: npm install
+        working-directory: frontend
 
-      - name: Build Frontend
-        working-directory: ./frontend
-        run: npm run build  # Adjust this to your actual build command
+      # Build the frontend and move the build to the backend's public directory
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
 
-      - name: Copy Frontend Build to Backend Public
+      - name: Move frontend build to backend
         run: |
-          cp -r ./frontend/dist ./backend
+          rm -rf backend/public  # Clear any previous build
+          mv frontend/build backend/public
 
-      - name: Deploy to Azure
+      # Deploy to Azure Web App using publish profile
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: Reservation-system  # Replace with your Azure app name
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: ./backend  # Specify the backend directory
+          app-name: "your-azure-webapp-name"  # Replace with your Web App name
+          slot-name: "production"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./backend  # Deploy the backend folder with frontend build included
+

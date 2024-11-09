@@ -122,7 +122,8 @@ const MyBooking = () => {
 
   const handleCancelBooking = async (bookingId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/bookings/${bookingId}`);
+      const res = await axios.delete(`http://localhost:3000/api/bookings/${bookingId}`);
+      console.log("Booking canceled:", res.data);
       fetchOrders();
     } catch (error) {
       console.error("Error canceling booking:", error);
@@ -198,17 +199,7 @@ const MyBooking = () => {
                         mb: { xs: 2, md: 0 },
                       }}
                     >
-                      <ActionButton
-                        component="label"
-                        startIcon={<CloudUploadIcon />}
-                      >
-                        Upload Poster
-                        <VisuallyHiddenInput
-                          type="file"
-                          onChange={handlePosterUpload(order._id)}
-                          accept="image/*"
-                        />
-                      </ActionButton>
+                     
                     </Box>
                   )}
                 </Grid>
