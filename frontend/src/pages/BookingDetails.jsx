@@ -66,6 +66,7 @@ const bookSeat = async (bookingDataStr, userId, accessToken) => {
       }
     );
     console.log("Calendar event created:", response.data);
+    return response.data;
   } catch (error) {
     console.error("Error booking seat and creating event:", error);
   }
@@ -79,6 +80,7 @@ const BookingDetails = () => {
   const { getCurrentUser } = useAuth();
   const userId = getCurrentUser()._id;
   const accessToken = getCurrentUser().accessToken;
+  const service = getCurrentUser().service;
 
   const navigate = useNavigate();
 
@@ -95,14 +97,6 @@ const BookingDetails = () => {
       confirmButtonText: "Confirm",
     }).then((result) => {
       if (result.isConfirmed) {
-        bookSeat(bookingDataStr, userId, accessToken);
-
-        Swal.fire({
-          title: "Success!",
-          text: "Booking process completed.",
-          icon: "success",
-        });
-
         seatService
           .CreateSeat({ theaterId, selectedSeats })
           .then((response) => {
@@ -110,17 +104,47 @@ const BookingDetails = () => {
             bookingService
               .Create(bookingDataStr)
               .then((response) => {
-                toast.success("Set reminder to the Google calender", {
-                  position: "top-right",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                  transition: Bounce,
-                });
+                if (service === "google") {
+                  Swal.fire({
+                    title: "Set reminder to the Google calender?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    background: "#1e2a38",
+                    color: "#e2e8f0",
+                    confirmButtonColor: "#dc2626",
+                    cancelButtonColor: "#5C2FC2",
+                    confirmButtonText: "Confirm",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      const res = bookSeat(bookingDataStr, userId, accessToken);
+                      Swal.fire({
+                        title: "Success!",
+                        text: "Booking process completed.",
+                        icon: "success",
+                        color: "#e2e8f0",
+                      });
+                      navigate("/");
+                    } else {
+                      Swal.fire({
+                        title: "Success!",
+                        text: "Booking process completed.",
+                        icon: "success",
+                        color: "#e2e8f0",
+                      });
+                      navigate("/");
+                    }
+                  });
+                }
+                if (service !== "google") {
+                  Swal.fire({
+                    title: "Success!",
+                    text: "Booking process completed.",
+                    icon: "success",
+                    color: "#e2e8f0",
+                  });
+                }
+
                 navigate("/");
                 console.log(response.data);
               })
