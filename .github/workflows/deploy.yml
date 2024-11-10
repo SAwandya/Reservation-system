@@ -3,7 +3,7 @@ name: Deploy MERN Application to Azure Web App
 on:
   push:
     branches:
-      - redesign-home  # Set the branch you want to trigger deployments on
+      - redesign-home  # Set the branch to trigger deployments
 
 jobs:
   build-and-deploy:
@@ -29,21 +29,22 @@ jobs:
         run: npm install
         working-directory: frontend
 
-      # Build the frontend and move the build to the backend's public directory
+      # Build the frontend
       - name: Build frontend
         run: npm run build
         working-directory: frontend
 
+      # Move frontend build to backend
       - name: Move frontend build to backend
         run: |
-          rm -rf backend/public  # Clear any previous build
-          mv frontend/dist backend/public  # Update "dist" to correct build output if needed
+          rm -rf backend/dist  
+          mv frontend/dist backend/dist
 
       # Deploy to Azure Web App using publish profile
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "ReserveNow"  # Replace with your Web App name
+          app-name: "ReserveNow"  # Replace with your Azure Web App name
           slot-name: "production"
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: ./backend  # Deploy the backend folder with frontend build included
+          package: ./backend  # Deploy backend with frontend build included
