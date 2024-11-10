@@ -87,7 +87,7 @@ const SignInForm = () => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { authToken, login } = useAuth();
+  const { authToken, login, getCurrentUser } = useAuth();
 
   const validateField = (name, value) => {
     const fieldSchema = Joi.object({ [name]: schema.extract(name) });
@@ -140,9 +140,16 @@ const SignInForm = () => {
           transition: Bounce,
         });
         login(response);
-        navigate("/");
+
+        console.log("Storage error", getCurrentUser().role);
+
+        if (getCurrentUser().role === "admin") {
+          navigate("/Dashboard");
+        } else {
+          navigate("/");
+        }
       } catch (err) {
-        setErrors(err.response.data);
+        setErrors(err.response?.data);
       }
     }
   };

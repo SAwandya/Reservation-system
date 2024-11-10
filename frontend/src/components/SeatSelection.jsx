@@ -36,6 +36,7 @@ const bookingSchema = Joi.object({
   totalAmount: Joi.number().greater(0).required(),
   bookingDate: Joi.string().isoDate().required(),
   bookingTime: Joi.string().required(),
+  event: Joi.string().required(),
 });
 
 const SeatSelection = () => {
@@ -46,13 +47,17 @@ const SeatSelection = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  console.log("seat array: ", data);
-
   // Media query to detect screen size
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isMediumScreen = useMediaQuery("(max-width:960px)");
   const selectedDate = useGameQueryStore((s) => s.selectedDate);
   const selectedTime = useGameQueryStore((s) => s.selectedTime);
+  const selectedCard = useGameQueryStore((s) => s.selectedCard);
+
+  const { getCurrentUser } = useAuth();
+  const { _id, name, email } = getCurrentUser();
+
+  console.log("Current User :", _id, name, email);
 
   // Effect to handle seat layout when data changes
   useEffect(() => {
@@ -100,9 +105,6 @@ const SeatSelection = () => {
     setSnackbarOpen(false);
   };
 
-  const { getCurrentUser } = useAuth();
-  const { _id, name, email } = getCurrentUser();
-
   const navigate = useNavigate();
 
   const handleConfirm = async () => {
@@ -118,6 +120,7 @@ const SeatSelection = () => {
         totalAmount: totalPrice,
         bookingDate: formattedDate,
         bookingTime: selectedTime,
+        event: selectedCard._id,
       };
 
       console.log("Booking data:", bookingData);

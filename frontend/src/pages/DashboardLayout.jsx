@@ -12,6 +12,7 @@ import SideBar from "../components/SideBar";
 import MoviePostForm from "../components/MoviePostForm";
 import Content from "../components/Content";
 import { styled } from "@mui/system";
+import BookingEmailSender from "../components/BookingMailSender";
 
 const DashboardContainer = styled(Box)({
   display: "flex",
@@ -65,6 +66,8 @@ const DashboardLayout = () => {
         return <MoviePostForm />;
       case "Users":
         return <UsersTable />;
+      case "Mail Service":
+        return <BookingEmailSender/>;
       default:
         return (
           <Typography

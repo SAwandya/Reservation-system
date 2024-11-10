@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
   },
+  facebookId: {
+    type: String,
+  },
   accessToken: {
     type: String,
   },
@@ -27,7 +30,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  picture: {
+    type: String,
+  },
 });
+
+// Create partial indexes for googleId and facebookId
+userSchema.index({ googleId: 1 }, { unique: true, partialFilterExpression: { googleId: { $type: "string" } } });
+userSchema.index({ facebookId: 1 }, { unique: true, partialFilterExpression: { facebookId: { $type: "string" } } });
 
 const User = mongoose.model("User", userSchema);
 

@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import googleIcon from "../assets/googleIcon.png";
+import Facebookpng from "../assets/facebook.png";
 
-const GoogleButton = styled(Button)({
+const FacebookButton = styled(Button)({
   width: "100%",
   backgroundColor: "#002548",
   color: "#fff",
@@ -27,7 +27,7 @@ const GoogleButton = styled(Button)({
   },
 });
 
-const GoogleIcon = styled(Box)({
+const FacebookIcon = styled(Box)({
   width: "30px",
   height: "30px",
   backgroundColor: "#fff",
@@ -38,7 +38,7 @@ const GoogleIcon = styled(Box)({
   justifyContent: "center",
 });
 
-const Login = () => {
+const FacebookLogin = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -52,21 +52,21 @@ const Login = () => {
   }, [location, navigate]);
 
   const handleLogin = () => {
-    window.location.href = `http://localhost:3000/api/auth/google`;
+    window.location.href = `http://localhost:3000/api/auth/facebook`;
   };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <GoogleButton
+      <FacebookButton
         onClick={handleLogin}
         startIcon={
-          <GoogleIcon component="img" src={googleIcon} alt="Google logo" />
+          <FacebookIcon component="img" src={Facebookpng} alt="Facebook logo" />
         }
       >
-        Sign in with Google
-      </GoogleButton>
+        Sign in with Facebook
+      </FacebookButton>
     </Box>
   );
 };
 
-export default Login;
+export default FacebookLogin;

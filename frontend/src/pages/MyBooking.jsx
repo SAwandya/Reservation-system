@@ -10,11 +10,12 @@ import {
 import { styled } from "@mui/system";
 import axios from "axios";
 import { useAuth } from "../Context/AuthContext";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Swal from "sweetalert2";
+
 
 const ContentWrapper = styled(Box)({
   padding: "24px",
-  width: "100%",
+  width: "204vh",
   background: "linear-gradient(135deg, #001529 0%, #181818 100%)",
   minHeight: "100vh",
   marginTop: "70px",
@@ -105,25 +106,27 @@ const MyBooking = () => {
     }
   };
 
-  const handlePosterUpload = (orderId) => (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setOrders(
-          orders.map((order) =>
-            order._id === orderId ? { ...order, poster: reader.result } : order
-          )
-        );
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleCancelBooking = async (bookingId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/bookings/${bookingId}`);
-      fetchOrders();
+      Swal.fire({
+        title: "Cancel Booking?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        background: "#1e2a38",
+        color: "#e2e8f0",
+        confirmButtonColor: "#dc2626",
+        cancelButtonColor: "#5C2FC2",
+        confirmButtonText: "Confirm",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axios.delete(
+            `http://localhost:3000/api/bookings/${bookingId}`
+          );
+          console.log("Booking canceled:", res.data);
+          fetchOrders();
+        }
+      });
     } catch (error) {
       console.error("Error canceling booking:", error);
     }
@@ -197,19 +200,7 @@ const MyBooking = () => {
                         borderRadius: "8px",
                         mb: { xs: 2, md: 0 },
                       }}
-                    >
-                      <ActionButton
-                        component="label"
-                        startIcon={<CloudUploadIcon />}
-                      >
-                        Upload Poster
-                        <VisuallyHiddenInput
-                          type="file"
-                          onChange={handlePosterUpload(order._id)}
-                          accept="image/*"
-                        />
-                      </ActionButton>
-                    </Box>
+                    ></Box>
                   )}
                 </Grid>
 

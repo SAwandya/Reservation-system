@@ -1,36 +1,39 @@
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const { User } = require("../models/user");
 require("dotenv").config();
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET;
 
 passport.use(
-  new GoogleStrategy(
+  new FacebookStrategy(
     {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/api/auth/google/callback",
+      clientID: FACEBOOK_APP_ID,
+      clientSecret: FACEBOOK_APP_SECRET,
+      callbackURL: "http://localhost:3000/api/auth/facebook/callback",
+      profileFields: ["id", "displayName", "emails"], // Make sure "emails" is listed
     },
     async (accessToken, refreshToken, profile, done) => {
-      // Find or create user in the database
       try {
-        let user = await User.findOne({ googleId: profile.id });
+        // Check if a user already exists
+        let user = await User.findOne({ facebookId: profile.id });
+
         if (!user) {
+          // Create a new user if one doesn't exist
           user = await User.create({
-            googleId: profile.id,
+            facebookId: profile.id,
             name: profile.displayName,
-            email: profile.emails[0].value,
+            email: profile.emails[0].value, // Facebook might not return email
             accessToken: accessToken,
             refreshToken: refreshToken,
-            picture: profile.photos ? profile.photos[0].value : "",
           });
+          await user.save();
         } else {
           user.accessToken = accessToken;
-          user.picture = profile.photos ? profile.photos[0].value : "";
           user.save();
         }
+
         return done(null, user);
       } catch (error) {
         return done(error, null);

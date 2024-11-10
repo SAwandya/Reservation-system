@@ -52,8 +52,6 @@ const NewCardSlider = () => {
 
   const { data: cards } = useMovies();
 
-  console.log(" My events :", cards);
-
   useEffect(() => {
     const slider = sliderRef.current;
     const track = trackRef.current;
@@ -119,7 +117,7 @@ const NewCardSlider = () => {
   const SetSelectedCard = useGameQueryStore((s) => s.SetSelectedCard);
 
   const handleCardClick = (card) => {
-    console.log("Selected card:", card);
+    console.log("Card clicked:", card);
     SetSelectedCard(card);
     setSelectedCard(card);
     setOpenPopup(true);

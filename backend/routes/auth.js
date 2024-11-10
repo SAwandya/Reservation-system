@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 const passport = require("passport");
@@ -19,13 +19,27 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-  const token = generateToken(req.user);
+  const token = generateToken(req.user, "google");
 
     res.redirect(`http://localhost:4000/login/?token=${token}`); // Redirect to dashboard or any other page
   }
 );
 
+// Route to initiate Facebook authentication
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 
+// Callback route after Facebook authentication
+router.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/" }),
+  (req, res) => {
+    const token = generateToken(req.user, "facebook");
+    res.redirect(`http://localhost:4000/login/?token=${token}`); // Redirect to frontend with token
+  }
+);
 
 router.post("/", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });

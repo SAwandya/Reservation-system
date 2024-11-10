@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { access } = require('fs');
 
-exports.generateToken = (user) => {
+exports.generateToken = (user, service) => {
     return jwt.sign(
-      { _id: user._id, name: user.name, email: user.email, accessToken: user.accessToken },
+      { _id: user._id, name: user.name, email: user.email, accessToken: user.accessToken, service: user.service, service: service },
       process.env.GOOGLE_CLIENT_SECRET,
       {
         expiresIn: "7d",

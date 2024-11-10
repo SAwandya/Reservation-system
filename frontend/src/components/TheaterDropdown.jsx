@@ -144,7 +144,7 @@ const TheaterDropdown = () => {
       >
         <Grid container spacing={2}>
           {theaters?.map((theater) => (
-            <Grid item xs={12} key={theater.id}>
+            <Grid item xs={12} key={theater._id}>
               <TheaterMenuItem onClick={() => handleTheaterSelect(theater)}>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={4}>
