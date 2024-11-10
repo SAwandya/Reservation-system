@@ -15,6 +15,7 @@ import DashboardProtectedRoute from "./components/DashboardProtectedRoute";
 import ImageSlider2 from "./components/ImageSlider2";
 import ShowtimeForm from "./components/ShowTimeForm";
 import NewDashboard from "./pages/NewDashboard";
+import ScannedBookingDetails from "./components/ScannedBookingDetails";
 
 const router = createBrowserRouter([
   {
@@ -23,9 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-            <NewDashboard />
-        ),
+        element: <NewDashboard />,
       },
       {
         path: "/moviedetails/:id",
@@ -56,6 +55,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <MyBooking />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/scannedbooking/:bookingId",
+        element: (
+          <ProtectedRoute>
+            <ScannedBookingDetails/>
           </ProtectedRoute>
         ),
       },

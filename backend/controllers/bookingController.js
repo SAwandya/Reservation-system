@@ -154,9 +154,7 @@ exports.getBookingByCustomerIdEvent = async (req, res) => {
 
 exports.getBookingByIdEvent = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id).populate(
-      "showtime seats"
-    );
+    const booking = await Booking.findById(req.params.id);
     if (!booking) return res.status(404).json({ error: "Booking not found" });
     res.json(booking);
   } catch (error) {
@@ -204,7 +202,7 @@ exports.deleteBookingEvent = async (req, res) => {
     await Promise.all(updatePromises);
 
     // Step 4: Delete the booking
-    await Booking.findByIdAndDelete(req.params.id);
+    await Booking.findByIdAndUpdate(req.params.id, { state: "released" });
 
     res.json({ message: "Booking deleted and seats released successfully" });
   } catch (error) {
@@ -212,3 +210,5 @@ exports.deleteBookingEvent = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+

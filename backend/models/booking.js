@@ -18,8 +18,9 @@ const bookingSchema = new mongoose.Schema(
     customerEmail: { type: String, required: true },
     totalAmount: { type: Number, required: true },
     bookingDate: { type: String, required: true },
+    state: { type: String, default: "booked" },
     bookingTime: { type: String, required: true },
-    theaterName: { type: String, required: true}
+    theaterName: { type: String, required: true },
   },
   { timestamps: true }
 );
