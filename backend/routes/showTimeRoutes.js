@@ -7,6 +7,7 @@ const {
   getShowTimeByIdEvent,
   deleteShowTimeByIdEvent,
   updateShowTimeByIdEvent,
+  getShowTimesByEventId,
 } = require("../controllers/showTimeController");
 
 const router = express.Router();
@@ -155,6 +156,8 @@ router.put("/:id", updateShowTimeByIdEvent);
  *         description: Showtime not found.
  */
 router.delete("/:id", deleteShowTimeByIdEvent);
+
+router.get("/events/:id", getShowTimesByEventId);
 
 
 module.exports = router;

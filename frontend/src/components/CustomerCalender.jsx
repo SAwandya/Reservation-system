@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import { Box, Typography, Grid } from '@mui/material';
-import { styled } from '@mui/system';
-import 'react-calendar/dist/Calendar.css';
-import useGameQueryStore from '../store';
+import React, { useState, useEffect } from "react";
+import Calendar from "react-calendar";
+import { Box, Typography, Grid } from "@mui/material";
+import { styled } from "@mui/system";
+import "react-calendar/dist/Calendar.css";
+import useGameQueryStore from "../store";
+import axios from "axios";
 
 const CalendarWrapper = styled(Box)({
   display: "flex",
@@ -17,14 +18,14 @@ const CalendarWrapper = styled(Box)({
 
 const SidebarWrapper = styled(Box)({
   width: "30%",
-  backgroundColor: "#001529", // Darker blue to match dashboard
+  backgroundColor: "#001529",
   padding: "20px",
   color: "white",
 });
 
 const CalendarContent = styled(Box)({
   width: "70%",
-  backgroundColor: "#002548", // Slightly lighter than sidebar but still dark
+  backgroundColor: "#002548",
   padding: "20px",
   color: "white",
 });
@@ -66,7 +67,7 @@ const StyledCalendar = styled(Calendar)({
     fontWeight: "bold",
     fontSize: "14px",
     marginBottom: "10px",
-    color: "#4f9eff", // Light blue for weekday headers
+    color: "#4f9eff",
   },
 
   ".react-calendar__month-view__weekdays__weekday": {
@@ -87,17 +88,17 @@ const StyledCalendar = styled(Calendar)({
     borderRadius: "50%",
     color: "#fff",
     "&:enabled:hover, &:enabled:focus": {
-      backgroundColor: "rgba(79, 158, 255, 0.3)", // Light blue with opacity
+      backgroundColor: "rgba(79, 158, 255, 0.3)",
     },
   },
 
   ".react-calendar__tile--now": {
-    backgroundColor: "rgba(79, 158, 255, 0.2)", // Current date highlight
+    backgroundColor: "rgba(79, 158, 255, 0.2)",
     color: "#fff",
   },
 
   ".react-calendar__tile--active": {
-    backgroundColor: "#4f9eff", // Selected date
+    backgroundColor: "#4f9eff",
     color: "#fff",
     "&:enabled:hover": {
       backgroundColor: "#4f9eff",
@@ -105,43 +106,58 @@ const StyledCalendar = styled(Calendar)({
   },
 
   ".react-calendar__month-view__days__day--neighboringMonth": {
-    color: "rgba(255,255,255,0.3)", // Dimmed color for days from other months
+    color: "rgba(255,255,255,0.3)",
+  },
+
+  ".highlighted-date": {
+    backgroundColor: "pink", // Highlighted dates in pink
+    color: "#000",
+    borderRadius: "50%",
   },
 });
 
-
 const CustomCalendar = () => {
-
   const [date, setDate] = useState(new Date());
-
+  const [showtimes, setShowtimes] = useState([]);
   const SetSelectedDate = useGameQueryStore((s) => s.SetSelectedDate);
 
-  console.log("new date: ", date);
+  const selectedTheater = useGameQueryStore((s) => s.selectedTheater);
+
+  const theaterId = selectedTheater;
+
+  useEffect(() => {
+    const fetchShowtimes = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/showtimes/events/${theaterId}`
+        );
+        setShowtimes(response.data);
+        console.log("Showtimes:", response.data);
+      } catch (error) {
+        console.error("Error fetching showtimes:", error);
+      }
+    };
+
+    fetchShowtimes();
+  }, [theaterId]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-
-    SetSelectedDate(newDate)
-
-    // Format the date to a more readable string
-    const formattedDate = {
-      day: newDate.getDate(),
-      month: newDate.toLocaleString("default", { month: "long" }),
-      year: newDate.getFullYear(),
-      fullDate: newDate.toISOString(), // Full ISO date string if needed
-    };
-
-    // // Pass the formatted date up to parent component
-    // if (onDateSelect) {
-    //   onDateSelect(formattedDate);
-    // }
+    SetSelectedDate(newDate);
   };
 
   const tileClassName = ({ date, view }) => {
-    if (view === 'month') {
-      const day = date.getDate();
-      if ([4, 11, 13, 18, 21, 25].includes(day)) {
-        return 'highlighted-date';
+    if (view === "month") {
+      const localDateString = date.toLocaleDateString("en-CA"); // "YYYY-MM-DD" format in local time
+
+      const highlightedDates = showtimes.map((show) => {
+        const showDate = new Date(show.date);
+        return showDate.toLocaleDateString("en-CA"); // Convert each showtime date to local format
+      });
+
+      // Check if the local date matches any highlighted date
+      if (highlightedDates.includes(localDateString)) {
+        return "highlighted-date";
       }
     }
     return null;
@@ -151,12 +167,12 @@ const CustomCalendar = () => {
     <CalendarWrapper>
       <SidebarWrapper>
         <Typography variant="h1" sx={{ fontSize: "72px", fontWeight: "bold" }}>
-          02
+          {date.getDate()}
         </Typography>
         <Typography variant="h4" sx={{ textTransform: "uppercase" }}>
-          July
+          {date.toLocaleString("default", { month: "long" })}
         </Typography>
-        <Typography variant="h4">2021</Typography>
+        <Typography variant="h4">{date.getFullYear()}</Typography>
         <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
           TO DO
         </Typography>

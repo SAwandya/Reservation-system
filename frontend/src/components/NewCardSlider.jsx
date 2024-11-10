@@ -117,6 +117,7 @@ const NewCardSlider = () => {
   const SetSelectedCard = useGameQueryStore((s) => s.SetSelectedCard);
 
   const handleCardClick = (card) => {
+    console.log("Card clicked:", card);
     SetSelectedCard(card);
     setSelectedCard(card);
     setOpenPopup(true);

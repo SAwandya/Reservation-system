@@ -84,6 +84,18 @@ exports.getShowTimeByIdEvent = async (req, res) => {
   }
 };
 
+// Route to get showtimes for a given theaterId
+exports.getShowTimesByEventId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const showtimes = await Showtime.find({ theater: id });
+    res.status(200).json(showtimes);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving showtimes", error });
+  }
+};
+
 exports.updateShowTimeByIdEvent = async (req, res) => {
   try {
     const showtime = await Showtime.findByIdAndUpdate(req.params.id, req.body, {

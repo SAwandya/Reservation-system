@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Avatar, IconButton, Button, TextField, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
-import avaterImg from "../assets/avater.jpg"; // Placeholder image
+import avaterImg from "../assets/react.svg"; // Placeholder image
 import axios from 'axios';
+import useUser from '../hooks/useUser';
+import { useAuth } from '../Context/AuthContext';
 
 const Profile = () => {
   const [showhideTableButton, setShowHideTableButton] = useState(true);
@@ -11,7 +13,13 @@ const Profile = () => {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+  const { logout, getCurrentUser } = useAuth();
 
+  const userId = getCurrentUser()._id;
+
+  const { data } = useUser(userId);
+
+  console.log("My data: ", data);
 
 // In your Profile component or wherever you're fetching the profile
 const fetchProfile = async () => {
@@ -182,53 +190,65 @@ const deleteProfile = async () => {
   };
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh', 
-      background: 'linear-gradient(to right, #f2f6fc, #c0d7f0)' 
-    }}>
-      <Card sx={{ 
-        width: 700, 
-        padding: 3, 
-        boxShadow: 6, 
-        borderRadius: 4, 
-        backgroundColor: '#fff8f0', 
-      }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "linear-gradient(to right, #0d1a33, #001f4d)", // Dark blue gradient background
+        marginTop: "40px",
+        width: "203vh",
+        overflowX: "hidden",
+      }}
+    >
+      <Card
+        sx={{
+          width: 700,
+          padding: 3,
+          boxShadow: 6,
+          borderRadius: 4,
+          backgroundColor: "#003161",
+        }}
+      >
         <CardContent>
-          <Box sx={{ textAlign: 'center', mb: 3 }}>
-              <h1 style={{ color: '#141821', fontWeight: 'bold', fontSize: '2rem', margin: '0' }}>MY PROFILE</h1>
+          <Box sx={{ textAlign: "center", mb: 3 }}>
+            <h1
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "2rem",
+                margin: "0",
+              }}
+            >
+              MY PROFILE
+            </h1>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-            <Box sx={{ position: 'relative' }}>
-              <Avatar 
-                src={selectedFile ? URL.createObjectURL(selectedFile) : avaterImg} 
-                alt="avatar" 
-                sx={{ 
-                  width: 150, 
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+            <Box sx={{ position: "relative" }}>
+              <Avatar
+                src={data?.picture || avaterImg}
+                alt="avatar"
+                sx={{
+                  width: 150,
                   height: 150,
-                  border: '4px solid #3f4348', 
-                  boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)' 
-                }} 
+                  border: "4px solid #3f4348",
+                  boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.1)",
+                }}
               />
-              <IconButton 
-                component="label" 
-                sx={{ 
-                  position: 'absolute', 
-                  bottom: 5, 
-                  right: 10, 
-                  bgcolor: '#fff', 
-                  border: '2px solid #3f4348', 
-                  '&:hover': { bgcolor: '#f0f0f0' },
+              <IconButton
+                component="label"
+                sx={{
+                  position: "absolute",
+                  bottom: 5,
+                  right: 10,
+                  bgcolor: "#fff",
+                  border: "2px solid #3f4348",
+                  "&:hover": { bgcolor: "#f0f0f0" },
                 }}
               >
-                <UploadIcon sx={{ fontSize: '1.2rem' }} /> 
-                <input 
-                  type="file" 
-                  hidden 
-                  onChange={handleFileUpload} 
-                />
+                <UploadIcon sx={{ fontSize: "1.2rem" }} />
+                <input type="file" hidden onChange={handleFileUpload} />
               </IconButton>
             </Box>
           </Box>
@@ -238,44 +258,48 @@ const deleteProfile = async () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold', color: '#1f2633' }}>Field</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', color: '#1f2633' }}>Information</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                      Field
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                      Information
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{  color: '#3f4348' }}>Username</TableCell>
-                    <TableCell sx={{ color: '#3f4348' }}>{newUserName}</TableCell>
+                    <TableCell sx={{ color: "white" }}>Username</TableCell>
+                    <TableCell sx={{ color: "white" }}>{data?.name}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell sx={{  color: '#3f4348' }}>Email</TableCell>
-                    <TableCell sx={{ color: '#3f4348' }}>{newEmail}</TableCell>
+                    <TableCell sx={{ color: "white" }}>Email</TableCell>
+                    <TableCell sx={{ color: "white" }}>{data?.email}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
             ) : (
               <>
-                <TextField 
-                  label="New Username" 
-                  value={newUserName} 
-                  onChange={(e) => setNewUserName(e.target.value)} 
-                  fullWidth 
-                  sx={{ mb: 2 }} 
+                <TextField
+                  label="New Username"
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                  fullWidth
+                  sx={{ mb: 2, color: "white" }}
                 />
-                <TextField 
-                  label="New Email" 
-                  value={newEmail} 
-                  onChange={(e) => setNewEmail(e.target.value)} 
-                  fullWidth 
-                  sx={{ mb: 2 }} 
+                <TextField
+                  label="New Email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  fullWidth
+                  sx={{ mb: 2, color: "white" }}
                 />
-                <TextField 
-                  label="New Password" 
-                  type="password" 
-                  value={newPassword} 
-                  onChange={(e) => setNewPassword(e.target.value)} 
-                  fullWidth 
-                  sx={{ mb: 2 }} 
+                <TextField
+                  label="New Password"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  fullWidth
+                  sx={{ mb: 2, color: "white" }}
                 />
               </>
             )}
@@ -284,13 +308,13 @@ const deleteProfile = async () => {
               fullWidth
               variant="contained"
               sx={{
-                bgcolor: '#3f4348', 
-                color: '#ffffff', 
+                bgcolor: "#3A9679",
+                color: "#ffffff",
                 mt: 3,
-                '&:hover': { bgcolor: '#303437' }
+                "&:hover": { bgcolor: "#3A9679" },
               }}
             >
-              {showhideTableButton ? 'Edit Profile' : 'Save Changes'}
+              {showhideTableButton ? "Edit Profile" : "Save Changes"}
             </Button>
           </form>
 
@@ -299,10 +323,10 @@ const deleteProfile = async () => {
             fullWidth
             variant="contained"
             sx={{
-              bgcolor: '#FF0000', 
-              color: '#ffffff', 
+              bgcolor: "#B31312",
+              color: "#ffffff",
               mt: 2,
-              '&:hover': { bgcolor: '#cc0000' }
+              "&:hover": { bgcolor: "#B31312" },
             }}
           >
             Delete Profile
@@ -311,6 +335,7 @@ const deleteProfile = async () => {
       </Card>
     </Box>
   );
+
 };
 
 export default Profile;

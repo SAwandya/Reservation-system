@@ -6,8 +6,8 @@ const sendMail = async (emails, subject, message) => {
   let config = {
     service: "gmail",
     auth: {
-      user: "nevilnutrifeeds@gmail.com",
-      pass: "ugel zylt zrcy fhjb",
+      user: "reservefor.now@gmail.com",
+      pass: "uyel eomc oouz iaux",
     },
   };
 
@@ -16,7 +16,7 @@ const sendMail = async (emails, subject, message) => {
   let MailGenerator = new Mailgen({
     theme: "default",
     product: {
-      name: "Nevil Nutri Feed (Pvt) Ltd",
+      name: "ReserveNow",
       link: "https://mailgen.js/",
     },
   });
@@ -34,7 +34,7 @@ const sendMail = async (emails, subject, message) => {
   // Iterate over each email in the array
   const sendMailPromises = emails.map((recipientEmail) => {
     let mailOptions = {
-      from: "nevilnutrifeeds@gmail.com",
+      from: "reservefor.now@gmail.com",
       to: recipientEmail,
       subject: subject,
       html: emailBody,

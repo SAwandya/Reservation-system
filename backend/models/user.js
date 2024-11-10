@@ -30,6 +30,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  picture: {
+    type: String,
+  },
 });
 
 // Create partial indexes for googleId and facebookId
