@@ -15,7 +15,7 @@ import Swal from "sweetalert2";
 
 const ContentWrapper = styled(Box)({
   padding: "24px",
-  width: "100%",
+  width: "204vh",
   background: "linear-gradient(135deg, #001529 0%, #181818 100%)",
   minHeight: "100vh",
   marginTop: "70px",

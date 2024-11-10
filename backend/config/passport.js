@@ -1,6 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const { User } = require("../models/user"); 
+const { User } = require("../models/user");
 require("dotenv").config();
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -24,9 +24,11 @@ passport.use(
             email: profile.emails[0].value,
             accessToken: accessToken,
             refreshToken: refreshToken,
+            picture: profile.photos ? profile.photos[0].value : "",
           });
         } else {
           user.accessToken = accessToken;
+          user.picture = profile.photos ? profile.photos[0].value : "";
           user.save();
         }
         return done(null, user);

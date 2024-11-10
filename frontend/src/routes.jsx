@@ -16,6 +16,7 @@ import ImageSlider2 from "./components/ImageSlider2";
 import ShowtimeForm from "./components/ShowTimeForm";
 import NewDashboard from "./pages/NewDashboard";
 import ScannedBookingDetails from "./components/ScannedBookingDetails";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -62,7 +63,15 @@ const router = createBrowserRouter([
         path: "/scannedbooking/:bookingId",
         element: (
           <ProtectedRoute>
-            <ScannedBookingDetails/>
+            <ScannedBookingDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile/>
           </ProtectedRoute>
         ),
       },

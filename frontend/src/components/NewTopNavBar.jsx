@@ -20,6 +20,7 @@ import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import ReactQRScanner from "react-qr-scanner"; // Import the QR scanner component
+import useUser from "../hooks/useUser";
 
 const StyledAppBar = styled(AppBar)({
   background: "#001529",
@@ -80,6 +81,7 @@ const NewTopNavBar = () => {
   };
 
   const handleCloseUserMenu = () => {
+    navigate("/profile");
     setAnchorElUser(null);
   };
 
@@ -108,6 +110,12 @@ const NewTopNavBar = () => {
   };
 
   const { logout, getCurrentUser } = useAuth();
+
+  const userId = getCurrentUser()._id;
+
+  const { data } = useUser(userId);
+
+  console.log("My data: ", data);
 
   const currentUserRole = getCurrentUser().role;
 
@@ -157,10 +165,12 @@ const NewTopNavBar = () => {
 
           {/* Right Side: Profile, Logout, and QR Scanner */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {currentUserRole === "admin" && (<NavButton onClick={() => setIsQrScannerOpen(true)}>
-              Scan QR
-            </NavButton>)}
-            
+            {currentUserRole === "admin" && (
+              <NavButton onClick={() => setIsQrScannerOpen(true)}>
+                Scan QR
+              </NavButton>
+            )}
+
             {/* QR Scan button */}
             {isQrScannerOpen && (
               <Box
@@ -191,7 +201,7 @@ const NewTopNavBar = () => {
             <ProfileButton onClick={handleOpenUserMenu}>
               <Avatar
                 alt="User Name"
-                src="/path-to-profile-image.jpg"
+                src={data?.picture}
                 sx={{
                   width: 40,
                   height: 40,
@@ -214,13 +224,13 @@ const NewTopNavBar = () => {
             >
               <Box sx={{ p: 2 }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                  John Doe
+                  {data?.name}
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: "rgba(255,255,255,0.7)" }}
                 >
-                  john@example.com
+                  {data?.email}
                 </Typography>
               </Box>
               <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />

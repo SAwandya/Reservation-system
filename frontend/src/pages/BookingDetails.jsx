@@ -11,7 +11,7 @@ import { styled } from "@mui/system";
 
 const StyledContainer = styled(Box)({
   padding: 3,
-  maxWidth: 600,
+  maxWidth: "203vh",
   margin: "auto",
   marginTop: "100px",
   marginTop: "170px",
