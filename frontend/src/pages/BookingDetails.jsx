@@ -74,6 +74,7 @@ const bookSeat = async (bookingDataStr, userId, accessToken) => {
 
 const BookingDetails = () => {
   const bookingData = localStorage.getItem("bookingData");
+  console.log("Booking data:", bookingData);
   const bookingDataStr = JSON.parse(bookingData);
   const theaterId = bookingDataStr.theater;
   const selectedSeats = bookingDataStr.seats;
@@ -98,7 +99,7 @@ const BookingDetails = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         seatService
-          .CreateSeat({ theaterId, selectedSeats })
+          .CreateSeat({ theaterId, selectedSeats})
           .then((response) => {
             console.log(response.data);
             bookingService
@@ -123,6 +124,7 @@ const BookingDetails = () => {
                         text: "Booking process completed.",
                         icon: "success",
                         color: "#e2e8f0",
+                        background: "#1e2a38",
                       });
                       navigate("/");
                     } else {
@@ -131,6 +133,7 @@ const BookingDetails = () => {
                         text: "Booking process completed.",
                         icon: "success",
                         color: "#e2e8f0",
+                        background: "#1e2a38",
                       });
                       navigate("/");
                     }
@@ -142,6 +145,7 @@ const BookingDetails = () => {
                     text: "Booking process completed.",
                     icon: "success",
                     color: "#e2e8f0",
+                    background: "#1e2a38",
                   });
                 }
 

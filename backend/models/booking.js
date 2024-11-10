@@ -8,6 +8,11 @@ const bookingSchema = new mongoose.Schema(
       ref: "Theater",
       required: true,
     },
+    event: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Movie",
+      required: true,
+    },
     seats: [{ type: String, required: true }],
     customerName: { type: String, required: true },
     customerEmail: { type: String, required: true },

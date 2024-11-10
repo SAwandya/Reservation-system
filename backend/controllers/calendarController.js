@@ -4,8 +4,6 @@ const { User } = require("../models/user");
 exports.createCallendarEvent = async (req, res) => {
   const { userId, bookingDate, bookingTime } = req.body;
 
-  console.log(userId, bookingDate, bookingTime);
-
   try {
     const user = await User.findById(userId); // Fetch the user and access token
 

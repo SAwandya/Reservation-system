@@ -17,6 +17,7 @@ exports.createBookingEvent = async (req, res) => {
       totalAmount,
       bookingDate,
       bookingTime,
+      event,
     } = req.body;
 
     const theaterData = await Theater.findById(theater);
@@ -27,6 +28,7 @@ exports.createBookingEvent = async (req, res) => {
     // Create a new booking
     const newBooking = new Booking({
       theater: theater, // Cast the theater ID to ObjectId
+      event: event,
       seats: seats.map((seat) => seat),
       customerName,
       customerEmail,
@@ -35,6 +37,8 @@ exports.createBookingEvent = async (req, res) => {
       bookingTime,
       theaterName,
     });
+
+    console.log("New booking:", newBooking);
 
     const savedBooking = await newBooking.save();
 

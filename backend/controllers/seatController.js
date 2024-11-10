@@ -56,8 +56,6 @@ exports.createMultipleSeatsEvent = async (req, res) => {
       folder: "events",
     });
 
-    console.log("Result", result.secure_url);
-
     let newtheater = await Theater.findOne({
       name: theater,
       location,
