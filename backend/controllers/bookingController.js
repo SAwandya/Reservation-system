@@ -55,8 +55,8 @@ exports.createBookingEvent = async (req, res) => {
       let config = {
         service: "gmail",
         auth: {
-          user: "nevilnutrifeeds@gmail.com",
-          pass: "ugel zylt zrcy fhjb",
+          user: "reservefor.now@gmail.com",
+          pass: "uyel eomc oouz iaux",
         },
       };
 
@@ -91,7 +91,7 @@ exports.createBookingEvent = async (req, res) => {
       let mailContent = MailGenerator.generate(response);
 
       let message = {
-        from: "nevilnutrifeeds@gmail.com",
+        from: "reservefor.now@gmail.com",
         to: customerEmail,
         subject: "Booking Confirmation",
         html: `${mailContent}<p><strong>Your QR Code:</strong></p><img src="cid:qrcode" alt="QR Code" />`,
@@ -173,38 +173,38 @@ exports.updateBookingEvent = async (req, res) => {
 };
 
 exports.deleteBookingEvent = async (req, res) => {
- try {
-   // Step 1: Find the booking by ID
-   const booking = await Booking.findById(req.params.id);
-   if (!booking) {
-     return res.status(404).json({ message: "Booking not found" });
-   }
+  try {
+    // Step 1: Find the booking by ID
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
 
-   // Step 2: Extract theater ID and seats array from the booking
-   const theaterId = booking.theater;
-   const seats = booking.seats; // Example: ["VIP-1-12", "VIP-1-13"]
+    // Step 2: Extract theater ID and seats array from the booking
+    const theaterId = booking.theater;
+    const seats = booking.seats; // Example: ["VIP-1-12", "VIP-1-13"]
 
-   // Step 3: Iterate over each seat in the booking and update availability
-   const updatePromises = seats.map(async (seatIdentifier) => {
-     // Split the seatIdentifier (e.g., "VIP-1-12") into section, row, and number
-     const [section, row, number] = seatIdentifier.split("-");
+    // Step 3: Iterate over each seat in the booking and update availability
+    const updatePromises = seats.map(async (seatIdentifier) => {
+      // Split the seatIdentifier (e.g., "VIP-1-12") into section, row, and number
+      const [section, row, number] = seatIdentifier.split("-");
 
-     // Find the seat by theater, section, row, and number, and set isAvailable to true
-     await Seat.findOneAndUpdate(
-       { theater: theaterId, section, row, number },
-       { isAvailable: true }
-     );
-   });
+      // Find the seat by theater, section, row, and number, and set isAvailable to true
+      await Seat.findOneAndUpdate(
+        { theater: theaterId, section, row, number },
+        { isAvailable: true }
+      );
+    });
 
-   // Wait for all update operations to complete
-   await Promise.all(updatePromises);
+    // Wait for all update operations to complete
+    await Promise.all(updatePromises);
 
-   // Step 4: Delete the booking
-   await Booking.findByIdAndDelete(req.params.id);
+    // Step 4: Delete the booking
+    await Booking.findByIdAndDelete(req.params.id);
 
-   res.json({ message: "Booking deleted and seats released successfully" });
- } catch (error) {
-   console.error("Error deleting booking and updating seats:", error);
-   res.status(500).json({ error: "Server error" });
- }
+    res.json({ message: "Booking deleted and seats released successfully" });
+  } catch (error) {
+    console.error("Error deleting booking and updating seats:", error);
+    res.status(500).json({ error: "Server error" });
+  }
 };
